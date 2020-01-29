@@ -1,8 +1,5 @@
 package com.epam.lab.model;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Author extends Entity{
 
     private String name;
@@ -32,6 +29,6 @@ public class Author extends Entity{
 
     @Override
     public String toString() {
-        return String.format("Author{name='%s', surname='%s'}", name, surname);
+        return String.format("Author{id=%d, name='%s', surname='%s'}", getId(), name, surname);
     }
 }

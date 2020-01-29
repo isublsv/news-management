@@ -68,7 +68,7 @@ public class News extends Entity {
 
     @Override
     public String toString() {
-        return String.format("News{title='%s', shortText='%s', fullText='%s', creationDate=%s, modificationDate=%s}",
+        return String.format("News{id=%d, title='%s', shortText='%s', fullText='%s', creationDate=%s, modificationDate=%s}", getId(),
                 title, shortText, fullText, creationDate, modificationDate);
     }
 }
