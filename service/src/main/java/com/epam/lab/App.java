@@ -8,10 +8,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.time.LocalDateTime;
 
-/**
- * Hello world!
- *
- */
 public class App 
 {
     public static void main( String[] args )
@@ -28,11 +24,12 @@ public class App
 
         newsService.create(news);
 
-        System.out.println(newsService.find(1));
+        System.out.println(newsService.find(3));
 
+        news.setId(1);
         news.setShortText("FFFFFF");
         newsService.update(news);
 
-        newsService.delete(5);
+        newsService.delete(1);
     }
 }

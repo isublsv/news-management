@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 @Service("newsService")
 public class NewsServiceImpl implements NewsService {
 
+    private final NewsRepository newsRepository;
+
     @Autowired
-    NewsRepository newsRepository;
+    public NewsServiceImpl(final NewsRepository newsRepository) {
+        this.newsRepository = newsRepository;
+    }
 
     @Override
     public void create(News entity) {
@@ -26,12 +30,12 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void update(News entity) {
         newsRepository.update(entity);
-        System.out.println("The News was updated!");
+        System.out.println("The News was updated! " + entity);
     }
 
     @Override
     public void delete(long id) {
         newsRepository.delete(id);
-        System.out.println("The News was deleted!");
+        System.out.println("The News was deleted by id=" + id);
     }
 }
