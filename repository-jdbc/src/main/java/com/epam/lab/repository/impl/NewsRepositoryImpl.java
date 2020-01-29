@@ -51,4 +51,9 @@ public class NewsRepositoryImpl implements NewsRepository {
     public void delete(long id) {
         jdbcTemplate.update("DELETE FROM news.news WHERE id=?;", id);
     }
+
+    @Override
+    public Long countAllNews() {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM news.news;", Long.class);
+    }
 }

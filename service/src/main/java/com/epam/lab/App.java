@@ -31,5 +31,7 @@ public class App
         newsService.update(news);
 
         newsService.delete(1);
+
+        System.out.println("The number of all news: " + newsService.countAllNews());
     }
 }

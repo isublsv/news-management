@@ -38,4 +38,9 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.delete(id);
         System.out.println("The News was deleted by id=" + id);
     }
+
+    @Override
+    public Long countAllNews() {
+        return newsRepository.countAllNews();
+    }
 }
