@@ -1,5 +1,8 @@
 package com.epam.lab.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public abstract class Entity {
 
     private long id;

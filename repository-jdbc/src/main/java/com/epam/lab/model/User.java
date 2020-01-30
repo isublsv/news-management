@@ -1,11 +1,26 @@
 package com.epam.lab.model;
 
+import org.springframework.stereotype.Component;
+
+@Component("user")
 public class User extends Entity{
 
     private String name;
     private String surname;
     private String login;
     private String password;
+
+    public User() {
+        super();
+    }
+
+    public User(String name, String surname, String login, String password) {
+        super();
+        this.name = name;
+        this.surname = surname;
+        this.login = login;
+        this.password = password;
+    }
 
     public User(long id, String name, String surname, String login, String password) {
         super(id);

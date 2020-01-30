@@ -1,14 +1,32 @@
 package com.epam.lab.model;
 
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+@Component("author")
 public class Author extends Entity{
 
     private String name;
     private String surname;
+    private List<News> news;
 
-    public Author(long id, String name, String surname) {
+    public Author() {
+        super();
+    }
+
+    public Author(String name, String surname, List<News> news) {
+        super();
+        this.name = name;
+        this.surname = surname;
+        this.news = news;
+    }
+
+    public Author(long id, String name, String surname, List<News> news) {
         super(id);
         this.name = name;
         this.surname = surname;
+        this.news = news;
     }
 
     public String getName() {
@@ -27,8 +45,16 @@ public class Author extends Entity{
         this.surname = surname;
     }
 
+    public List<News> getNews() {
+        return news;
+    }
+
+    public void setNews(List<News> news) {
+        this.news = news;
+    }
+
     @Override
     public String toString() {
-        return String.format("Author{id=%d, name='%s', surname='%s'}", getId(), name, surname);
+        return String.format("Author{id=%d, name='%s', surname='%s', news='%s'}", getId(), name, surname, news.toString());
     }
 }
