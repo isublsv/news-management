@@ -1,7 +1,7 @@
 package com.epam.lab;
 
 import com.epam.lab.configuration.DataSourceConfiguration;
-import com.epam.lab.model.News;
+import com.epam.lab.dto.NewsDto;
 import com.epam.lab.service.NewsService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -15,7 +15,7 @@ public class App
         ApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class);
         NewsService newsService = (NewsService) context.getBean("newsService");
 
-        News news = (News) context.getBean("news");
+        NewsDto news = (NewsDto) context.getBean("newsDto");
         news.setTitle("!!!GOOD NEWS!!!");
         news.setShortText("blabla");
         news.setFullText("BLBLBLBLB");
@@ -26,7 +26,7 @@ public class App
 
         System.out.println(newsService.find(3));
 
-        news.setId(1);
+        news.setId(1L);
         news.setShortText("FFFFFF");
         newsService.update(news);
 
