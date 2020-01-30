@@ -1,6 +1,5 @@
 package com.epam.lab.configuration;
 
-import com.zaxxer.hikari.HikariDataSource;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.sql.DataSource;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
@@ -32,7 +33,7 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    public DataSourceTransactionManager dataSourceTransactionManager(HikariDataSource dataSource) {
+    public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 }
