@@ -2,7 +2,7 @@ package com.epam.lab.model;
 
 import org.springframework.stereotype.Component;
 
-@Component("news")
+@Component("tag")
 public class Tag extends Entity {
     
     private String name;
