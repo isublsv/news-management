@@ -1,6 +1,6 @@
 package com.epam.lab.service;
 
-import com.epam.lab.model.Tag;
+import com.epam.lab.dto.TagDto;
 
-public interface TagService extends Service<Tag> {
+public interface TagService extends Service<TagDto> {
 }

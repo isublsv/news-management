@@ -1,11 +1,11 @@
 package com.epam.lab.service;
 
-import com.epam.lab.model.Entity;
+import com.epam.lab.dto.AbstractDto;
 
-public interface Service<T extends Entity> {
+public interface Service<D extends AbstractDto> {
 
-    void create(T entity);
-    T find(long id);
-    void update(T entity);
+    void create(D entityDto);
+    D find(long id);
+    void update(D entityDto);
     void delete(long id);
 }
