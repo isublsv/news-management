@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public abstract class AbstractDto implements Serializable {
 
-    private Long id;
+    private long id;
 
     public AbstractDto() {
     }
 
-    public AbstractDto(Long id) {
+    public AbstractDto(long id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 }
