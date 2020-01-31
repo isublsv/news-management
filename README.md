@@ -1,4 +1,4 @@
-###Business Requirements
+### Business Requirements###
 Create a backend for simple **News Management** application. Pay attention that your application should be without view layer (UI).
 
 #### The system should expose REST APIs to perform the following operations:
@@ -16,8 +16,8 @@ Create a backend for simple **News Management** application. Pay attention that 
 * Each news may have more than 1 tag;
 * Count all news;
 
-####Technical requirements
-#####General Requirements:
+#### Technical requirements
+##### General Requirements:
 * Code should be clean and should not contain any “developer-purpose” constructions.
 * Application should be designed and written with respect to OOD and SOLID principles.
 * Code should contain valuable comments where appropriate.
@@ -28,7 +28,7 @@ Create a backend for simple **News Management** application. Pay attention that 
 * Abstraction should be used to avoid code duplication.
 * Database schema should be adjusted as described on image. Create 2 separate db scripts: one for db schema generation and one for loading default data (near 20 items for each table);
 
-#####Tools and Implementation Requirements:
+##### Tools and Implementation Requirements:
 Please note that only GA versions of tools, frameworks, and libraries are allowed.
 
 * JDK version: 8. Use Streams, java.time.*, etc. where it is appropriate.
@@ -47,7 +47,7 @@ Please note that only GA versions of tools, frameworks, and libraries are allowe
 * APIs should be demonstrated using Postman tool. Postman collections with APIs should be prepared for the demo.
 * For search functionality use SeachCriteria object which may contain author entity and list of tags (will be using for constructing SQL queries in DAO layer);
 
-####Restrictions
+#### Restrictions
 
 It is forbidden to use:
 * Spring Boot,
