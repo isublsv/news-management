@@ -20,10 +20,11 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public void create(final Author entity) {
+    public Author create(final Author entity) {
         jdbcTemplate.update(
                 "INSERT INTO news.author (name, surname) VALUES (?, ?);",
                 entity.getName(), entity.getSurname());
+        return entity;
     }
 
     @Override
@@ -43,5 +44,12 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     @Override
     public void delete(final long id) {
         jdbcTemplate.update("DELETE FROM news.author WHERE id=?;", id);
+    }
+
+    @Override
+    public Author findByAuthor(Author author) {
+        return jdbcTemplate.queryForObject(
+                "SELECT id, name, surname FROM news.author WHERE id=? AND name=? AND surname=?;",
+                new Object[]{author.getId(), author.getName(), author.getSurname()}, new BeanPropertyRowMapper<>(Author.class));
     }
 }

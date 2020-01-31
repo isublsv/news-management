@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 @Qualifier("tagRepository")
 public class TagRepositoryImpl implements TagRepository {
 
+    public static final String INSERT_TAG = "INSERT INTO news.tag (name) VALUES (?);";
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -20,9 +21,9 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void create(final Tag entity) {
-        jdbcTemplate.update("INSERT INTO news.tag (name) VALUES (?);",
-                            entity.getName());
+    public Tag create(final Tag entity) {
+        jdbcTemplate.update(INSERT_TAG, entity.getName());
+        return entity;
     }
 
     @Override
@@ -41,5 +42,11 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public void delete(final long id) {
         jdbcTemplate.update("DELETE FROM news.tag WHERE id=?;", id);
+    }
+
+    @Override
+    public Tag findByTag(Tag tag) {
+        return jdbcTemplate.queryForObject("SELECT id, name FROM news.tag WHERE id=? AND name=?",
+                new Object[]{tag}, new BeanPropertyRowMapper<>(Tag.class));
     }
 }
