@@ -22,6 +22,7 @@ public class DataSourceConfiguration {
         dataSource.setJdbcUrl(env.getRequiredProperty("jdbc.url"));
         dataSource.setUsername(env.getRequiredProperty("jdbc.username"));
         dataSource.setPassword(env.getRequiredProperty("jdbc.password"));
+        dataSource.setMaximumPoolSize(Integer.parseInt(env.getRequiredProperty("jdbc.poolSize")));
         return dataSource;
     }
 
