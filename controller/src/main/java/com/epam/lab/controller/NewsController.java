@@ -3,32 +3,36 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.NewsDto;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/news")
+@RequestMapping(value = "/")
 public class NewsController {
-    
-    private final NewsService newsService;
+
+    NewsService newsService;
 
     @Autowired
-    public NewsController(final NewsService newsService) {
+    public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
-    
-    @PostMapping(value = "/add")
-    public void addNews(@RequestBody NewsDto newsDto) {
-        newsService.create(newsDto);
+
+    @GetMapping
+    @ResponseBody
+    public NewsDto findNews() {
+        NewsDto newsDto = new NewsDto();
+        newsDto.setTitle("Big news!");
+        newsDto.setShortText("BLABLA!");
+        newsDto.setFullText("Full text!");
+        return newsDto;
     }
 
-    @GetMapping(value = "/find")
-    public ResponseEntity<NewsDto> findNews(@RequestParam long id) {
-        return ResponseEntity.ok(newsService.find(id));
+
+    @PutMapping
+    @ResponseBody
+    public NewsDto createNews(@RequestBody NewsDto newsDto) {
+        newsService.create(newsDto);
+        return newsDto;
     }
+
+
 }
