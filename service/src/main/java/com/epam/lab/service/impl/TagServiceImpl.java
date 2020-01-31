@@ -22,9 +22,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void create(TagDto entityDto) {
+    public TagDto create(TagDto entityDto) {
         tagRepository.create(tagMapper.toEntity(entityDto));
         System.out.println("The Tag was added!");
+        return entityDto;
     }
 
     @Override

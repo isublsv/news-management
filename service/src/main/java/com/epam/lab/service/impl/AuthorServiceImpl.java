@@ -22,9 +22,10 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void create(AuthorDto entityDto) {
+    public AuthorDto create(AuthorDto entityDto) {
         authorRepository.create(authorMapper.toEntity(entityDto));
         System.out.println("The Author was added!");
+        return entityDto;
     }
 
     @Override
