@@ -44,13 +44,14 @@ CREATE TABLE news."user" (
 CREATE TABLE news.news_author (
     news_id bigint NOT NULL,
     author_id bigint NOT NULL,
+    CONSTRAINT news_id_author_id_key UNIQUE (news_id, author_id),
 	CONSTRAINT fk_news_id FOREIGN KEY (news_id)
 		REFERENCES news.news (id) MATCH SIMPLE
-		ON UPDATE CASCADE
-        ON DELETE CASCADE,
+		ON UPDATE NO ACTION 
+        ON DELETE NO ACTION,
 	CONSTRAINT fk_author_id FOREIGN KEY (author_id)
         REFERENCES news.author (id) MATCH SIMPLE
-        ON UPDATE CASCADE
+        ON UPDATE NO ACTION 
         ON DELETE CASCADE
 );
 
@@ -59,12 +60,12 @@ CREATE TABLE news.news_tag (
     tag_id bigint NOT NULL,
 	CONSTRAINT fk_news_id FOREIGN KEY (news_id)
 		REFERENCES news.news(id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
+        ON UPDATE NO ACTION 
+        ON DELETE NO ACTION,
 	CONSTRAINT fk_tag_id FOREIGN KEY (tag_id)
 		REFERENCES news.tag(id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON UPDATE NO ACTION 
+        ON DELETE NO ACTION
 );
 
 CREATE TABLE news.roles (
@@ -72,9 +73,15 @@ CREATE TABLE news.roles (
     role_name character varying(30) NOT NULL,
 	CONSTRAINT fk_user_id FOREIGN KEY (user_id)
 		REFERENCES news."user"(id) MATCH SIMPLE
-		ON UPDATE CASCADE
-		ON DELETE CASCADE
+		ON UPDATE NO ACTION 
+		ON DELETE NO ACTION
 );
+
+CREATE INDEX idx_author_name_surname ON news.author (name) INCLUDE (surname);
+
+CREATE INDEX idx_tag_name ON news.tag (name);
+
+CREATE INDEX idx_news_title ON news.news (title);
 
 ALTER TABLE news.author OWNER to postgres;
 
