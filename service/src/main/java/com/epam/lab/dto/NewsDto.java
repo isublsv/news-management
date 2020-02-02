@@ -15,104 +15,226 @@ public class NewsDto extends AbstractDto {
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
     private AuthorDto authorDto;
+    private boolean isAuthorNew;
     private List<TagDto> tagDtos;
+    private boolean isNewsFresh;
 
     public NewsDto() {
         super();
     }
 
-    public NewsDto(String title, String shortText, String fullText, LocalDateTime creationDate, LocalDateTime modificationDate, AuthorDto authorDto, List<TagDto> tagDtos) {
-        this.title = title;
-        this.shortText = shortText;
-        this.fullText = fullText;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.authorDto = authorDto;
-        this.tagDtos = tagDtos;
+    public NewsDto(final String titleValue, final String shortTextValue, final String fullTextValue,
+            final LocalDateTime creationDateValue, final LocalDateTime modificationDateValue,
+            final AuthorDto authorDtoValue, final boolean isAuthorNewValue, final List<TagDto> tagDtosValue,
+            final boolean isNewsFreshValue) {
+        super();
+        title = titleValue;
+        shortText = shortTextValue;
+        fullText = fullTextValue;
+        creationDate = creationDateValue;
+        modificationDate = modificationDateValue;
+        authorDto = authorDtoValue;
+        isAuthorNew = isAuthorNewValue;
+        tagDtos = tagDtosValue;
+        isNewsFresh = isNewsFreshValue;
     }
 
-    public NewsDto(Long id, String title, String shortText, String fullText, LocalDateTime creationDate, LocalDateTime modificationDate, AuthorDto authorDto, List<TagDto> tagDtos) {
+    public NewsDto(final long id, final String titleValue, final String shortTextValue, final String fullTextValue,
+            final LocalDateTime creationDateValue, final LocalDateTime modificationDateValue,
+            final AuthorDto authorDtoValue, final boolean isAuthorNewValue, final List<TagDto> tagDtosValue,
+            final boolean isNewsFreshValue) {
         super(id);
-        this.title = title;
-        this.shortText = shortText;
-        this.fullText = fullText;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.authorDto = authorDto;
-        this.tagDtos = tagDtos;
+        title = titleValue;
+        shortText = shortTextValue;
+        fullText = fullTextValue;
+        creationDate = creationDateValue;
+        modificationDate = modificationDateValue;
+        authorDto = authorDtoValue;
+        isAuthorNew = isAuthorNewValue;
+        tagDtos = tagDtosValue;
+        isNewsFresh = isNewsFreshValue;
     }
 
+    /**
+     * Gets title.
+     *
+     * @return value of title.
+     */
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    /**
+     * Sets title.
+     *
+     * @param titleValue value of title.
+     */
+    public void setTitle(final String titleValue) {
+        title = titleValue;
     }
 
+    /**
+     * Gets shortText.
+     *
+     * @return value of shortText.
+     */
     public String getShortText() {
         return shortText;
     }
 
-    public void setShortText(String shortText) {
-        this.shortText = shortText;
+    /**
+     * Sets shortText.
+     *
+     * @param shortTextValue value of shortText.
+     */
+    public void setShortText(final String shortTextValue) {
+        shortText = shortTextValue;
     }
 
+    /**
+     * Gets fullText.
+     *
+     * @return value of fullText.
+     */
     public String getFullText() {
         return fullText;
     }
 
-    public void setFullText(String fullText) {
-        this.fullText = fullText;
+    /**
+     * Sets fullText.
+     *
+     * @param fullTextValue value of fullText.
+     */
+    public void setFullText(final String fullTextValue) {
+        fullText = fullTextValue;
     }
 
+    /**
+     * Gets creationDate.
+     *
+     * @return value of creationDate.
+     */
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    /**
+     * Sets creationDate.
+     *
+     * @param creationDateValue value of creationDate.
+     */
+    public void setCreationDate(final LocalDateTime creationDateValue) {
+        creationDate = creationDateValue;
     }
 
+    /**
+     * Gets modificationDate.
+     *
+     * @return value of modificationDate.
+     */
     public LocalDateTime getModificationDate() {
         return modificationDate;
     }
 
-    public void setModificationDate(LocalDateTime modificationDate) {
-        this.modificationDate = modificationDate;
+    /**
+     * Sets modificationDate.
+     *
+     * @param modificationDateValue value of modificationDate.
+     */
+    public void setModificationDate(final LocalDateTime modificationDateValue) {
+        modificationDate = modificationDateValue;
     }
 
+    /**
+     * Gets authorDto.
+     *
+     * @return value of authorDto.
+     */
     public AuthorDto getAuthorDto() {
         return authorDto;
     }
 
-    public void setAuthorDto(AuthorDto authorDto) {
-        this.authorDto = authorDto;
+    /**
+     * Sets authorDto.
+     *
+     * @param authorDtoValue value of authorDto.
+     */
+    public void setAuthorDto(final AuthorDto authorDtoValue) {
+        authorDto = authorDtoValue;
     }
 
+    /**
+     * Gets isNewAuthor.
+     *
+     * @return value of isNewAuthor.
+     */
+    public boolean isAuthorNew() {
+        return isAuthorNew;
+    }
+
+    /**
+     * Sets isNewAuthor.
+     *
+     * @param authorNewValue value of isNewAuthor.
+     */
+    public void setAuthorNew(final boolean authorNewValue) {
+        isAuthorNew = authorNewValue;
+    }
+
+    /**
+     * Gets tagDtos.
+     *
+     * @return value of tagDtos.
+     */
     public List<TagDto> getTagDtos() {
         return tagDtos;
     }
 
-    public void setTagDtos(List<TagDto> tagDtos) {
-        this.tagDtos = tagDtos;
+    /**
+     * Sets tagDtos.
+     *
+     * @param tagDtosValue value of tagDtos.
+     */
+    public void setTagDtos(final List<TagDto> tagDtosValue) {
+        tagDtos = tagDtosValue;
+    }
+
+    /**
+     * Gets isNewsFresh.
+     *
+     * @return value of isNewsFresh.
+     */
+    public boolean isNewsFresh() {
+        return isNewsFresh;
+    }
+
+    /**
+     * Sets isNewsFresh.
+     *
+     * @param newsFreshValue value of isNewsFresh.
+     */
+    public void setNewsFresh(final boolean newsFreshValue) {
+        isNewsFresh = newsFreshValue;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NewsDto newsDto = (NewsDto) o;
-        return Objects.equals(shortText, newsDto.shortText) &&
-                Objects.equals(fullText, newsDto.fullText) &&
-                Objects.equals(creationDate, newsDto.creationDate) &&
-                Objects.equals(modificationDate, newsDto.modificationDate) &&
-                Objects.equals(authorDto, newsDto.authorDto) &&
-                Objects.equals(tagDtos, newsDto.tagDtos);
+    public boolean equals(final Object oValue) {
+        if (this == oValue) {
+            return true;
+        }
+        if (oValue == null || getClass() != oValue.getClass()) {
+            return false;
+        }
+        NewsDto newsDto = (NewsDto) oValue;
+        return isAuthorNew == newsDto.isAuthorNew && isNewsFresh == newsDto.isNewsFresh && title.equals(newsDto.title)
+               && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText) && creationDate.equals(
+                newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate) && authorDto.equals(
+                newsDto.authorDto) && Objects.equals(tagDtos, newsDto.tagDtos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shortText, fullText, creationDate, modificationDate, authorDto, tagDtos);
+        return Objects.hash(title, shortText, fullText, creationDate, modificationDate, authorDto, isAuthorNew,
+                            tagDtos, isNewsFresh);
     }
 }

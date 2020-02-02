@@ -13,22 +13,32 @@ public class TagDto extends AbstractDto {
         super();
     }
 
-    public TagDto(String name) {
+    public TagDto(final String nameValue) {
         super();
-        this.name = name;
+        name = nameValue;
     }
 
-    public TagDto(Long id, String name) {
-        super(id);
-        this.name = name;
+    public TagDto(final long idValue, final String nameValue) {
+        super(idValue);
+        name = nameValue;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return value of name.
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * Sets name.
+     *
+     * @param nameValue value of name.
+     */
+    public void setName(final String nameValue) {
+        name = nameValue;
     }
 
     @Override

@@ -16,45 +16,86 @@ public class AuthorDto extends AbstractDto {
         super();
     }
 
-    public AuthorDto(Long id, String name, String surname, List<NewsDto> newsDtos) {
-        super(id);
-        this.name = name;
-        this.surname = surname;
-        this.newsDtos = newsDtos;
+    public AuthorDto(final String nameValue, final String surnameValue, final List<NewsDto> newsDtosValue) {
+        super();
+        name = nameValue;
+        surname = surnameValue;
+        newsDtos = newsDtosValue;
     }
 
+    public AuthorDto(final long id, final String nameValue, final String surnameValue,
+            final List<NewsDto> newsDtosValue) {
+        super(id);
+        name = nameValue;
+        surname = surnameValue;
+        newsDtos = newsDtosValue;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return value of name.
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+     * Sets name.
+     *
+     * @param nameValue value of name.
+     */
+    public void setName(final String nameValue) {
+        name = nameValue;
     }
 
+    /**
+     * Gets surname.
+     *
+     * @return value of surname.
+     */
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    /**
+     * Sets surname.
+     *
+     * @param surnameValue value of surname.
+     */
+    public void setSurname(final String surnameValue) {
+        surname = surnameValue;
     }
 
-    public List<NewsDto> getNews() {
+    /**
+     * Gets newsDtos.
+     *
+     * @return value of newsDtos.
+     */
+    public List<NewsDto> getNewsDtos() {
         return newsDtos;
     }
 
-    public void setNews(List<NewsDto> newsDtos) {
-        this.newsDtos = newsDtos;
+    /**
+     * Sets newsDtos.
+     *
+     * @param newsDtosValue value of newsDtos.
+     */
+    public void setNewsDtos(final List<NewsDto> newsDtosValue) {
+        newsDtos = newsDtosValue;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         AuthorDto authorDto = (AuthorDto) o;
-        return Objects.equals(name, authorDto.name) &&
-                Objects.equals(surname, authorDto.surname) &&
-                newsDtos.equals(authorDto.newsDtos);
+        return Objects.equals(name, authorDto.name) && Objects.equals(surname, authorDto.surname) && newsDtos.equals(
+                authorDto.newsDtos);
     }
 
     @Override
