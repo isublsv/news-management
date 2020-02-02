@@ -33,7 +33,7 @@ public class ServiceConfiguration {
     }
 
     @Bean
-    public DataSourceTransactionManager dataSourceTransactionManager(DataSource dataSource) {
+    public DataSourceTransactionManager dataSourceTransactionManager(final DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 }
