@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 @PropertySource("classpath:database.properties")
 public class DataSourceConfiguration {
 
-    @Bean(destroyMethod = "close")
-    public DataSource dataSource(Environment env) {
+    @Bean
+    public DataSource dataSource(final Environment env) {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(env.getRequiredProperty("jdbc.driverClassName"));
         dataSource.setJdbcUrl(env.getRequiredProperty("jdbc.url"));
@@ -27,7 +27,7 @@ public class DataSourceConfiguration {
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate(final DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 }

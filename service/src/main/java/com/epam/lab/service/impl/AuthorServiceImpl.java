@@ -16,32 +16,28 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorMapper authorMapper;
 
     @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorMapper authorMapper) {
-        this.authorRepository = authorRepository;
-        this.authorMapper = authorMapper;
+    public AuthorServiceImpl(final AuthorRepository authorRepositoryValue, final AuthorMapper authorMapperValue) {
+        this.authorRepository = authorRepositoryValue;
+        this.authorMapper = authorMapperValue;
     }
 
     @Override
-    public AuthorDto create(AuthorDto entityDto) {
-        authorRepository.create(authorMapper.toEntity(entityDto));
-        System.out.println("The Author was added!");
-        return entityDto;
+    public AuthorDto create(final AuthorDto entityDto) {
+        return authorMapper.toDto(authorRepository.create(authorMapper.toEntity(entityDto)));
     }
 
     @Override
-    public AuthorDto find(long id) {
+    public AuthorDto find(final long id) {
         return authorMapper.toDto(authorRepository.find(id));
     }
 
     @Override
-    public void update(AuthorDto entityDto) {
+    public void update(final AuthorDto entityDto) {
         authorRepository.update(authorMapper.toEntity(entityDto));
-        System.out.println("The Author was updated! " + entityDto);
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(final long id) {
         authorRepository.delete(id);
-        System.out.println("The Author was deleted by id=" + id);
     }
 }
