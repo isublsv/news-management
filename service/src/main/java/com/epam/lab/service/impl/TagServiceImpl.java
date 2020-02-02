@@ -16,32 +16,28 @@ public class TagServiceImpl implements TagService {
     private final TagMapper tagMapper;
 
     @Autowired
-    public TagServiceImpl(final TagRepository tagRepository, TagMapper tagMapper) {
-        this.tagRepository = tagRepository;
-        this.tagMapper = tagMapper;
+    public TagServiceImpl(final TagRepository tagRepositoryValue, final TagMapper tagMapperValue) {
+        this.tagRepository = tagRepositoryValue;
+        this.tagMapper = tagMapperValue;
     }
 
     @Override
-    public TagDto create(TagDto entityDto) {
-        tagRepository.create(tagMapper.toEntity(entityDto));
-        System.out.println("The Tag was added!");
-        return entityDto;
+    public TagDto create(final TagDto entityDto) {
+        return tagMapper.toDto(tagRepository.create(tagMapper.toEntity(entityDto)));
     }
 
     @Override
-    public TagDto find(long id) {
+    public TagDto find(final long id) {
         return tagMapper.toDto(tagRepository.find(id));
     }
 
     @Override
-    public void update(TagDto entityDto) {
+    public void update(final TagDto entityDto) {
         tagRepository.update(tagMapper.toEntity(entityDto));
-        System.out.println("The Tag was updated! " + entityDto);
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(final long id) {
         tagRepository.delete(id);
-        System.out.println("The Tag was deleted by id=" + id);
     }
 }
