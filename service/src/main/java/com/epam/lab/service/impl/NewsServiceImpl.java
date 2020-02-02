@@ -1,7 +1,10 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
+import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
@@ -23,56 +26,101 @@ public class NewsServiceImpl implements NewsService {
     private final AuthorRepository authorRepository;
     private final TagRepository tagRepository;
     private final NewsMapper newsMapper;
+    private final TagMapper tagMapper;
 
     @Autowired
-    public NewsServiceImpl(final NewsRepository newsRepository,
-                           AuthorRepository authorRepository,
-                           TagRepository tagRepository,
-                           NewsMapper newsMapper) {
-        this.newsRepository = newsRepository;
-        this.authorRepository = authorRepository;
-        this.tagRepository = tagRepository;
-        this.newsMapper = newsMapper;
+    public NewsServiceImpl(final NewsRepository newsRepositoryValue, final AuthorRepository authorRepositoryValue,
+            final TagRepository tagRepositoryValue, final NewsMapper newsMapperValue, final TagMapper tagMapperValue) {
+        this.newsRepository = newsRepositoryValue;
+        this.authorRepository = authorRepositoryValue;
+        this.tagRepository = tagRepositoryValue;
+        this.newsMapper = newsMapperValue;
+        this.tagMapper = tagMapperValue;
     }
 
     @Override
-    public NewsDto create(NewsDto entityDto) throws Exception {
+    public NewsDto create(final NewsDto entityDto) throws ServiceException {
         News news = newsMapper.toEntity(entityDto);
-        long id = entityDto.getAuthorDto().getId();
-        if (id != 0) {
+        long authorId = entityDto.getAuthorDto().getId();
+        //check if author has ID
+        if (authorId != 0) {
+            //check if provided author's name, surname and ID matches the values from DB
             Author author = authorRepository.findByAuthor(news.getAuthor());
-            if (author == null) {
-                throw new Exception();
+            if (author != null) {
+                if (entityDto.isNewsFresh()) {
+                    long newsId = newsRepository.create(news).getId();
+                    newsRepository.addNewsAuthor(newsId, author.getId());
+                    news.setId(newsId);
+                } else {
+                    throw new ServiceException();
+                }
             } else {
-                News news1 = newsRepository.create(newsMapper.toEntity(entityDto));
-                newsRepository.addNewsAuthor(news1.getId(), author.getId());
+                throw new ServiceException();
             }
-        }
-        List<Tag> tagList = news.getTags();
-        if (!tagList.isEmpty()) {
-            for (Tag tag : tagList) {
-                tagRepository.findByTag(tag);
+        } else {
+            Author author;
+            //check if author is new than create new value in DB else find author by name and surname in DB
+            if (entityDto.isAuthorNew()) {
+                author = authorRepository.create(news.getAuthor());
+            } else {
+                author = authorRepository.findAuthorByNameAndSurname(news.getAuthor());
             }
+            long newsId = newsRepository.create(news).getId();
+            newsRepository.addNewsAuthor(newsId, author.getId());
+            news.setAuthor(author);
+            news.setId(newsId);
         }
+        createNewsTags(news);
         return newsMapper.toDto(news);
 
     }
 
     @Override
-    public NewsDto find(long id) {
+    public NewsDto find(final long id) {
         return newsMapper.toDto(newsRepository.find(id));
     }
 
     @Override
-    public void update(NewsDto entityDto) {
+    public void update(final NewsDto entityDto) {
         newsRepository.update(newsMapper.toEntity(entityDto));
-        System.out.println("The News was updated! " + entityDto);
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(final long id) {
         newsRepository.delete(id);
-        System.out.println("The News was deleted by id=" + id);
+    }
+
+    private void createNewsTags(final News news) {
+        List<Tag> tags = news.getTags();
+        if (!tags.isEmpty()) {
+            for (Tag tag : tags) {
+                Tag tagWithId = tagRepository.findByTag(tag);
+                if (tagWithId != null) {
+                    newsRepository.addNewsTag(news.getId(), tagWithId.getId());
+                    tag.setId(tagWithId.getId());
+                } else {
+                    long tagId = tagRepository.create(tag).getId();
+                    newsRepository.addNewsTag(news.getId(), tagId);
+                    tag.setId(tagId);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void addTagsForNews(final NewsDto newsDto, final List<TagDto> tagDtos) {
+        News news = newsMapper.toEntity(newsDto);
+        for (TagDto tagDto : tagDtos) {
+            Tag tag = tagRepository.findByTag((tagMapper.toEntity(tagDto)));
+            if (tag != null) {
+                if (!news.getTags().contains(tag)) {
+                    newsRepository.addNewsTag(news.getId(), tag.getId());
+                }
+            } else {
+                long tagId = tagRepository.create(tagMapper.toEntity(tagDto)).getId();
+                newsRepository.addNewsTag(news.getId(), tagId);
+            }
+        }
     }
 
     @Override
