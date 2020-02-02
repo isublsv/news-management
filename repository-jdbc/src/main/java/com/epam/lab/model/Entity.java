@@ -10,16 +10,26 @@ public abstract class Entity {
     public Entity() {
     }
 
-    public Entity(long id) {
-        this.id = id;
+    public Entity(final long ldValue) {
+        id = ldValue;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return value of id.
+     */
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    /**
+     * Sets id.
+     *
+     * @param ldValue value of id.
+     */
+    public void setId(final long ldValue) {
+        id = ldValue;
     }
 
     @Override
