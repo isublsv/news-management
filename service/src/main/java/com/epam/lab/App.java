@@ -2,6 +2,7 @@ package com.epam.lab;
 
 import com.epam.lab.configuration.DataSourceConfiguration;
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.exception.ServiceException;
 import com.epam.lab.service.NewsService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,8 +11,7 @@ import java.time.LocalDateTime;
 
 public class App 
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws ServiceException {
         ApplicationContext context = new AnnotationConfigApplicationContext(DataSourceConfiguration.class);
         NewsService newsService = (NewsService) context.getBean("newsService");
 

@@ -5,7 +5,12 @@ import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +19,7 @@ import java.util.List;
 @RequestMapping(value = "/")
 public class NewsController {
 
-    NewsService newsService;
+    private NewsService newsService;
 
     @Autowired
     public NewsController(NewsService newsService) {
@@ -44,12 +49,10 @@ public class NewsController {
         return newsDto;
     }
 
-
     @PutMapping
     @ResponseBody
-    public NewsDto createNews(@RequestBody NewsDto newsDto) {
-        newsService.create(newsDto);
-        return newsDto;
+    public NewsDto createNews(@RequestBody NewsDto newsDto) throws Exception {
+        return newsService.create(newsDto);
     }
 
 
