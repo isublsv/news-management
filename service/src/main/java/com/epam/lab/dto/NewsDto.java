@@ -14,18 +14,23 @@ public class NewsDto extends AbstractDto {
     private String fullText;
     private LocalDateTime creationDate;
     private LocalDateTime modificationDate;
-    private AuthorDto authorDto;
+    private AuthorDto author;
     private boolean isAuthorNew;
-    private List<TagDto> tagDtos;
+    private List<TagDto> tags;
     private boolean isNewsFresh;
 
     public NewsDto() {
         super();
     }
 
-    public NewsDto(final String titleValue, final String shortTextValue, final String fullTextValue,
-            final LocalDateTime creationDateValue, final LocalDateTime modificationDateValue,
-            final AuthorDto authorDtoValue, final boolean isAuthorNewValue, final List<TagDto> tagDtosValue,
+    public NewsDto(final String titleValue,
+            final String shortTextValue,
+            final String fullTextValue,
+            final LocalDateTime creationDateValue,
+            final LocalDateTime modificationDateValue,
+            final AuthorDto authorValue,
+            final boolean isAuthorNewValue,
+            final List<TagDto> tagsValue,
             final boolean isNewsFreshValue) {
         super();
         title = titleValue;
@@ -33,15 +38,21 @@ public class NewsDto extends AbstractDto {
         fullText = fullTextValue;
         creationDate = creationDateValue;
         modificationDate = modificationDateValue;
-        authorDto = authorDtoValue;
+        author = authorValue;
         isAuthorNew = isAuthorNewValue;
-        tagDtos = tagDtosValue;
+        tags = tagsValue;
         isNewsFresh = isNewsFreshValue;
     }
 
-    public NewsDto(final long id, final String titleValue, final String shortTextValue, final String fullTextValue,
-            final LocalDateTime creationDateValue, final LocalDateTime modificationDateValue,
-            final AuthorDto authorDtoValue, final boolean isAuthorNewValue, final List<TagDto> tagDtosValue,
+    public NewsDto(final long id,
+            final String titleValue,
+            final String shortTextValue,
+            final String fullTextValue,
+            final LocalDateTime creationDateValue,
+            final LocalDateTime modificationDateValue,
+            final AuthorDto authorValue,
+            final boolean isAuthorNewValue,
+            final List<TagDto> tagsValue,
             final boolean isNewsFreshValue) {
         super(id);
         title = titleValue;
@@ -49,9 +60,9 @@ public class NewsDto extends AbstractDto {
         fullText = fullTextValue;
         creationDate = creationDateValue;
         modificationDate = modificationDateValue;
-        authorDto = authorDtoValue;
+        author = authorValue;
         isAuthorNew = isAuthorNewValue;
-        tagDtos = tagDtosValue;
+        tags = tagsValue;
         isNewsFresh = isNewsFreshValue;
     }
 
@@ -150,17 +161,17 @@ public class NewsDto extends AbstractDto {
      *
      * @return value of authorDto.
      */
-    public AuthorDto getAuthorDto() {
-        return authorDto;
+    public AuthorDto getAuthor() {
+        return author;
     }
 
     /**
      * Sets authorDto.
      *
-     * @param authorDtoValue value of authorDto.
+     * @param authorValue value of authorDto.
      */
-    public void setAuthorDto(final AuthorDto authorDtoValue) {
-        authorDto = authorDtoValue;
+    public void setAuthor(final AuthorDto authorValue) {
+        author = authorValue;
     }
 
     /**
@@ -186,17 +197,17 @@ public class NewsDto extends AbstractDto {
      *
      * @return value of tagDtos.
      */
-    public List<TagDto> getTagDtos() {
-        return tagDtos;
+    public List<TagDto> getTags() {
+        return tags;
     }
 
     /**
      * Sets tagDtos.
      *
-     * @param tagDtosValue value of tagDtos.
+     * @param tagsValue value of tagDtos.
      */
-    public void setTagDtos(final List<TagDto> tagDtosValue) {
-        tagDtos = tagDtosValue;
+    public void setTags(final List<TagDto> tagsValue) {
+        tags = tagsValue;
     }
 
     /**
@@ -228,13 +239,13 @@ public class NewsDto extends AbstractDto {
         NewsDto newsDto = (NewsDto) oValue;
         return isAuthorNew == newsDto.isAuthorNew && isNewsFresh == newsDto.isNewsFresh && title.equals(newsDto.title)
                && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText) && creationDate.equals(
-                newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate) && authorDto.equals(
-                newsDto.authorDto) && Objects.equals(tagDtos, newsDto.tagDtos);
+                newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate) && author.equals(
+                newsDto.author) && Objects.equals(tags, newsDto.tags);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, shortText, fullText, creationDate, modificationDate, authorDto, isAuthorNew,
-                            tagDtos, isNewsFresh);
+        return Objects.hash(title, shortText, fullText, creationDate, modificationDate, author, isAuthorNew, tags,
+                            isNewsFresh);
     }
 }
