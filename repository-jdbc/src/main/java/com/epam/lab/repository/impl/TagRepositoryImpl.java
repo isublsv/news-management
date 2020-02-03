@@ -1,5 +1,6 @@
 package com.epam.lab.repository.impl;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,17 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void update(final Tag entity) {
+    public Tag update(final Tag entity) {
         jdbcTemplate.update(UPDATE_TAG_BY_ID, entity.getName(), entity.getId());
+        return entity;
     }
 
     @Override
     public void delete(final long id) {
-        jdbcTemplate.update(DELETE_TAG_BY_ID, id);
+        int rowsNumber = jdbcTemplate.update(DELETE_TAG_BY_ID, id);
+        if (rowsNumber == 0) {
+            throw new RepositoryException("Tag ID not found!");
+        }
     }
 
     @Override

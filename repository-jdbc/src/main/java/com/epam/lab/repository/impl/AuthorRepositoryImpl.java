@@ -1,5 +1,6 @@
 package com.epam.lab.repository.impl;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     private static final String INSERT_AUTHOR = "INSERT INTO news.author (name, surname) VALUES (?, ?);";
 
-    private static final String FIND_AUTHOR_BY_ID = "SELECT name, surname FROM news.author WHERE id=?;";
+    private static final String FIND_AUTHOR_BY_ID = "SELECT id, name, surname FROM news.author WHERE id=?;";
 
     private static final String UPDATE_AUTHOR_BY_ID = "UPDATE news.author SET name=?, surname=? WHERE id=?;";
 
@@ -60,13 +61,17 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public void update(final Author entity) {
+    public Author update(final Author entity) {
         jdbcTemplate.update(UPDATE_AUTHOR_BY_ID, entity.getName(), entity.getSurname(), entity.getId());
+        return entity;
     }
 
     @Override
     public void delete(final long id) {
-        jdbcTemplate.update(DELETE_AUTHOR_BY_ID, id);
+        int rowNumber = jdbcTemplate.update(DELETE_AUTHOR_BY_ID, id);
+        if (rowNumber == 0) {
+            throw new RepositoryException();
+        }
     }
 
     @Override

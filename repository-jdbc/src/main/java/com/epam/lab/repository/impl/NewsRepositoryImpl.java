@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -21,7 +22,7 @@ import static java.util.Objects.requireNonNull;
 public class NewsRepositoryImpl implements NewsRepository {
 
     private static final String INSERT_NEWS = "INSERT INTO news.news (title, short_text, full_text, "
-                                             + "creation_date, modification_date) VALUES (?, ?, ?, ?, ?);";
+            + "creation_date, modification_date) VALUES (?, ?, ?, ?, ?);";
 
     private static final String UPDATE_NEWS_BY_ID =
             "UPDATE news.news SET title=?, short_text=?, full_text=?, modification_date=? WHERE id=?;";
@@ -37,6 +38,8 @@ public class NewsRepositoryImpl implements NewsRepository {
     private static final String INSERT_NEWS_AND_TAG_IDS = "INSERT INTO news.news_tag (news_id, tag_id) VALUES (?, ?);";
 
     private static final String SELECT_ALL_NEWS = "SELECT COUNT(*) FROM news.news;";
+
+    private static final String SELECT_NEWS_BY_AUTHOR_ID = "SELECT news_id FROM news_author WHERE author_id=?;";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -65,13 +68,16 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public News find(final long id) {
         return jdbcTemplate.queryForObject(SELECT_NEWS_BY_ID, new Object[]{id},
-                                           new BeanPropertyRowMapper<>(News.class));
+                new BeanPropertyRowMapper<>(News.class));
     }
 
     @Override
-    public void update(final News entity) {
+    public News update(final News entity) {
+        LocalDateTime now = LocalDateTime.now();
         jdbcTemplate.update(UPDATE_NEWS_BY_ID, entity.getTitle(), entity.getShortText(), entity.getFullText(),
-                            LocalDateTime.now(), entity.getId());
+                now, entity.getId());
+        entity.setModificationDate(now);
+        return entity;
     }
 
     @Override
@@ -83,16 +89,23 @@ public class NewsRepositoryImpl implements NewsRepository {
     public void addNewsAuthor(final long newsId, final long authorId) {
         jdbcTemplate.update(INSERT_NEWS_AND_AUTHOR_IDS, newsId, authorId);
     }
-    
+
     @Override
     public void addNewsTag(final long newsId, final long tagId) {
         jdbcTemplate.update(INSERT_NEWS_AND_TAG_IDS, newsId, tagId);
     }
 
     @Override
+    public List<News> findNewsByAuthorId(final long authorId) {
+        return jdbcTemplate.query(SELECT_NEWS_BY_AUTHOR_ID, new Object[]{authorId}, (rs, rowNum) -> {
+            News news = new News();
+            news.setId(rs.getLong(1));
+            return news;
+        });
+    }
+
+    @Override
     public Long countAllNews() {
         return jdbcTemplate.queryForObject(SELECT_ALL_NEWS, Long.class);
     }
-
-
 }
