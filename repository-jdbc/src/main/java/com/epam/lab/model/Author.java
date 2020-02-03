@@ -103,7 +103,6 @@ public class Author extends Entity {
 
     @Override
     public String toString() {
-        return String.format("Author{id=%d, name='%s', surname='%s', news='%s'}", getId(), name, surname,
-                             news.toString());
+        return String.format("Author{id=%d, name='%s', surname='%s', news='%s'}", getId(), name, surname, news);
     }
 }
