@@ -7,6 +7,6 @@ public interface Service<D extends AbstractDto> {
 
     D create(D entityDto) throws ServiceException;
     D find(long id);
-    void update(D entityDto);
+    D update(D entityDto);
     void delete(long id);
 }
