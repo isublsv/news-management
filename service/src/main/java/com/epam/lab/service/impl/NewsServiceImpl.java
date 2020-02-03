@@ -81,8 +81,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void update(final NewsDto entityDto) {
-        newsRepository.update(newsMapper.toEntity(entityDto));
+    public NewsDto update(final NewsDto entityDto) {
+        News news = newsRepository.update(newsMapper.toEntity(entityDto));
+        return newsMapper.toDto(news);
     }
 
     @Override
@@ -99,6 +100,7 @@ public class NewsServiceImpl implements NewsService {
                     newsRepository.addNewsTag(news.getId(), tagWithId.getId());
                     tag.setId(tagWithId.getId());
                 } else {
+
                     long tagId = tagRepository.create(tag).getId();
                     newsRepository.addNewsTag(news.getId(), tagId);
                     tag.setId(tagId);

@@ -2,6 +2,7 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void update(final TagDto entityDto) {
-        tagRepository.update(tagMapper.toEntity(entityDto));
+    public TagDto update(final TagDto entityDto) {
+        Tag tag = tagRepository.update(tagMapper.toEntity(entityDto));
+        return tagMapper.toDto(tag);
     }
 
     @Override
