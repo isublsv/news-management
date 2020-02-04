@@ -44,28 +44,29 @@ CREATE TABLE news."user" (
 CREATE TABLE news.news_author (
     news_id bigint NOT NULL,
     author_id bigint NOT NULL,
-    CONSTRAINT news_id_author_id_key UNIQUE (news_id, author_id),
+    CONSTRAINT uniq_news_id UNIQUE (news_id),
 	CONSTRAINT fk_news_id FOREIGN KEY (news_id)
 		REFERENCES news.news (id) MATCH SIMPLE
-		ON UPDATE NO ACTION 
-        ON DELETE NO ACTION,
+		ON UPDATE CASCADE 
+        ON DELETE CASCADE,
 	CONSTRAINT fk_author_id FOREIGN KEY (author_id)
         REFERENCES news.author (id) MATCH SIMPLE
-        ON UPDATE NO ACTION 
+        ON UPDATE CASCADE 
         ON DELETE CASCADE
 );
 
 CREATE TABLE news.news_tag (
     news_id bigint NOT NULL,
     tag_id bigint NOT NULL,
+    CONSTRAINT uniq_news_id_tag_id UNIQUE (news_id, tag_id),
 	CONSTRAINT fk_news_id FOREIGN KEY (news_id)
 		REFERENCES news.news(id) MATCH SIMPLE
-        ON UPDATE NO ACTION 
-        ON DELETE NO ACTION,
+        ON UPDATE CASCADE 
+        ON DELETE CASCADE ,
 	CONSTRAINT fk_tag_id FOREIGN KEY (tag_id)
 		REFERENCES news.tag(id) MATCH SIMPLE
-        ON UPDATE NO ACTION 
-        ON DELETE NO ACTION
+        ON UPDATE CASCADE 
+        ON DELETE CASCADE
 );
 
 CREATE TABLE news.roles (
