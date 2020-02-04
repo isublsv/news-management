@@ -55,7 +55,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public Author find(final long id) {
+    public Author find(final Long id) {
         return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_ID,
                                            new Object[]{id}, new BeanPropertyRowMapper<>(Author.class));
     }
@@ -67,7 +67,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         int rowNumber = jdbcTemplate.update(DELETE_AUTHOR_BY_ID, id);
         if (rowNumber == 0) {
             throw new RepositoryException();

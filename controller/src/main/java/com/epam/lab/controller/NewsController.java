@@ -1,7 +1,6 @@
 package com.epam.lab.controller;
 
 import com.epam.lab.dto.NewsDto;
-import com.epam.lab.exception.ServiceException;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 public class NewsController {
@@ -30,12 +29,12 @@ public class NewsController {
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public NewsDto createNews(@RequestBody final NewsDto newsDto) throws ServiceException {
+    public NewsDto createNews(@RequestBody final NewsDto newsDto) {
         return newsService.create(newsDto);
     }
 
     @GetMapping("/find/{id}")
-    public NewsDto findNewsById(@PathVariable final long id) {
+    public NewsDto findNewsById(@PathVariable final Long id) {
         return newsService.find(id);
     }
 
@@ -46,9 +45,12 @@ public class NewsController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteAuthor(@PathVariable final long id) {
+    public void deleteAuthor(@PathVariable final Long id) {
         newsService.delete(id);
     }
 
-
+    @GetMapping("/findAll")
+    public Long findAllNews() {
+        return newsService.countAllNews();
+    }
 }

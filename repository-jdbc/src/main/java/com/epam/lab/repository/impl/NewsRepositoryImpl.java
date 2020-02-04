@@ -39,7 +39,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     private static final String SELECT_ALL_NEWS = "SELECT COUNT(*) FROM news.news;";
 
-    private static final String SELECT_NEWS_BY_AUTHOR_ID = "SELECT news_id FROM news_author WHERE author_id=?;";
+    private static final String SELECT_NEWS_BY_AUTHOR_ID = "SELECT news_id FROM news.news_author WHERE author_id=?;";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -66,7 +66,7 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public News find(final long id) {
+    public News find(final Long id) {
         return jdbcTemplate.queryForObject(SELECT_NEWS_BY_ID, new Object[]{id},
                 new BeanPropertyRowMapper<>(News.class));
     }
@@ -81,22 +81,22 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         jdbcTemplate.update(DELETE_NEWS_BY_ID, id);
     }
 
     @Override
-    public void addNewsAuthor(final long newsId, final long authorId) {
+    public void addNewsAuthor(final Long newsId, final Long authorId) {
         jdbcTemplate.update(INSERT_NEWS_AND_AUTHOR_IDS, newsId, authorId);
     }
 
     @Override
-    public void addNewsTag(final long newsId, final long tagId) {
+    public void addNewsTag(final Long newsId, final Long tagId) {
         jdbcTemplate.update(INSERT_NEWS_AND_TAG_IDS, newsId, tagId);
     }
 
     @Override
-    public List<News> findNewsByAuthorId(final long authorId) {
+    public List<News> findNewsByAuthorId(final Long authorId) {
         return jdbcTemplate.query(SELECT_NEWS_BY_AUTHOR_ID, new Object[]{authorId}, (rs, rowNum) -> {
             News news = new News();
             news.setId(rs.getLong(1));

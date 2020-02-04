@@ -21,7 +21,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     private static final String INSERT_TAG = "INSERT INTO news.tag (name) VALUES (?);";
 
-    private static final String FIND_TAG_BY_ID = "SELECT name FROM news.tag WHERE id=?;";
+    private static final String FIND_TAG_BY_ID = "SELECT id, name FROM news.tag WHERE id=?;";
 
     private static final String UPDATE_TAG_BY_ID = "UPDATE news.tag SET name=? WHERE id=?;";
 
@@ -49,7 +49,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Tag find(final long id) {
+    public Tag find(final Long id) {
         return jdbcTemplate.queryForObject(FIND_TAG_BY_ID, new Object[]{id}, new BeanPropertyRowMapper<>(Tag.class));
     }
 
@@ -60,7 +60,7 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         int rowsNumber = jdbcTemplate.update(DELETE_TAG_BY_ID, id);
         if (rowsNumber == 0) {
             throw new RepositoryException("Tag ID not found!");
@@ -70,6 +70,6 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Tag findByTag(final Tag tag) {
         return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME,
-                                           new Object[]{tag}, new BeanPropertyRowMapper<>(Tag.class));
+                                           new Object[]{tag.getId(), tag.getName()}, new BeanPropertyRowMapper<>(Tag.class));
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class Entity {
 
-    private long id;
+    private Long id;
 
     public Entity() {
     }
@@ -19,7 +19,7 @@ public abstract class Entity {
      *
      * @return value of id.
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -28,7 +28,7 @@ public abstract class Entity {
      *
      * @param ldValue value of id.
      */
-    public void setId(final long ldValue) {
+    public void setId(final Long ldValue) {
         id = ldValue;
     }
 

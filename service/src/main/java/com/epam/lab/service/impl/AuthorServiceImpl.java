@@ -36,7 +36,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDto find(final long id) {
+    public AuthorDto find(final Long id) {
         return authorMapper.toDto(authorRepository.find(id));
     }
 
@@ -47,7 +47,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         List<News> newsList = newsRepository.findNewsByAuthorId(id);
         authorRepository.delete(id);
         for (News news : newsList) {

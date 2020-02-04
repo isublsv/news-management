@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static org.springframework.http.MediaType.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/tag")
@@ -31,18 +31,13 @@ public class TagController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
     public TagDto addTag(@RequestBody final TagDto tagDto) {
-        TagDto tagDtoWithId = new TagDto();
-        try {
-            tagDtoWithId = tagService.create(tagDto);
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
-        return tagDtoWithId;
+        return tagService.create(tagDto);
     }
 
     @GetMapping("/find/{id}")
-    public TagDto findTagById(@PathVariable final long id) {
+    public TagDto findTagById(@PathVariable final Long id) {
         return tagService.find(id);
     }
 
@@ -53,7 +48,11 @@ public class TagController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTag(@PathVariable final long id) {
-        tagService.delete(id);
+    public void deleteTag(@PathVariable final Long id) {
+        try {
+            tagService.delete(id);
+        } catch (ServiceException e) {
+           //TODO
+        }
     }
 }

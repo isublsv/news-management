@@ -6,7 +6,7 @@ import com.epam.lab.exception.ServiceException;
 public interface Service<D extends AbstractDto> {
 
     D create(D entityDto) throws ServiceException;
-    D find(long id);
+    D find(Long id);
     D update(D entityDto);
-    void delete(long id);
+    void delete(Long id);
 }

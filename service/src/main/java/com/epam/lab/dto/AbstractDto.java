@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class AbstractDto implements Serializable {
 
-    private long id;
+    private Long id;
 
     public AbstractDto() {
     }
@@ -18,7 +18,7 @@ public abstract class AbstractDto implements Serializable {
      *
      * @return value of id.
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -27,7 +27,7 @@ public abstract class AbstractDto implements Serializable {
      *
      * @param idValue value of id.
      */
-    public void setId(final long idValue) {
+    public void setId(final Long idValue) {
         id = idValue;
     }
 }

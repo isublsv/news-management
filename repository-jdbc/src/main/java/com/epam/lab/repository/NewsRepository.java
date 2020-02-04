@@ -8,9 +8,9 @@ public interface NewsRepository extends Repository<News> {
 
     Long countAllNews();
 
-    void addNewsAuthor(long newsId, long authorId);
+    void addNewsAuthor(Long newsId, Long authorId);
 
-    void addNewsTag(long newsId, long tagId);
+    void addNewsTag(Long newsId, Long tagId);
 
-    List<News> findNewsByAuthorId(long authorId);
+    List<News> findNewsByAuthorId(Long authorId);
 }

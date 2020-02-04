@@ -39,11 +39,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsDto create(final NewsDto entityDto) throws ServiceException {
+    public NewsDto create(final NewsDto entityDto) {
         News news = newsMapper.toEntity(entityDto);
-        long authorId = entityDto.getAuthorDto().getId();
+        Long authorId = entityDto.getAuthor().getId();
         //check if author has ID
-        if (authorId != 0) {
+        if (authorId != null) {
             //check if provided author's name, surname and ID matches the values from DB
             Author author = authorRepository.findByAuthor(news.getAuthor());
             if (author != null) {
@@ -52,10 +52,10 @@ public class NewsServiceImpl implements NewsService {
                     newsRepository.addNewsAuthor(newsId, author.getId());
                     news.setId(newsId);
                 } else {
-                    throw new ServiceException();
+                    throw new ServiceException("The news is exists with provided title");
                 }
             } else {
-                throw new ServiceException();
+                throw new ServiceException("The author entity is invalid");
             }
         } else {
             Author author;
@@ -76,7 +76,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsDto find(final long id) {
+    public NewsDto find(final Long id) {
         return newsMapper.toDto(newsRepository.find(id));
     }
 
@@ -87,13 +87,13 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public void delete(final long id) {
+    public void delete(final Long id) {
         newsRepository.delete(id);
     }
 
     private void createNewsTags(final News news) {
         List<Tag> tags = news.getTags();
-        if (!tags.isEmpty()) {
+        if (tags != null && !tags.isEmpty()) {
             for (Tag tag : tags) {
                 Tag tagWithId = tagRepository.findByTag(tag);
                 if (tagWithId != null) {
