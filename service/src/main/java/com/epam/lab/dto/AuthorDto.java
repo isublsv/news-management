@@ -10,25 +10,25 @@ public class AuthorDto extends AbstractDto {
 
     private String name;
     private String surname;
-    private List<NewsDto> newsDtos;
+    private List<NewsDto> news;
 
     public AuthorDto() {
         super();
     }
 
-    public AuthorDto(final String nameValue, final String surnameValue, final List<NewsDto> newsDtosValue) {
+    public AuthorDto(final String nameValue, final String surnameValue, final List<NewsDto> newsValue) {
         super();
         name = nameValue;
         surname = surnameValue;
-        newsDtos = newsDtosValue;
+        news = newsValue;
     }
 
     public AuthorDto(final long id, final String nameValue, final String surnameValue,
-            final List<NewsDto> newsDtosValue) {
+            final List<NewsDto> newsValue) {
         super(id);
         name = nameValue;
         surname = surnameValue;
-        newsDtos = newsDtosValue;
+        news = newsValue;
     }
 
     /**
@@ -68,21 +68,21 @@ public class AuthorDto extends AbstractDto {
     }
 
     /**
-     * Gets newsDtos.
+     * Gets news.
      *
-     * @return value of newsDtos.
+     * @return value of news.
      */
-    public List<NewsDto> getNewsDtos() {
-        return newsDtos;
+    public List<NewsDto> getNews() {
+        return news;
     }
 
     /**
-     * Sets newsDtos.
+     * Sets news.
      *
-     * @param newsDtosValue value of newsDtos.
+     * @param newsValue value of news.
      */
-    public void setNewsDtos(final List<NewsDto> newsDtosValue) {
-        newsDtos = newsDtosValue;
+    public void setNews(final List<NewsDto> newsValue) {
+        news = newsValue;
     }
 
     @Override
@@ -94,12 +94,12 @@ public class AuthorDto extends AbstractDto {
             return false;
         }
         AuthorDto authorDto = (AuthorDto) o;
-        return Objects.equals(name, authorDto.name) && Objects.equals(surname, authorDto.surname) && newsDtos.equals(
-                authorDto.newsDtos);
+        return Objects.equals(name, authorDto.name) && Objects.equals(surname, authorDto.surname) && news.equals(
+                authorDto.news);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, surname, newsDtos);
+        return Objects.hash(name, surname, news);
     }
 }
