@@ -105,6 +105,11 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
+    public List<News> searchBy(final String sqlQuery) {
+        return jdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(News.class));
+    }
+
+    @Override
     public Long countAllNews() {
         return jdbcTemplate.queryForObject(SELECT_ALL_NEWS, Long.class);
     }

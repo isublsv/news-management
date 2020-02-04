@@ -13,4 +13,6 @@ public interface NewsRepository extends Repository<News> {
     void addNewsTag(Long newsId, Long tagId);
 
     List<News> findNewsByAuthorId(Long authorId);
+
+    List<News> searchBy(String sqlQuery);
 }
