@@ -29,6 +29,8 @@ public class TagRepositoryImpl implements TagRepository {
 
     private static final String FIND_TAG_BY_ID_NAME = "SELECT id, name FROM news.tag WHERE id=? AND name=?";
 
+    private static final String FIND_TAG_BY_NAME = "SELECT id, name FROM news.tag WHERE name=?;";
+
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -71,5 +73,10 @@ public class TagRepositoryImpl implements TagRepository {
     public Tag findByTag(final Tag tag) {
         return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME,
                                            new Object[]{tag.getId(), tag.getName()}, new BeanPropertyRowMapper<>(Tag.class));
+    }
+
+    @Override
+    public Tag findByTagName(final String name) {
+        return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class));
     }
 }
