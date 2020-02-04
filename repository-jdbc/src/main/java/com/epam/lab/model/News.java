@@ -2,7 +2,7 @@ package com.epam.lab.model;
 
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,8 +12,8 @@ public class News extends Entity {
     private String title;
     private String shortText;
     private String fullText;
-    private LocalDateTime creationDate;
-    private LocalDateTime modificationDate;
+    private LocalDate creationDate;
+    private LocalDate modificationDate;
     private Author author;
     private List<Tag> tags;
 
@@ -21,8 +21,12 @@ public class News extends Entity {
         super();
     }
 
-    public News(final String titleValue, final String shortTextValue, final String fullTextValue,
-            final LocalDateTime creationDateValue, final LocalDateTime modificationDateValue, final Author authorValue,
+    public News(final String titleValue,
+            final String shortTextValue,
+            final String fullTextValue,
+            final LocalDate creationDateValue,
+            final LocalDate modificationDateValue,
+            final Author authorValue,
             final List<Tag> tagsValue) {
         super();
         title = titleValue;
@@ -34,8 +38,13 @@ public class News extends Entity {
         tags = tagsValue;
     }
 
-    public News(final long id, final String titleValue, final String shortTextValue, final String fullTextValue,
-            final LocalDateTime creationDateValue, final LocalDateTime modificationDateValue, final Author authorValue,
+    public News(final long id,
+            final String titleValue,
+            final String shortTextValue,
+            final String fullTextValue,
+            final LocalDate creationDateValue,
+            final LocalDate modificationDateValue,
+            final Author authorValue,
             final List<Tag> tagsValue) {
         super(id);
         title = titleValue;
@@ -106,7 +115,7 @@ public class News extends Entity {
      *
      * @return value of creationDate.
      */
-    public LocalDateTime getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
@@ -115,7 +124,7 @@ public class News extends Entity {
      *
      * @param creationDateValue value of creationDate.
      */
-    public void setCreationDate(final LocalDateTime creationDateValue) {
+    public void setCreationDate(final LocalDate creationDateValue) {
         creationDate = creationDateValue;
     }
 
@@ -124,7 +133,7 @@ public class News extends Entity {
      *
      * @return value of modificationDate.
      */
-    public LocalDateTime getModificationDate() {
+    public LocalDate getModificationDate() {
         return modificationDate;
     }
 
@@ -133,7 +142,7 @@ public class News extends Entity {
      *
      * @param modificationDateValue value of modificationDate.
      */
-    public void setModificationDate(final LocalDateTime modificationDateValue) {
+    public void setModificationDate(final LocalDate modificationDateValue) {
         modificationDate = modificationDateValue;
     }
 
