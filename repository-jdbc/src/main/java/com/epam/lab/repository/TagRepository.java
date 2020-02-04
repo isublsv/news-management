@@ -6,5 +6,5 @@ public interface TagRepository extends Repository<Tag> {
 
     Tag findByTag(Tag tag);
 
-    Tag findByTagName(String name);
+    Boolean findByTagName(String name);
 }
