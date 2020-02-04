@@ -1,6 +1,7 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.mapper.TagMapper;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service("newsService")
@@ -128,5 +130,11 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public Long countAllNews() {
         return newsRepository.countAllNews();
+    }
+
+    @Override
+    public List<NewsDto> searchBy(final SearchCriteria searchCriteria) {
+        String sql = "" + searchCriteria.accept();
+        return newsRepository.searchBy(sql).stream().map(newsMapper::toDto).collect(Collectors.toList());
     }
 }
