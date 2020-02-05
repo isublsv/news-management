@@ -5,6 +5,7 @@ import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -40,14 +41,18 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag create(final Tag entity) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(INSERT_TAG, new String[]{"id"});
-            ps.setString(1, entity.getName());
-            return ps;
-        }, keyHolder);
-        entity.setId(requireNonNull(keyHolder.getKey()).longValue());
-        return entity;
+        try {
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(INSERT_TAG, new String[]{"id"});
+                ps.setString(1, entity.getName());
+                return ps;
+            }, keyHolder);
+            entity.setId(requireNonNull(keyHolder.getKey()).longValue());
+            return entity;
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     @Override
@@ -71,8 +76,12 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag findByTag(final Tag tag) {
-        return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME,
-                                           new Object[]{tag.getId(), tag.getName()}, new BeanPropertyRowMapper<>(Tag.class));
+        try {
+            return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME, new Object[]{tag.getId(), tag.getName()},
+                                               new BeanPropertyRowMapper<>(Tag.class));
+        } catch (DataAccessException e) {
+            return null;
+        }
     }
 
     @Override

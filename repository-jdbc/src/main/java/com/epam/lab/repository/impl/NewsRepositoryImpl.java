@@ -1,9 +1,11 @@
 package com.epam.lab.repository.impl;
 
+import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.Objects.requireNonNull;
@@ -28,18 +30,22 @@ public class NewsRepositoryImpl implements NewsRepository {
             "UPDATE news.news SET title=?, short_text=?, full_text=?, modification_date=? WHERE id=?;";
 
     private static final String SELECT_NEWS_BY_ID =
-            "SELECT title, short_text, full_text, creation_date, modification_date FROM news.news WHERE id=?;";
+            "SELECT news.id, title, short_text, full_text, creation_date, modification_date, author.id, author.name,"
+            + " author.surname FROM news.news LEFT JOIN news.news_author ON news.id = news_author.news_id"
+            + " JOIN news.author ON news_author.author_id = author.id WHERE news.id=?;";
 
     private static final String DELETE_NEWS_BY_ID = "DELETE FROM news.news WHERE id=?;";
 
-    private static final String INSERT_NEWS_AND_AUTHOR_IDS =
-            "INSERT INTO news.news_author (news_id, author_id) VALUES (?, ?);";
+    private static final String INSERT_NEWS_AND_AUTHOR_IDS = "INSERT INTO news.news_author (news_id, author_id) " 
+                                                             + "VALUES (?, ?);";
 
     private static final String INSERT_NEWS_AND_TAG_IDS = "INSERT INTO news.news_tag (news_id, tag_id) VALUES (?, ?);";
 
     private static final String SELECT_ALL_NEWS = "SELECT COUNT(*) FROM news.news;";
 
     private static final String SELECT_NEWS_BY_AUTHOR_ID = "SELECT news_id FROM news.news_author WHERE author_id=?;";
+
+    private static final String FIND_NEWS_BY_TITLE = "SELECT EXISTS(SELECT title FROM news.news WHERE title=?);";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -51,29 +57,51 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public News create(final News entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        LocalDate dateTime = LocalDate.now();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(INSERT_NEWS, new String[]{"id"});
             int counter = 1;
             ps.setString(counter++, entity.getTitle());
             ps.setString(counter++, entity.getShortText());
             ps.setString(counter++, entity.getFullText());
-            ps.setDate(counter++, Date.valueOf(LocalDateTime.now().toLocalDate()));
-            ps.setDate(counter, Date.valueOf(LocalDateTime.now().toLocalDate()));
+            ps.setDate(counter++, Date.valueOf(dateTime));
+            ps.setDate(counter, Date.valueOf(dateTime));
             return ps;
         }, keyHolder);
         entity.setId(requireNonNull(keyHolder.getKey()).longValue());
+        entity.setCreationDate(dateTime);
+        entity.setModificationDate(dateTime);
         return entity;
     }
 
     @Override
     public News find(final Long id) {
-        return jdbcTemplate.queryForObject(SELECT_NEWS_BY_ID, new Object[]{id},
-                new BeanPropertyRowMapper<>(News.class));
+        try {
+            return jdbcTemplate.queryForObject(SELECT_NEWS_BY_ID, new Object[]{id}, (rs, rowNum) -> {
+                News news = new News();
+                int counter = 1;
+                news.setId(rs.getLong(counter++));
+                news.setTitle(rs.getString(counter++));
+                news.setShortText(rs.getString(counter++));
+                news.setFullText(rs.getString(counter++));
+                news.setCreationDate(rs.getDate(counter++).toLocalDate());
+                news.setModificationDate(rs.getDate(counter++).toLocalDate());
+
+                Author author = new Author();
+                author.setId(rs.getLong(counter++));
+                author.setName(rs.getString(counter++));
+                author.setSurname(rs.getString(counter));
+                news.setAuthor(author);
+                return news;
+            });
+        } catch (EmptyResultDataAccessException eValue) {
+            return null;
+        }
     }
 
     @Override
     public News update(final News entity) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDate now = LocalDate.now();
         jdbcTemplate.update(UPDATE_NEWS_BY_ID, entity.getTitle(), entity.getShortText(), entity.getFullText(),
                 now, entity.getId());
         entity.setModificationDate(now);
@@ -91,8 +119,14 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public void addNewsTag(final Long newsId, final Long tagId) {
-        jdbcTemplate.update(INSERT_NEWS_AND_TAG_IDS, newsId, tagId);
+    public boolean addNewsTag(final Long newsId, final Long tagId) {
+        int rowsNumber = jdbcTemplate.update(INSERT_NEWS_AND_TAG_IDS, newsId, tagId);
+        return rowsNumber > 0;
+    }
+
+    @Override
+    public Boolean findNewsByTitle(final String title) {
+        return jdbcTemplate.queryForObject(FIND_NEWS_BY_TITLE, Boolean.class, title);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -83,8 +84,13 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author findAuthorByNameAndSurname(final Author author) {
-        return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_NAME_SURNAME,
-                                           new Object[]{author.getName(), author.getSurname()},
-                                           new BeanPropertyRowMapper<>(Author.class));
+        try {
+            return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_NAME_SURNAME,
+                                               new Object[]{author.getName(), author.getSurname()},
+                                               new BeanPropertyRowMapper<>(Author.class));
+        } catch (EmptyResultDataAccessException e) {
+            //TODO log
+            return null;
+        }
     }
 }

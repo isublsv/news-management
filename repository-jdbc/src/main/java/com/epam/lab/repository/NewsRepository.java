@@ -10,7 +10,9 @@ public interface NewsRepository extends Repository<News> {
 
     void addNewsAuthor(Long newsId, Long authorId);
 
-    void addNewsTag(Long newsId, Long tagId);
+    boolean addNewsTag(Long newsId, Long tagId);
+    
+    Boolean findNewsByTitle(String title);
 
     List<News> findNewsByAuthorId(Long authorId);
 

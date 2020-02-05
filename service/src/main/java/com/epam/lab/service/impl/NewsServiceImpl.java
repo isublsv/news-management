@@ -49,10 +49,9 @@ public class NewsServiceImpl implements NewsService {
             //check if provided author's name, surname and ID matches the values from DB
             Author author = authorRepository.findByAuthor(news.getAuthor());
             if (author != null) {
-                if (entityDto.isNewsFresh()) {
-                    long newsId = newsRepository.create(news).getId();
-                    newsRepository.addNewsAuthor(newsId, author.getId());
-                    news.setId(newsId);
+                //check if news with provided title exists in the DB
+                if (!Boolean.TRUE.equals(newsRepository.findNewsByTitle(news.getTitle()))) {
+                    createLinkBetweenAuthorAndNews(news, author);
                 } else {
                     throw new ServiceException("The news is exists with provided title");
                 }
@@ -60,17 +59,9 @@ public class NewsServiceImpl implements NewsService {
                 throw new ServiceException("The author entity is invalid");
             }
         } else {
-            Author author;
-            //check if author is new than create new value in DB else find author by name and surname in DB
-            if (entityDto.isAuthorNew()) {
-                author = authorRepository.create(news.getAuthor());
-            } else {
-                author = authorRepository.findAuthorByNameAndSurname(news.getAuthor());
-            }
-            long newsId = newsRepository.create(news).getId();
-            newsRepository.addNewsAuthor(newsId, author.getId());
+            Author author = authorRepository.create(news.getAuthor());
+            createLinkBetweenAuthorAndNews(news, author);
             news.setAuthor(author);
-            news.setId(newsId);
         }
         createNewsTags(news);
         return newsMapper.toDto(news);
@@ -79,7 +70,16 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDto find(final Long id) {
-        return newsMapper.toDto(newsRepository.find(id));
+        News news = newsRepository.find(id);
+        return newsMapper.toDto(news);
+    }
+
+    private void createLinkBetweenAuthorAndNews(final News news, final Author author) {
+        News fullNewsEntity = newsRepository.create(news);
+        newsRepository.addNewsAuthor(fullNewsEntity.getId(), author.getId());
+        news.setId(fullNewsEntity.getId());
+        news.setCreationDate(fullNewsEntity.getCreationDate());
+        news.setModificationDate(fullNewsEntity.getModificationDate());
     }
 
     @Override
@@ -97,15 +97,18 @@ public class NewsServiceImpl implements NewsService {
         List<Tag> tags = news.getTags();
         if (tags != null && !tags.isEmpty()) {
             for (Tag tag : tags) {
-                Tag tagWithId = tagRepository.findByTag(tag);
-                if (tagWithId != null) {
-                    newsRepository.addNewsTag(news.getId(), tagWithId.getId());
-                    tag.setId(tagWithId.getId());
+                if (tag.getId() != null) {
+                    Tag validTag = tagRepository.findByTag(tag);
+                    if (validTag != null) {
+                        newsRepository.addNewsTag(news.getId(), validTag.getId());
+                    }
                 } else {
-
-                    long tagId = tagRepository.create(tag).getId();
-                    newsRepository.addNewsTag(news.getId(), tagId);
-                    tag.setId(tagId);
+                    Tag newTag = tagRepository.create(tag);
+                    if (newTag != null && newsRepository.addNewsTag(news.getId(), newTag.getId())) {
+                        tag.setId(newTag.getId());
+                    } else {
+                        tags.remove(tag);
+                    }
                 }
             }
         }
