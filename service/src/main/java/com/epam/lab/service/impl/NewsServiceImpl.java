@@ -71,6 +71,10 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto find(final Long id) {
         News news = newsRepository.find(id);
+        Author author = authorRepository.find(news.getAuthor().getId());
+        news.setAuthor(author);
+        List<Tag> tags = tagRepository.findTagsByNewsId(news.getId());
+        news.setTags(tags);
         return newsMapper.toDto(news);
     }
 
@@ -137,7 +141,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsDto> searchBy(final SearchCriteria searchCriteria) {
-        String sql = "" + searchCriteria.accept();
+        String sql = searchCriteria.accept();
         return newsRepository.searchBy(sql).stream().map(newsMapper::toDto).collect(Collectors.toList());
     }
 }
