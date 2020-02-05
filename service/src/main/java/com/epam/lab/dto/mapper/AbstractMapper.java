@@ -18,6 +18,7 @@ public abstract class AbstractMapper<E extends Entity, D extends AbstractDto> im
     public AbstractMapper(final Class<E> entity, final Class<D> dto) {
         this.entity = entity;
         this.dto = dto;
+        mapper = new ModelMapper();
     }
 
     @Override
