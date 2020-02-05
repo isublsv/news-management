@@ -29,6 +29,7 @@ CREATE TABLE news.news (
 CREATE TABLE news.tag (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY,
     name character varying(30) NOT NULL,
+    CONSTRAINT uniq_tag_name UNIQUE (name),
 	PRIMARY KEY (id)
 );
 
@@ -79,8 +80,6 @@ CREATE TABLE news.roles (
 );
 
 CREATE INDEX idx_author_name_surname ON news.author (name) INCLUDE (surname);
-
-CREATE INDEX idx_tag_name ON news.tag (name);
 
 CREATE INDEX idx_news_title ON news.news (title);
 
