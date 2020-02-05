@@ -13,6 +13,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
@@ -31,6 +32,9 @@ public class TagRepositoryImpl implements TagRepository {
     private static final String FIND_TAG_BY_ID_NAME = "SELECT id, name FROM news.tag WHERE id=? AND name=?;";
 
     private static final String FIND_TAG_BY_NAME = "SELECT EXISTS(SELECT id, name FROM news.tag WHERE name=?);";
+
+    private static final String FIND_TAGS_BY_NEWS_ID = "SELECT id, name FROM news.tag"
+            + " RIGHT JOIN news.news_tag ON news.tag.id=news.news_tag.tag_id WHERE news_id=?;";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -87,5 +91,10 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public Boolean findByTagName(final String name) {
         return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, Boolean.class);
+    }
+
+    @Override
+    public List<Tag> findTagsByNewsId(final Long newsId) {
+        return jdbcTemplate.query(FIND_TAGS_BY_NEWS_ID, new Object[]{newsId}, new BeanPropertyRowMapper<>(Tag.class));
     }
 }

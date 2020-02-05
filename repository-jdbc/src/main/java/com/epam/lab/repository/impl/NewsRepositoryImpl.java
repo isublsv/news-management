@@ -30,13 +30,12 @@ public class NewsRepositoryImpl implements NewsRepository {
             "UPDATE news.news SET title=?, short_text=?, full_text=?, modification_date=? WHERE id=?;";
 
     private static final String SELECT_NEWS_BY_ID =
-            "SELECT news.id, title, short_text, full_text, creation_date, modification_date, author.id, author.name,"
-            + " author.surname FROM news.news LEFT JOIN news.news_author ON news.id = news_author.news_id"
-            + " JOIN news.author ON news_author.author_id = author.id WHERE news.id=?;";
+            "SELECT news.id, title, short_text, full_text, creation_date, modification_date, news.news_author.author_id"
+                    + " FROM news.news LEFT JOIN news.news_author WHERE news.id=?;";
 
     private static final String DELETE_NEWS_BY_ID = "DELETE FROM news.news WHERE id=?;";
 
-    private static final String INSERT_NEWS_AND_AUTHOR_IDS = "INSERT INTO news.news_author (news_id, author_id) " 
+    private static final String INSERT_NEWS_AND_AUTHOR_IDS = "INSERT INTO news.news_author (news_id, author_id) "
                                                              + "VALUES (?, ?);";
 
     private static final String INSERT_NEWS_AND_TAG_IDS = "INSERT INTO news.news_tag (news_id, tag_id) VALUES (?, ?);";
@@ -88,13 +87,12 @@ public class NewsRepositoryImpl implements NewsRepository {
                 news.setModificationDate(rs.getDate(counter++).toLocalDate());
 
                 Author author = new Author();
-                author.setId(rs.getLong(counter++));
-                author.setName(rs.getString(counter++));
-                author.setSurname(rs.getString(counter));
+                author.setId(rs.getLong(counter));
                 news.setAuthor(author);
                 return news;
             });
-        } catch (EmptyResultDataAccessException eValue) {
+        } catch (EmptyResultDataAccessException e) {
+            //TODO log
             return null;
         }
     }
@@ -130,12 +128,8 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public List<News> findNewsByAuthorId(final Long authorId) {
-        return jdbcTemplate.query(SELECT_NEWS_BY_AUTHOR_ID, new Object[]{authorId}, (rs, rowNum) -> {
-            News news = new News();
-            news.setId(rs.getLong(1));
-            return news;
-        });
+    public List<Long> findNewsByAuthorId(final Long authorId) {
+        return jdbcTemplate.query(SELECT_NEWS_BY_AUTHOR_ID, new Object[]{authorId}, new BeanPropertyRowMapper<>(Long.class));
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface NewsRepository extends Repository<News> {
     
     Boolean findNewsByTitle(String title);
 
-    List<News> findNewsByAuthorId(Long authorId);
+    List<Long> findNewsByAuthorId(Long authorId);
 
     List<News> searchBy(String sqlQuery);
 }
