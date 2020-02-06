@@ -32,7 +32,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     private static final String SELECT_NEWS_BY_ID =
             "SELECT news.id, title, short_text, full_text, creation_date, modification_date, news.news_author.author_id"
-                    + " FROM news.news LEFT JOIN news.news_author WHERE news.id=?;";
+                    + " FROM news.news LEFT JOIN news.news_author ON news.news.id=news.news_author.news_id WHERE news.id=?;";
 
     private static final String DELETE_NEWS_BY_ID = "DELETE FROM news.news WHERE id=?;";
 
@@ -46,6 +46,8 @@ public class NewsRepositoryImpl implements NewsRepository {
     private static final String SELECT_NEWS_BY_AUTHOR_ID = "SELECT news_id FROM news.news_author WHERE author_id=?;";
 
     private static final String FIND_NEWS_BY_TITLE = "SELECT EXISTS(SELECT title FROM news.news WHERE title=?);";
+
+    private static final String FIND_BY_QUERY = "SELECT";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -137,7 +139,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public List<News> searchBy(final String sqlQuery) {
-        return jdbcTemplate.query(sqlQuery, new BeanPropertyRowMapper<>(News.class));
+        return jdbcTemplate.query(FIND_BY_QUERY + sqlQuery, new BeanPropertyRowMapper<>(News.class));
     }
 
     @Override
