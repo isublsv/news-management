@@ -71,7 +71,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     public void delete(final Long id) {
         int rowNumber = jdbcTemplate.update(DELETE_AUTHOR_BY_ID, id);
         if (rowNumber == 0) {
-            throw new RepositoryException("Author " + id + " not found!");
+            throw new RepositoryException("Author with " + id + " not found!");
         }
     }
 

@@ -8,7 +8,9 @@ public interface TagRepository extends Repository<Tag> {
 
     Tag findByTag(Tag tag);
 
-    Boolean findByTagName(String name);
+    Tag findByTagName(String name);
 
     List<Tag> findTagsByNewsId(Long newsId);
+
+    void removeTagsByNewsId(Long newsId);
 }

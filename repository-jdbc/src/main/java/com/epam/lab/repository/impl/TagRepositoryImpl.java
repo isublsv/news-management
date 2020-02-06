@@ -31,10 +31,12 @@ public class TagRepositoryImpl implements TagRepository {
 
     private static final String FIND_TAG_BY_ID_NAME = "SELECT id, name FROM news.tag WHERE id=? AND name=?;";
 
-    private static final String FIND_TAG_BY_NAME = "SELECT EXISTS(SELECT id, name FROM news.tag WHERE name=?);";
+    private static final String FIND_TAG_BY_NAME = "SELECT id, name FROM news.tag WHERE name=?;";
 
     private static final String FIND_TAGS_BY_NEWS_ID = "SELECT id, name FROM news.tag"
             + " RIGHT JOIN news.news_tag ON news.tag.id=news.news_tag.tag_id WHERE news_id=?;";
+
+    private static final String DELETE_TAGS_BY_NEWS_ID = "DELETE FROM news.news_tag WHERE news.news_tag.news_id=?;";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -74,7 +76,7 @@ public class TagRepositoryImpl implements TagRepository {
     public void delete(final Long id) {
         int rowsNumber = jdbcTemplate.update(DELETE_TAG_BY_ID, id);
         if (rowsNumber == 0) {
-            throw new RepositoryException("Tag " + id + " not found!");
+            throw new RepositoryException("Tag with " + id + " not found!");
         }
     }
 
@@ -89,12 +91,17 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public Boolean findByTagName(final String name) {
-        return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, Boolean.class);
+    public Tag findByTagName(final String name) {
+        return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
     public List<Tag> findTagsByNewsId(final Long newsId) {
         return jdbcTemplate.query(FIND_TAGS_BY_NEWS_ID, new Object[]{newsId}, new BeanPropertyRowMapper<>(Tag.class));
+    }
+
+    @Override
+    public void removeTagsByNewsId(final Long newsId) {
+        jdbcTemplate.update(DELETE_TAGS_BY_NEWS_ID, newsId);
     }
 }

@@ -1,5 +1,6 @@
 package com.epam.lab.repository.impl;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.repository.NewsRepository;
@@ -108,7 +109,10 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void delete(final Long id) {
-        jdbcTemplate.update(DELETE_NEWS_BY_ID, id);
+        int rowNumber = jdbcTemplate.update(DELETE_NEWS_BY_ID, id);
+        if (rowNumber == 0) {
+            throw new RepositoryException("News with " + id + " not found!");
+        }
     }
 
     @Override
@@ -117,9 +121,8 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public boolean addNewsTag(final Long newsId, final Long tagId) {
-        int rowsNumber = jdbcTemplate.update(INSERT_NEWS_AND_TAG_IDS, newsId, tagId);
-        return rowsNumber > 0;
+    public void addNewsTag(final Long newsId, final Long tagId) {
+        jdbcTemplate.update(INSERT_NEWS_AND_TAG_IDS, newsId, tagId);
     }
 
     @Override
