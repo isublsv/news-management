@@ -4,6 +4,7 @@ import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.mapper.AuthorMapper;
 import com.epam.lab.exception.RepositoryException;
+import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.repository.AuthorRepository;
@@ -11,6 +12,7 @@ import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.impl.AuthorRepositoryImpl;
 import com.epam.lab.repository.impl.NewsRepositoryImpl;
 import com.epam.lab.service.AuthorService;
+import com.epam.lab.service.Service;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,6 +23,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -45,8 +48,8 @@ public class AuthorServiceImplTest {
         List<News> news = new ArrayList<>();
         author = new Author(1L, "name", "surname", news);
 
-        List<NewsDto> newsDtos = new ArrayList<>();
-        expected = new AuthorDto(1L, "name", "surname", newsDtos);
+        List<NewsDto> newsDtoList = new ArrayList<>();
+        expected = new AuthorDto(1L, "name", "surname", newsDtoList);
     }
 
     @Test
@@ -100,9 +103,9 @@ public class AuthorServiceImplTest {
         verify(newsRepository, times(idList.size())).delete(anyLong());
     }
 
-    @Test(expected = RepositoryException.class)
+    @Test(expected = ServiceException.class)
     public void shouldThrowExceptionAfterDeleteAuthorById() {
-        when(newsRepository.findNewsByAuthorId(anyLong())).thenThrow(RepositoryException.class);
+        doThrow(RepositoryException.class).when(authorRepository).delete(anyLong());
         authorService.delete(anyLong());
     }
 }
