@@ -21,41 +21,6 @@ public class News extends Entity {
         super();
     }
 
-    public News(final String titleValue,
-            final String shortTextValue,
-            final String fullTextValue,
-            final LocalDate creationDateValue,
-            final LocalDate modificationDateValue,
-            final Author authorValue,
-            final List<Tag> tagsValue) {
-        super();
-        title = titleValue;
-        shortText = shortTextValue;
-        fullText = fullTextValue;
-        creationDate = creationDateValue;
-        modificationDate = modificationDateValue;
-        author = authorValue;
-        tags = tagsValue;
-    }
-
-    public News(final long id,
-            final String titleValue,
-            final String shortTextValue,
-            final String fullTextValue,
-            final LocalDate creationDateValue,
-            final LocalDate modificationDateValue,
-            final Author authorValue,
-            final List<Tag> tagsValue) {
-        super(id);
-        title = titleValue;
-        shortText = shortTextValue;
-        fullText = fullTextValue;
-        creationDate = creationDateValue;
-        modificationDate = modificationDateValue;
-        author = authorValue;
-        tags = tagsValue;
-    }
-
     /**
      * Gets title.
      *
@@ -188,14 +153,14 @@ public class News extends Entity {
     }
 
     @Override
-    public boolean equals(final Object oValue) {
-        if (this == oValue) {
+    public boolean equals(final Object o) {
+        if (this == o) {
             return true;
         }
-        if (oValue == null || getClass() != oValue.getClass()) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        News news = (News) oValue;
+        News news = (News) o;
         return title.equals(news.title) && shortText.equals(news.shortText) && fullText.equals(news.fullText)
                && creationDate.equals(news.creationDate) && modificationDate.equals(news.modificationDate)
                && author.equals(news.author) && Objects.equals(tags, news.tags);

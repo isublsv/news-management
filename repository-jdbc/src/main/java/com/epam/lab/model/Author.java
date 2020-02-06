@@ -23,7 +23,7 @@ public class Author extends Entity {
         news = newsValue;
     }
 
-    public Author(final long id, final String nameValue, final String surnameValue, final List<News> newsValue) {
+    public Author(final Long id, final String nameValue, final String surnameValue, final List<News> newsValue) {
         super(id);
         name = nameValue;
         surname = surnameValue;
@@ -85,20 +85,18 @@ public class Author extends Entity {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(name, surname, news);
+    public boolean equals(Object oValue) {
+        if (this == oValue) return true;
+        if (oValue == null || getClass() != oValue.getClass()) return false;
+        Author author = (Author) oValue;
+        return Objects.equals(name, author.name) &&
+                Objects.equals(surname, author.surname) &&
+                Objects.equals(news, author.news);
     }
 
     @Override
-    public boolean equals(final Object oValue) {
-        if (this == oValue) {
-            return true;
-        }
-        if (oValue == null || getClass() != oValue.getClass()) {
-            return false;
-        }
-        Author author = (Author) oValue;
-        return name.equals(author.name) && surname.equals(author.surname) && Objects.equals(news, author.news);
+    public int hashCode() {
+        return Objects.hash(name, surname, news);
     }
 
     @Override

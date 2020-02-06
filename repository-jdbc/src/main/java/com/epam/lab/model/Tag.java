@@ -18,7 +18,7 @@ public class Tag extends Entity {
         name = nameValue;
     }
 
-    public Tag(final long id, final String nameValue) {
+    public Tag(final Long id, final String nameValue) {
         super(id);
         name = nameValue;
     }

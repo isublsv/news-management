@@ -10,7 +10,7 @@ public abstract class Entity {
     public Entity() {
     }
 
-    public Entity(final long ldValue) {
+    public Entity(final Long ldValue) {
         id = ldValue;
     }
 
