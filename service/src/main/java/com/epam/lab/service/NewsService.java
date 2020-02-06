@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface NewsService extends Service<NewsDto> {
 
-    void addTagsForNews(NewsDto newsDto, List<TagDto> tagDtos);
+    List<TagDto> addTagsForNews(Long newsId, List<TagDto> tagDtos);
     
     Long countAllNews();
 

@@ -5,6 +5,7 @@ import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -17,7 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -63,9 +68,17 @@ public class NewsServiceImpl implements NewsService {
             createLinkBetweenAuthorAndNews(news, author);
             news.setAuthor(author);
         }
-        createNewsTags(news);
-        return newsMapper.toDto(news);
+        return createTagsForNews(entityDto, news);
+    }
 
+    private NewsDto createTagsForNews(final NewsDto entityDto, final News news) {
+        List<TagDto> tagDtos = new ArrayList<>();
+        if (news.getTags() != null) {
+            tagDtos.addAll(addTagsForNews(news.getId(), entityDto.getTags()));
+        }
+        NewsDto newsDto = newsMapper.toDto(news);
+        newsDto.setTags(tagDtos);
+        return newsDto;
     }
 
     @Override
@@ -89,49 +102,79 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsDto update(final NewsDto entityDto) {
         News news = newsRepository.update(newsMapper.toEntity(entityDto));
-        return newsMapper.toDto(news);
+        Author author = news.getAuthor();
+        //if author exist
+        if (author != null) {
+            Long authorId = author.getId();
+            //if author has ID
+            if (authorId != null) {
+                //than find author in the DB
+                Author validAuthor = authorRepository.findByAuthor(author);
+                //if author is valid
+                if (validAuthor != null) {
+                    //than add this author for provided news
+                    newsRepository.addNewsAuthor(news.getId(), authorId);
+                    news.setAuthor(validAuthor);
+                } else {
+                    throw new ServiceException("The author entity is invalid");
+                }
+                //if author hasn't ID
+            } else {
+                //create a new author entity in the DB
+                Author newAuthor = authorRepository.create(author);
+                news.setAuthor(newAuthor);
+            }
+        }
+        return createTagsForNews(entityDto, news);
     }
 
     @Override
     public void delete(final Long id) {
-        newsRepository.delete(id);
-    }
-
-    private void createNewsTags(final News news) {
-        List<Tag> tags = news.getTags();
-        if (tags != null && !tags.isEmpty()) {
-            for (Tag tag : tags) {
-                if (tag.getId() != null) {
-                    Tag validTag = tagRepository.findByTag(tag);
-                    if (validTag != null) {
-                        newsRepository.addNewsTag(news.getId(), validTag.getId());
-                    }
-                } else {
-                    Tag newTag = tagRepository.create(tag);
-                    if (newTag != null && newsRepository.addNewsTag(news.getId(), newTag.getId())) {
-                        tag.setId(newTag.getId());
-                    } else {
-                        tags.remove(tag);
-                    }
-                }
-            }
+        try {
+            newsRepository.delete(id);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
         }
     }
 
     @Override
-    public void addTagsForNews(final NewsDto newsDto, final List<TagDto> tagDtos) {
-        News news = newsMapper.toEntity(newsDto);
-        for (TagDto tagDto : tagDtos) {
-            Tag tag = tagRepository.findByTag((tagMapper.toEntity(tagDto)));
-            if (tag != null) {
-                if (!news.getTags().contains(tag)) {
-                    newsRepository.addNewsTag(news.getId(), tag.getId());
+    public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtos) {
+        Set<Tag> tags = new HashSet<>(tagRepository.findTagsByNewsId(newsId));
+        tags.addAll(tagDtos.stream().map(tagMapper::toEntity).collect(Collectors.toList()));
+        tagRepository.removeTagsByNewsId(newsId);
+
+        Iterator<Tag> it = tags.iterator();
+        while (it.hasNext()) {
+            Tag tag = it.next();
+            //if tag has ID
+            if (tag.getId() != null) {
+                //than check if tag is valid
+                Tag validTag = tagRepository.findByTag(tag);
+                //if its valid than add this tag for provided news
+                if (validTag != null) {
+                    //than add this tag for provided news
+                    newsRepository.addNewsTag(newsId, tag.getId());
+                } else {
+                    //else remove from the list
+                    it.remove();
                 }
             } else {
-                long tagId = tagRepository.create(tagMapper.toEntity(tagDto)).getId();
-                newsRepository.addNewsTag(news.getId(), tagId);
+                //if a tag hasn't ID than we'll try to add it to the DB
+                Tag newTagId = tagRepository.create(tag);
+                //if the operation above was complete successfully
+                if (newTagId != null) {
+                    //than add this tag for provided news
+                    newsRepository.addNewsTag(newsId, newTagId.getId());
+                    //else there is a tag with the same name in the DB
+                } else {
+                    //find tag ID by name
+                    Long existingTagId = tagRepository.findByTagName(tag.getName()).getId();
+                    //than add this tag for provided news
+                    newsRepository.addNewsTag(newsId, existingTagId);
+                }
             }
         }
+        return tags.stream().map(tagMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

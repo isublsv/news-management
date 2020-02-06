@@ -27,9 +27,6 @@ public class TagServiceImpl implements TagService {
     @Override
     public TagDto create(final TagDto entityDto) {
         Tag tag = tagMapper.toEntity(entityDto);
-        if (Boolean.TRUE.equals(tagRepository.findByTagName(tag.getName()))) {
-            throw new ServiceException("The tag with provided name \"" + tag.getName() + "\" is already exist");
-        }
         return tagMapper.toDto(tagRepository.create(tag));
     }
 
