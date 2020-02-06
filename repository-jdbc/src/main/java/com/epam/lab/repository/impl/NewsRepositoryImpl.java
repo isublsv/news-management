@@ -132,7 +132,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public List<Long> findNewsByAuthorId(final Long authorId) {
-        return jdbcTemplate.query(SELECT_NEWS_BY_AUTHOR_ID, new Object[]{authorId}, new BeanPropertyRowMapper<>(Long.class));
+        return jdbcTemplate.queryForList(SELECT_NEWS_BY_AUTHOR_ID, new Object[]{authorId}, Long.class);
     }
 
     @Override
