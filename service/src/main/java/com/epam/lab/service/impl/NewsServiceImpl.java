@@ -138,9 +138,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtos) {
+    public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtoList) {
         Set<Tag> tags = new HashSet<>(tagRepository.findTagsByNewsId(newsId));
-        tags.addAll(tagDtos.stream().map(tagMapper::toEntity).collect(Collectors.toList()));
+        tags.addAll(tagDtoList.stream().map(tagMapper::toEntity).collect(Collectors.toList()));
         tagRepository.removeTagsByNewsId(newsId);
 
         Iterator<Tag> it = tags.iterator();
@@ -165,12 +165,16 @@ public class NewsServiceImpl implements NewsService {
                 if (newTagId != null) {
                     //than add this tag for provided news
                     newsRepository.addNewsTag(newsId, newTagId.getId());
+                    tag.setId(newTagId.getId());
                     //else there is a tag with the same name in the DB
                 } else {
                     //find tag ID by name
-                    Long existingTagId = tagRepository.findByTagName(tag.getName()).getId();
+                    Tag tagByName = tagRepository.findByTagName(tag.getName());
                     //than add this tag for provided news
-                    newsRepository.addNewsTag(newsId, existingTagId);
+                    if (tagByName != null) {
+                        newsRepository.addNewsTag(newsId, tagByName.getId());
+                        tag.setId(tagByName.getId());
+                    }
                 }
             }
         }
