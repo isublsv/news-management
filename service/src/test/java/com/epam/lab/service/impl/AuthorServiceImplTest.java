@@ -13,6 +13,7 @@ import com.epam.lab.repository.impl.AuthorRepositoryImpl;
 import com.epam.lab.repository.impl.NewsRepositoryImpl;
 import com.epam.lab.service.AuthorService;
 import com.epam.lab.service.Service;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -31,15 +32,15 @@ import static org.mockito.Mockito.when;
 
 public class AuthorServiceImplTest {
 
-    private static AuthorService authorService;
-    private static AuthorRepository authorRepository;
-    private static NewsRepository newsRepository;
+    private AuthorService authorService;
+    private AuthorRepository authorRepository;
+    private NewsRepository newsRepository;
 
-    private static Author author;
-    private static AuthorDto expected;
+    private Author author;
+    private AuthorDto expected;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         authorRepository = mock(AuthorRepositoryImpl.class);
         newsRepository = mock(NewsRepositoryImpl.class);
         AuthorMapper authorMapper = new AuthorMapper();
@@ -64,20 +65,19 @@ public class AuthorServiceImplTest {
 
     @Test
     public void shouldFindAuthorById() {
-        long authorId = 1L;
-        when(authorRepository.find(authorId)).thenReturn(author);
+        when(authorRepository.find(anyLong())).thenReturn(author);
 
-        AuthorDto actual = authorService.find(authorId);
+        AuthorDto actual = authorService.find(anyLong());
         assertEquals(expected, actual);
 
-        verify(authorRepository, times(1)).find(authorId);
+        verify(authorRepository, times(1)).find(anyLong());
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     public void shouldThrowExceptionAfterFindAuthorById() {
-        long authorId = 2L;
-        when(authorRepository.find(authorId)).thenThrow(EmptyResultDataAccessException.class);
-        authorRepository.find(authorId);
+        when(authorRepository.find(anyLong())).thenThrow(EmptyResultDataAccessException.class);
+
+        authorRepository.find(anyLong());
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.repository.impl.TagRepositoryImpl;
 import com.epam.lab.service.TagService;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,14 +24,14 @@ import static org.mockito.Mockito.when;
 
 public class TagServiceImplTest {
 
-    private static TagService tagService;
-    private static TagRepository tagRepository;
+    private TagService tagService;
+    private TagRepository tagRepository;
 
-    private static Tag tag;
-    private static TagDto expected;
+    private Tag tag;
+    private TagDto expected;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         tagRepository = mock(TagRepositoryImpl.class);
         TagMapper tagMapper = new TagMapper();
         tagService = new TagServiceImpl(tagRepository, tagMapper);
@@ -51,20 +52,18 @@ public class TagServiceImplTest {
 
     @Test
     public void shouldFindTagById() {
-        long tagId = 1L;
-        when(tagRepository.find(tagId)).thenReturn(tag);
+        when(tagRepository.find(anyLong())).thenReturn(tag);
 
-        TagDto actual = tagService.find(tagId);
+        TagDto actual = tagService.find(anyLong());
         assertEquals(expected, actual);
 
-        verify(tagRepository, times(1)).find(tagId);
+        verify(tagRepository, times(1)).find(anyLong());
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     public void shouldThrowExceptionAfterFindTagById() {
-        long tagId = 2L;
-        when(tagService.find(tagId)).thenThrow(EmptyResultDataAccessException.class);
-        tagService.find(tagId);
+        when(tagService.find(anyLong())).thenThrow(EmptyResultDataAccessException.class);
+        tagService.find(anyLong());
     }
 
     @Test
@@ -79,17 +78,14 @@ public class TagServiceImplTest {
 
     @Test
     public void shouldDeleteTagById() {
-        long tagId = 3L;
-        tagService.delete(tagId);
+        tagService.delete(anyLong());
 
-        verify(tagRepository, times(1)).delete(tagId);
+        verify(tagRepository, times(1)).delete(anyLong());
     }
 
     @Test(expected = ServiceException.class)
     public void shouldThrowExceptionAfterDeleteTagById() {
-        long tagId = 4L;
-
-        doThrow(RepositoryException.class).when(tagRepository).delete(tagId);
-        tagService.delete(tagId);
+        doThrow(RepositoryException.class).when(tagRepository).delete(anyLong());
+        tagService.delete(anyLong());
     }
 }

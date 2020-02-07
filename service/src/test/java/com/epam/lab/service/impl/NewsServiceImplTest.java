@@ -166,16 +166,15 @@ public class NewsServiceImplTest {
 
         assertEquals(expected, actual);
 
-        verify(newsRepository, times(1)).find(newsId);
-        verify(authorRepository, times(1)).find(newsId);
-        verify(tagRepository, times(1)).findTagsByNewsId(newsId);
+        verify(newsRepository, times(1)).find(anyLong());
+        verify(authorRepository, times(1)).find(anyLong());
+        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
     public void shouldThrowExceptionAfterFindNewsById() {
-        long id = 5L;
-        when(newsRepository.find(id)).thenThrow(EmptyResultDataAccessException.class);
-        newsService.find(id);
+        when(newsRepository.find(anyLong())).thenThrow(EmptyResultDataAccessException.class);
+        newsService.find(anyLong());
     }
 
     @Test
@@ -241,103 +240,94 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldDeleteNewsById() {
-        long newsId = 6L;
-        newsService.delete(newsId);
-        verify(newsRepository, times(1)).delete(newsId);
+        newsService.delete(anyLong());
+        verify(newsRepository, times(1)).delete(anyLong());
     }
 
     @Test(expected = ServiceException.class)
     public void shouldThrowExceptionAfterDeleteNewsById() {
-        long tagId = 7L;
-        doThrow(RepositoryException.class).when(newsRepository).delete(tagId);
-        newsService.delete(tagId);
+        doThrow(RepositoryException.class).when(newsRepository).delete(anyLong());
+        newsService.delete(anyLong());
     }
 
     @Test
     public void shouldAddValidTagsForNews() {
-        long newsId = 10L;
         List<Tag> tags = new ArrayList<>();
-        long tagId = 12L;
-        Tag tag1 = new Tag(tagId, "TestTag1");
+        Tag tag1 = new Tag(1L, "TestTag1");
         tags.add(tag1);
 
-        when(tagRepository.findTagsByNewsId(newsId)).thenReturn(tags);
+        when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTag(any(Tag.class))).thenReturn(tag1);
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(newsId, new ArrayList<>());
+        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(newsId);
-        verify(tagRepository, times(1)).removeTagsByNewsId(newsId);
+        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
+        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
         verify(tagRepository, times(tags.size())).findByTag(any(Tag.class));
-        verify(newsRepository, times(tags.size())).addNewsTag(newsId, tagId);
+        verify(newsRepository, times(tags.size())).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
     public void shouldDoNotAddInvalidTagsForNews() {
-        long newsId = 11L;
         List<Tag> tags = new ArrayList<>();
-        long tagId = 13L;
-        Tag tag1 = new Tag(tagId, "TestTag2");
+        Tag tag1 = new Tag(13L, "TestTag2");
         tags.add(tag1);
 
-        when(tagRepository.findTagsByNewsId(newsId)).thenReturn(tags);
+        when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTag(any(Tag.class))).thenReturn(null);
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(newsId, new ArrayList<>());
+        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(0, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(newsId);
-        verify(tagRepository, times(1)).removeTagsByNewsId(newsId);
+        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
+        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
         verify(tagRepository, times(tags.size())).findByTag(any(Tag.class));
-        verify(newsRepository, times(0)).addNewsTag(newsId, tagId);
+        verify(newsRepository, times(0)).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
     public void shouldAddTagsWithoutIdForNews() {
-        long newsId = 11L;
         List<Tag> tags = new ArrayList<>();
         Tag tag1 = new Tag("TestTag2");
         tags.add(tag1);
 
-        when(tagRepository.findTagsByNewsId(newsId)).thenReturn(tags);
-        long newTagId = 1L;
-        when(tagRepository.create(tag1)).thenReturn(new Tag(newTagId, "TestTag2"));
+        when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
+        when(tagRepository.create(tag1)).thenReturn(new Tag(1L, "TestTag2"));
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(newsId, new ArrayList<>());
+        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(newsId);
-        verify(tagRepository, times(1)).removeTagsByNewsId(newsId);
+        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
+        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
         verify(tagRepository, times(1)).create(tag1);
-        verify(newsRepository, times(1)).addNewsTag(newsId, newTagId);
+        verify(newsRepository, times(1)).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
     public void shouldAddExistingTagsWithoutIdForNews() {
-        long newsId = 11L;
         List<Tag> tags = new ArrayList<>();
         Tag tag1 = new Tag("TestTag2");
         tags.add(tag1);
 
-        when(tagRepository.findTagsByNewsId(newsId)).thenReturn(tags);
+        when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.create(tag1)).thenReturn(null);
         Tag existingTag = new Tag(1L, "TestTag2");
         when(tagRepository.findByTagName(tag1.getName())).thenReturn(existingTag);
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(newsId, new ArrayList<>());
+        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(newsId);
-        verify(tagRepository, times(1)).removeTagsByNewsId(newsId);
+        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
+        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
         verify(tagRepository, times(1)).create(tag1);
-        verify(tagRepository, times(1)).findByTagName(existingTag.getName());
-        verify(newsRepository, times(1)).addNewsTag(newsId, existingTag.getId());
+        verify(tagRepository, times(1)).findByTagName(any(String.class));
+        verify(newsRepository, times(1)).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
     public void shouldFindCountAllNews() {
-        Long expected = 14L;
+        Long expected = 1L;
         when(newsRepository.countAllNews()).thenReturn(expected);
 
         Long actual = newsService.countAllNews();
