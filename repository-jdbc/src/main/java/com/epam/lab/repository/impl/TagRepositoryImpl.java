@@ -92,7 +92,12 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag findByTagName(final String name) {
-        return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class));
+        try {
+            return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class));
+        } catch (DataAccessException e) {
+            //TODO log
+            return null;
+        }
     }
 
     @Override
