@@ -67,3 +67,28 @@ CREATE TABLE news.roles (
 		ON UPDATE NO ACTION
 		ON DELETE NO ACTION
 );
+
+CREATE VIEW news.full_view AS SELECT search_by.id AS news_id,
+    search_by.title,
+    search_by.short_text,
+    search_by.full_text,
+    search_by.creation_date AS date,
+    search_by.tag_ids,
+    search_by.tag_names,
+    author.id AS author_id,
+    author.name AS author_name,
+    author.surname AS author_surname
+   FROM ( SELECT news.id,
+            news.title,
+            news.short_text,
+            news.full_text,
+            news.creation_date,
+            news.modification_date,
+            array_agg(tag.id) AS tag_ids,
+            array_agg(tag.name) AS tag_names
+           FROM news.news
+             LEFT JOIN news.news_tag ON news.id = news_tag.news_id
+             LEFT JOIN news.tag ON tag.id = news_tag.tag_id
+          GROUP BY news.id) search_by
+     LEFT JOIN news.news_author ON search_by.id = news_author.news_id
+     LEFT JOIN news.author ON news_author.author_id = author.id;
