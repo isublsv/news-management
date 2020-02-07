@@ -53,9 +53,9 @@ public class NewsController {
         newsService.delete(id);
     }
 
-    @GetMapping(value = "/sort", consumes = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/search_by", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<NewsDto> sortNewsBy(@ModelAttribute final SearchCriteria sc) {
+    public List<NewsDto> searchNewsBy(@ModelAttribute final SearchCriteria sc) {
         return newsService.searchBy(sc);
     }
 

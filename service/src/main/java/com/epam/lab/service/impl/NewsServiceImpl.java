@@ -1,6 +1,7 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.dto.OrderBy;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
@@ -37,7 +38,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     public NewsServiceImpl(final NewsRepository newsRepositoryValue, final AuthorRepository authorRepositoryValue,
-            final TagRepository tagRepositoryValue, final NewsMapper newsMapperValue, final TagMapper tagMapperValue) {
+                           final TagRepository tagRepositoryValue, final NewsMapper newsMapperValue, final TagMapper tagMapperValue) {
         this.newsRepository = newsRepositoryValue;
         this.authorRepository = authorRepositoryValue;
         this.tagRepository = tagRepositoryValue;
@@ -188,7 +189,53 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<NewsDto> searchBy(final SearchCriteria searchCriteria) {
-        String sql = searchCriteria.accept();
+        String sql = buildSearchQuery(searchCriteria);
         return newsRepository.searchBy(sql).stream().map(newsMapper::toDto).collect(Collectors.toList());
+    }
+
+    private String buildSearchQuery(final SearchCriteria searchCriteria) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(" WHERE (1=1) ");
+
+        String name = searchCriteria.getName();
+        String surname = searchCriteria.getSurname();
+        Set<String> tags = searchCriteria.getTags();
+        Set<String> orderBy = searchCriteria.getOrderBy();
+        boolean desc = searchCriteria.isDesc();
+
+        if (name != null && !name.isEmpty()) {
+            builder.append(" AND (LOWER(author_name)='")
+                    .append(name)
+                    .append("') ");
+        }
+        if (surname != null && !surname.isEmpty()) {
+            builder.append(" AND (LOWER(author_surname)='")
+                    .append(surname)
+                    .append("') ");
+        }
+        tags.forEach(tagName -> builder.append(" AND ('")
+                .append(tagName)
+                .append("' = ANY(tag_names)) "));
+
+        if (!orderBy.isEmpty()) {
+            builder.append(" ORDER BY ");
+            boolean isFirstColumn = false;
+            for (String order : orderBy) {
+                try {
+                    if (!isFirstColumn) {
+                        builder.append(OrderBy.valueOf(order.toUpperCase()).getColumnName());
+                        isFirstColumn = true;
+                    } else {
+                        builder.append(", ").append(OrderBy.valueOf(order.toUpperCase()).getColumnName());
+                    }
+                } catch (IllegalArgumentException ignored) {
+                }
+            }
+            if (desc) {
+                builder.append(" DESC");
+            }
+        }
+
+        return builder.append(";").toString();
     }
 }
