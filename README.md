@@ -1,4 +1,4 @@
-### Business Requirements###
+### Business Requirements
 Create a backend for simple **News Management** application. Pay attention that your application should be without view layer (UI).
 
 #### The system should expose REST APIs to perform the following operations:
