@@ -145,6 +145,7 @@ public class NewsServiceImplTest {
         entityDto.setTags(new ArrayList<>());
 
         when(authorRepository.create(any(Author.class))).thenReturn(author);
+        when((newsRepository.findNewsByTitle(any(String.class)))).thenReturn(Boolean.FALSE);
         when(newsRepository.create(any(News.class))).thenReturn(news);
 
         NewsDto actual = newsService.create(entityDto);
@@ -271,8 +272,7 @@ public class NewsServiceImplTest {
     @Test
     public void shouldDoNotAddInvalidTagsForNews() {
         List<Tag> tags = new ArrayList<>();
-        Tag tag1 = new Tag(13L, "TestTag2");
-        tags.add(tag1);
+        tags.add(new Tag(1L, "TestTag2"));
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTag(any(Tag.class))).thenReturn(null);
