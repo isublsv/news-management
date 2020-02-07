@@ -56,7 +56,7 @@ public class NewsRepositoryImplTest {
 
     @Test
     public void shouldReturnNullIfIfNewsWasNotFound() {
-        News actual = newsRepository.find(2L);
+        News actual = newsRepository.find(21L);
 
         assertNull(actual);
     }
@@ -79,15 +79,15 @@ public class NewsRepositoryImplTest {
     }
 
     @Test(expected = RepositoryException.class)
-    public void shouldThrowExceptionIfDeleteByNotExistingId() {
-        newsRepository.delete(2L);
+        public void shouldThrowExceptionIfDeleteByNotExistingId() {
+        newsRepository.delete(21L);
     }
 
     @Test
     @Rollback
     public void shouldAddAuthorForNews() {
         long newsId = 1L;
-        long authorId = 1L;
+        long authorId = 4L;
         newsRepository.addNewsAuthor(newsId, authorId);
         News expected = newsRepository.find(newsId);
         List<Long> newsByAuthor = newsRepository.findNewsByAuthorId(authorId);
@@ -111,7 +111,7 @@ public class NewsRepositoryImplTest {
 
     @Test
     public void shouldFindNewsByTitle() {
-        String title = "Title";
+        String title = "title 1";
 
         assertTrue(newsRepository.findNewsByTitle(title));
     }
@@ -127,7 +127,7 @@ public class NewsRepositoryImplTest {
     public void shouldCountOfAllNews() {
         Long actual = newsRepository.countAllNews();
 
-        assertEquals(1L, actual.longValue());
+        assertEquals(20L, actual.longValue());
     }
 
     private static News createNewsForInsertion() {
@@ -141,5 +141,14 @@ public class NewsRepositoryImplTest {
         news.setAuthor(new Author());
 
         return news;
+    }
+
+    @Test
+    public void shouldSearchNewsByProvidedQuery() {
+        String initSqlQuery = " WHERE (1=1)  AND (LOWER(author_name)='Sergei')" +
+                " AND (LOWER(author_surname)='Crachev')";
+        List<News> actual = newsRepository.searchBy(initSqlQuery);
+
+        assertEquals(0, actual.size());
     }
 }
