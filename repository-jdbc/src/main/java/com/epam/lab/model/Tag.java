@@ -13,6 +13,10 @@ public class Tag extends Entity {
         super();
     }
 
+    public Tag(final Long idValue) {
+        super(idValue);
+    }
+
     public Tag(final String nameValue) {
         super();
         name = nameValue;
