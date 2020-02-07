@@ -84,11 +84,11 @@ CREATE INDEX idx_author_name_surname ON news.author (name) INCLUDE (surname);
 CREATE INDEX idx_news_title ON news.news (title);
 
 SELECT search_by.id, search_by.tag_ids, news.author.id
-FROM (SELECT news.id, array_agg(tag.id) AS tag_ids
+FROM (SELECT news.news.id, array_agg(tag.id) AS tag_ids
       FROM news.news
                LEFT JOIN news.news_tag ON news.news.id = news.news_tag.news_id
-               LEFT JOIN news.tag ON news.tag.id = news.news_tag.tag_id) search_by
-         LEFT JOIN news.news_author ON news.news_author.author_id = news.news.id
+               LEFT JOIN news.tag ON news.tag.id = news.news_tag.tag_id GROUP BY news.news.id) search_by
+         LEFT JOIN news.news_author ON search_by.id = news.news_author.news_id
          LEFT JOIN news.author ON news.news_author.author_id = news.author.id;
 
 ALTER TABLE news.author
