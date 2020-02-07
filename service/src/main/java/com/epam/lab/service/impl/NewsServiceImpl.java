@@ -56,20 +56,32 @@ public class NewsServiceImpl implements NewsService {
             Author author = authorRepository.findByAuthor(news.getAuthor());
             if (author != null) {
                 //check if news with provided title exists in the DB
-                if (!Boolean.TRUE.equals(newsRepository.findNewsByTitle(news.getTitle()))) {
-                    createLinkBetweenAuthorAndNews(news, author);
-                } else {
-                    throw new ServiceException("The news is exists with provided title");
-                }
+                checkNewsActuality(news, author);
             } else {
                 throw new ServiceException("The author entity is invalid");
             }
         } else {
             Author author = authorRepository.create(news.getAuthor());
-            createLinkBetweenAuthorAndNews(news, author);
+            checkNewsActuality(news, author);
             news.setAuthor(author);
         }
         return createTagsForNews(entityDto, news);
+    }
+
+    private void checkNewsActuality(final News news, final Author author) {
+        if (!Boolean.TRUE.equals(newsRepository.findNewsByTitle(news.getTitle()))) {
+            createLinkBetweenAuthorAndNews(news, author);
+        } else {
+            throw new ServiceException("The news is exists with provided title");
+        }
+    }
+
+    private void createLinkBetweenAuthorAndNews(final News news, final Author author) {
+        News fullNewsEntity = newsRepository.create(news);
+        newsRepository.addNewsAuthor(fullNewsEntity.getId(), author.getId());
+        news.setId(fullNewsEntity.getId());
+        news.setCreationDate(fullNewsEntity.getCreationDate());
+        news.setModificationDate(fullNewsEntity.getModificationDate());
     }
 
     private NewsDto createTagsForNews(final NewsDto entityDto, final News news) {
@@ -90,14 +102,6 @@ public class NewsServiceImpl implements NewsService {
         List<Tag> tags = tagRepository.findTagsByNewsId(news.getId());
         news.setTags(tags);
         return newsMapper.toDto(news);
-    }
-
-    private void createLinkBetweenAuthorAndNews(final News news, final Author author) {
-        News fullNewsEntity = newsRepository.create(news);
-        newsRepository.addNewsAuthor(fullNewsEntity.getId(), author.getId());
-        news.setId(fullNewsEntity.getId());
-        news.setCreationDate(fullNewsEntity.getCreationDate());
-        news.setModificationDate(fullNewsEntity.getModificationDate());
     }
 
     @Override
