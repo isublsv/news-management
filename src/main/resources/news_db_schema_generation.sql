@@ -83,7 +83,7 @@ CREATE INDEX idx_author_name_surname ON news.author (name) INCLUDE (surname);
 
 CREATE INDEX idx_news_title ON news.news (title);
 
- SELECT search_by.id AS news_id,
+ CREATE VIEW news.full_view AS SELECT search_by.id AS news_id,
     search_by.title,
     search_by.short_text,
     search_by.full_text,
