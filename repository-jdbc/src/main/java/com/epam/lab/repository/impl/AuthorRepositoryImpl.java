@@ -58,7 +58,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     @Override
     public Author find(final Long id) {
         return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_ID,
-                                           new Object[]{id}, new BeanPropertyRowMapper<>(Author.class));
+                new Object[]{id}, new BeanPropertyRowMapper<>(Author.class));
     }
 
     @Override
@@ -77,17 +77,22 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author findByAuthor(final Author author) {
-        return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_ID_NAME_SURNAME,
-                new Object[]{author.getId(), author.getName(), author.getSurname()},
-                                           new BeanPropertyRowMapper<>(Author.class));
+        try {
+            return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_ID_NAME_SURNAME,
+                    new Object[]{author.getId(), author.getName(), author.getSurname()},
+                    new BeanPropertyRowMapper<>(Author.class));
+        } catch (EmptyResultDataAccessException eValue) {
+            //TODO log
+            return null;
+        }
     }
 
     @Override
     public Author findAuthorByNameAndSurname(final Author author) {
         try {
             return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_NAME_SURNAME,
-                                               new Object[]{author.getName(), author.getSurname()},
-                                               new BeanPropertyRowMapper<>(Author.class));
+                    new Object[]{author.getName(), author.getSurname()},
+                    new BeanPropertyRowMapper<>(Author.class));
         } catch (EmptyResultDataAccessException e) {
             //TODO log
             return null;
