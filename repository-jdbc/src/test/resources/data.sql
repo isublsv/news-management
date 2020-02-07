@@ -20,7 +20,7 @@ INSERT INTO news.author (name, surname) VALUES
     ('Vladimir', 'Kolesnikov'),
     ('Igor', 'Mishkin');
 
-INSERT INTO news.tag (name) VALUES 
+INSERT INTO news.tag (name) VALUES
     ('animals'),
     ('game'),
     ('pet'),
@@ -63,3 +63,46 @@ insert into news.news (title, short_text, full_text, creation_date, modification
     ('title 18', 'short text 18', 'full text 18', '2020-01-13', '2020-01-28'),
     ('title 19', 'short text 19', 'full text 19', '2020-01-25', '2020-01-28'),
     ('title 20', 'short text 20', 'full text 20', '2020-01-28', '2020-01-28');
+
+INSERT INTO news.news_author (news_id, author_id) VALUES
+(1, 3),
+(2, 3),
+(3, 3),
+(4, 3),
+(5, 4),
+(6, 4),
+(7, 4),
+(8, 1),
+(9, 1),
+(10, 2),
+(11, 3),
+(12, 5),
+(13, 5),
+(14, 8),
+(15, 9),
+(16, 10),
+(17, 11),
+(18, 11),
+(19, 12);
+
+INSERT INTO news.news_tag (news_id, tag_id) VALUES
+(1, 4),
+(1, 5),
+(1, 6),
+(2, 4),
+(5, 7),
+(5, 8),
+(3, 9),
+(3, 10),
+(3, 11),
+(4, 4),
+(4, 5),
+(4, 7),
+(16, 3),
+(16, 1),
+(9, 3),
+(19, 4),
+(19, 10),
+(19, 11),
+(16, 2),
+(10, 5);

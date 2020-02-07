@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -79,20 +78,20 @@ public class NewsRepositoryImplTest {
     }
 
     @Test(expected = RepositoryException.class)
-        public void shouldThrowExceptionIfDeleteByNotExistingId() {
+    public void shouldThrowExceptionIfDeleteByNotExistingId() {
         newsRepository.delete(21L);
     }
 
     @Test
     @Rollback
     public void shouldAddAuthorForNews() {
-        long newsId = 1L;
+        long newsId = 20L;
         long authorId = 4L;
         newsRepository.addNewsAuthor(newsId, authorId);
         News expected = newsRepository.find(newsId);
         List<Long> newsByAuthor = newsRepository.findNewsByAuthorId(authorId);
 
-        assertEquals(1, newsByAuthor.size());
+        assertEquals(4, newsByAuthor.size());
         assertTrue(newsByAuthor.contains(expected.getId()));
     }
 
@@ -105,7 +104,7 @@ public class NewsRepositoryImplTest {
         List<Tag> newsTags = tagRepository.findTagsByNewsId(newsId);
         Tag actual = tagRepository.find(tagId);
 
-        assertEquals(1, newsTags.size());
+        assertEquals(4, newsTags.size());
         assertTrue(newsTags.contains(actual));
     }
 
@@ -145,8 +144,8 @@ public class NewsRepositoryImplTest {
 
     @Test
     public void shouldSearchNewsByProvidedQuery() {
-        String initSqlQuery = " WHERE (1=1)  AND (LOWER(author_name)='Sergei')" +
-                " AND (LOWER(author_surname)='Crachev')";
+        String initSqlQuery = " WHERE (1=1)  AND (LOWER(author_name)='Igor')" +
+                " AND (LOWER(author_surname)='Bikov')";
         List<News> actual = newsRepository.searchBy(initSqlQuery);
 
         assertEquals(0, actual.size());
