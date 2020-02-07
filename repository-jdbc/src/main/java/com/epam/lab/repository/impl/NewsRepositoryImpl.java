@@ -52,7 +52,7 @@ public class NewsRepositoryImpl implements NewsRepository {
     private static final String FIND_NEWS_BY_TITLE = "SELECT EXISTS(SELECT title FROM news.news WHERE title=?);";
 
     private static final String FIND_BY_QUERY = "SELECT news_id, title, short_text, full_text, date, tag_ids,"
-            + " tag_names, author_id, author_name, author_surname FROM news.search_by ";
+            + " tag_names, author_id, author_name, author_surname FROM news.full_view ";
 
     private final JdbcTemplate jdbcTemplate;
 
