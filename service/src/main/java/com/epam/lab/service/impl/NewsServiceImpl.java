@@ -1,10 +1,10 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.NewsDto;
-import com.epam.lab.dto.OrderBy;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
+import com.epam.lab.dto.mapper.SearchCriteriaBuilder;
 import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
@@ -61,9 +61,9 @@ public class NewsServiceImpl implements NewsService {
                 throw new ServiceException("The author entity is invalid");
             }
         } else {
+            //create a new author and make link to current news entity
             Author author = authorRepository.create(news.getAuthor());
             checkNewsActuality(news, author);
-            news.setAuthor(author);
         }
         return createTagsForNews(entityDto, news);
     }
@@ -79,18 +79,20 @@ public class NewsServiceImpl implements NewsService {
     private void createLinkBetweenAuthorAndNews(final News news, final Author author) {
         News fullNewsEntity = newsRepository.create(news);
         newsRepository.addNewsAuthor(fullNewsEntity.getId(), author.getId());
+
         news.setId(fullNewsEntity.getId());
         news.setCreationDate(fullNewsEntity.getCreationDate());
         news.setModificationDate(fullNewsEntity.getModificationDate());
+        news.setAuthor(author);
     }
 
     private NewsDto createTagsForNews(final NewsDto entityDto, final News news) {
-        List<TagDto> tagDtos = new ArrayList<>();
+        List<TagDto> tagDtoList = new ArrayList<>();
         if (news.getTags() != null) {
-            tagDtos.addAll(addTagsForNews(news.getId(), entityDto.getTags()));
+            tagDtoList.addAll(addTagsForNews(news.getId(), entityDto.getTags()));
         }
         NewsDto newsDto = newsMapper.toDto(news);
-        newsDto.setTags(tagDtos);
+        newsDto.setTags(tagDtoList);
         return newsDto;
     }
 
@@ -192,54 +194,14 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsDto> searchBy(final SearchCriteria searchCriteria) {
-        String sql = buildSearchQuery(searchCriteria);
+    public List<NewsDto> searchBy(final SearchCriteria sc) {
+        String sql = new SearchCriteriaBuilder()
+                .setAuthorName(sc.getName())
+                .setAuthorSurname(sc.getSurname())
+                .setTags(sc.getTags())
+                .setSortAndOrder(sc.getOrderBy(), sc.isDesc())
+                .buildSearchQuery();
         return newsRepository.searchBy(sql).stream().map(newsMapper::toDto).collect(Collectors.toList());
     }
 
-    private String buildSearchQuery(final SearchCriteria searchCriteria) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(" WHERE (1=1) ");
-
-        String name = searchCriteria.getName();
-        String surname = searchCriteria.getSurname();
-        Set<String> tags = searchCriteria.getTags();
-        Set<String> orderBy = searchCriteria.getOrderBy();
-        boolean desc = searchCriteria.isDesc();
-
-        if (name != null && !name.isEmpty()) {
-            builder.append(" AND (LOWER(author_name)='")
-                    .append(name)
-                    .append("') ");
-        }
-        if (surname != null && !surname.isEmpty()) {
-            builder.append(" AND (LOWER(author_surname)='")
-                    .append(surname)
-                    .append("') ");
-        }
-        tags.forEach(tagName -> builder.append(" AND ('")
-                .append(tagName)
-                .append("' = ANY(tag_names)) "));
-
-        if (!orderBy.isEmpty()) {
-            builder.append(" ORDER BY ");
-            boolean isFirstColumn = false;
-            for (String order : orderBy) {
-                try {
-                    if (!isFirstColumn) {
-                        builder.append(OrderBy.valueOf(order.toUpperCase()).getColumnName());
-                        isFirstColumn = true;
-                    } else {
-                        builder.append(", ").append(OrderBy.valueOf(order.toUpperCase()).getColumnName());
-                    }
-                } catch (IllegalArgumentException ignored) {
-                }
-            }
-            if (desc) {
-                builder.append(" DESC");
-            }
-        }
-
-        return builder.append(";").toString();
-    }
 }
