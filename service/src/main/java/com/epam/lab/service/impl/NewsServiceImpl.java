@@ -2,9 +2,9 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.SearchCriteria;
+import com.epam.lab.dto.SearchCriteriaBuilder;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
-import com.epam.lab.dto.mapper.SearchCriteriaBuilder;
 import com.epam.lab.dto.mapper.TagMapper;
 import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
@@ -17,7 +17,6 @@ import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Transactional
 @Service("newsService")
 public class NewsServiceImpl implements NewsService {
 
@@ -37,8 +35,11 @@ public class NewsServiceImpl implements NewsService {
     private final TagMapper tagMapper;
 
     @Autowired
-    public NewsServiceImpl(final NewsRepository newsRepositoryValue, final AuthorRepository authorRepositoryValue,
-                           final TagRepository tagRepositoryValue, final NewsMapper newsMapperValue, final TagMapper tagMapperValue) {
+    public NewsServiceImpl(final NewsRepository newsRepositoryValue,
+            final AuthorRepository authorRepositoryValue,
+            final TagRepository tagRepositoryValue,
+            final NewsMapper newsMapperValue,
+            final TagMapper tagMapperValue) {
         this.newsRepository = newsRepositoryValue;
         this.authorRepository = authorRepositoryValue;
         this.tagRepository = tagRepositoryValue;
@@ -65,7 +66,9 @@ public class NewsServiceImpl implements NewsService {
             Author author = authorRepository.create(news.getAuthor());
             checkNewsActuality(news, author);
         }
-        return createTagsForNews(entityDto, news);
+        NewsDto newsDto = newsMapper.toDto(news);
+        newsDto.setTags(addTagsForNews(news.getId(), entityDto.getTags()));
+        return newsDto;
     }
 
     private void checkNewsActuality(final News news, final Author author) {
@@ -84,16 +87,6 @@ public class NewsServiceImpl implements NewsService {
         news.setCreationDate(fullNewsEntity.getCreationDate());
         news.setModificationDate(fullNewsEntity.getModificationDate());
         news.setAuthor(author);
-    }
-
-    private NewsDto createTagsForNews(final NewsDto entityDto, final News news) {
-        List<TagDto> tagDtoList = new ArrayList<>();
-        if (news.getTags() != null) {
-            tagDtoList.addAll(addTagsForNews(news.getId(), entityDto.getTags()));
-        }
-        NewsDto newsDto = newsMapper.toDto(news);
-        newsDto.setTags(tagDtoList);
-        return newsDto;
     }
 
     @Override
@@ -132,7 +125,9 @@ public class NewsServiceImpl implements NewsService {
                 news.setAuthor(newAuthor);
             }
         }
-        return createTagsForNews(entityDto, news);
+        NewsDto newsDto = newsMapper.toDto(news);
+        newsDto.setTags(addTagsForNews(news.getId(), entityDto.getTags()));
+        return newsDto;
     }
 
     @Override
@@ -203,5 +198,4 @@ public class NewsServiceImpl implements NewsService {
                 .buildSearchQuery();
         return newsRepository.searchBy(sql).stream().map(newsMapper::toDto).collect(Collectors.toList());
     }
-
 }

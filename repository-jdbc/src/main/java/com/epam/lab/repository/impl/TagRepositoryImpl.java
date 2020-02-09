@@ -57,6 +57,7 @@ public class TagRepositoryImpl implements TagRepository {
             entity.setId(requireNonNull(keyHolder.getKey()).longValue());
             return entity;
         } catch (DataAccessException e) {
+            //TODO log
             return null;
         }
     }
@@ -86,6 +87,7 @@ public class TagRepositoryImpl implements TagRepository {
             return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME, new Object[]{tag.getId(), tag.getName()},
                                                new BeanPropertyRowMapper<>(Tag.class));
         } catch (DataAccessException e) {
+            //TODO log
             return null;
         }
     }

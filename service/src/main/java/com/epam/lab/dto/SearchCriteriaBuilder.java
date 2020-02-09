@@ -1,6 +1,4 @@
-package com.epam.lab.dto.mapper;
-
-import com.epam.lab.dto.OrderBy;
+package com.epam.lab.dto;
 
 import java.util.Set;
 

@@ -16,6 +16,18 @@ public class SearchCriteria {
         this.orderBy = new LinkedHashSet<>();
     }
 
+    public SearchCriteria(final String nameValue,
+            final String surnameValue,
+            final Set<String> tagsValue,
+            final Set<String> orderByValue,
+            final boolean descValue) {
+        name = nameValue;
+        surname = surnameValue;
+        tags = tagsValue;
+        orderBy = orderByValue;
+        desc = descValue;
+    }
+
     public String getName() {
         return name;
     }

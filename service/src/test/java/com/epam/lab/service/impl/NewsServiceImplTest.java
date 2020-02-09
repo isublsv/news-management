@@ -336,7 +336,4 @@ public class NewsServiceImplTest {
         verify(newsRepository, times(1)).countAllNews();
     }
 
-    @Test
-    public void shouldSearchBy() {
-    }
 }
