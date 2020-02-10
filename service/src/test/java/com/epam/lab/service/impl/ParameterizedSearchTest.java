@@ -95,7 +95,7 @@ public class ParameterizedSearchTest {
         when(newsRepository.searchBy(any(String.class))).thenReturn(newsList);
 
         List<NewsDto> actual = newsService.searchBy(searchCriteria);
-        assertEquals(expectedNewsDtoList.size(), actual.size());
+        assertEquals(expectedNewsDtoList, actual);
         assertEquals(expectedNewsDtoList.get(0).getTitle(),actual.get(0).getTitle());
     }
 
