@@ -21,41 +21,6 @@ public class NewsDto extends AbstractDto {
         super();
     }
 
-    public NewsDto(final String titleValue,
-            final String shortTextValue,
-            final String fullTextValue,
-            final LocalDate creationDateValue,
-            final LocalDate modificationDateValue,
-            final AuthorDto authorValue,
-            final List<TagDto> tagsValue) {
-        super();
-        title = titleValue;
-        shortText = shortTextValue;
-        fullText = fullTextValue;
-        creationDate = creationDateValue;
-        modificationDate = modificationDateValue;
-        author = authorValue;
-        tags = tagsValue;
-    }
-
-    public NewsDto(final long id,
-            final String titleValue,
-            final String shortTextValue,
-            final String fullTextValue,
-            final LocalDate creationDateValue,
-            final LocalDate modificationDateValue,
-            final AuthorDto authorValue,
-            final List<TagDto> tagsValue) {
-        super(id);
-        title = titleValue;
-        shortText = shortTextValue;
-        fullText = fullTextValue;
-        creationDate = creationDateValue;
-        modificationDate = modificationDateValue;
-        author = authorValue;
-        tags = tagsValue;
-    }
-
     /**
      * Gets title.
      *
@@ -199,5 +164,12 @@ public class NewsDto extends AbstractDto {
         return title.equals(newsDto.title) && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
                && creationDate.equals(newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate)
                && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("NewsDto{id=%d, title='%s', shortText='%s', fullText='%s', creationDate=%s,"
+                + " modificationDate=%s, author=%s, tags=%s}",
+                getId(), title, shortText, fullText, creationDate, modificationDate, author, tags);
     }
 }

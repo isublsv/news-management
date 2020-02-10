@@ -9,7 +9,7 @@ public abstract class AbstractDto implements Serializable {
     public AbstractDto() {
     }
 
-    public AbstractDto(final long idValue) {
+    public AbstractDto(final Long idValue) {
         this.id = idValue;
     }
 

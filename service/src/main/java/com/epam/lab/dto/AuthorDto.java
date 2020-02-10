@@ -16,14 +16,7 @@ public class AuthorDto extends AbstractDto {
         super();
     }
 
-    public AuthorDto(final String nameValue, final String surnameValue, final List<NewsDto> newsValue) {
-        super();
-        name = nameValue;
-        surname = surnameValue;
-        news = newsValue;
-    }
-
-    public AuthorDto(final long id, final String nameValue, final String surnameValue,
+    public AuthorDto(final Long id, final String nameValue, final String surnameValue,
             final List<NewsDto> newsValue) {
         super(id);
         name = nameValue;
@@ -101,5 +94,10 @@ public class AuthorDto extends AbstractDto {
     @Override
     public int hashCode() {
         return Objects.hash(name, surname, news);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("AuthorDto{id=%d, name='%s', surname='%s', news=%s}", getId(), name, surname, news);
     }
 }

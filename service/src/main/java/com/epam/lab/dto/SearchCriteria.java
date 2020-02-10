@@ -67,4 +67,10 @@ public class SearchCriteria {
     public void setDesc(final boolean descValue) {
         desc = descValue;
     }
+
+    @Override
+    public String toString() {
+        return String.format("SearchCriteria{name='%s', surname='%s', tags=%s, orderBy=%s, desc=%s}",
+                name, surname, tags, orderBy, desc);
+    }
 }

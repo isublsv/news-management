@@ -18,7 +18,7 @@ public class TagDto extends AbstractDto {
         name = nameValue;
     }
 
-    public TagDto(final long idValue, final String nameValue) {
+    public TagDto(final Long idValue, final String nameValue) {
         super(idValue);
         name = nameValue;
     }
@@ -52,5 +52,10 @@ public class TagDto extends AbstractDto {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("TagDto{id=%d, name='%s'}", getId(), name);
     }
 }
