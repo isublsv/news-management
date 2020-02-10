@@ -34,6 +34,8 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
@@ -51,13 +53,15 @@ public class ParameterizedSearchTest {
         expectedNewsDtoList = expectedNewsDtoListValue;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "{index}: test with {0}, result = {1}")
     public static Collection<Object[]> data() {
         Set<String> tags = new HashSet<>();
         tags.add("Tag");
 
         Set<String> orderBy = new LinkedHashSet<>();
         orderBy.add("date");
+        orderBy.add("tag_names");
+        orderBy.add("srname");
 
         List<NewsDto> dtoList = new ArrayList<>();
         dtoList.add(createNewsDto());
@@ -96,7 +100,9 @@ public class ParameterizedSearchTest {
 
         List<NewsDto> actual = newsService.searchBy(searchCriteria);
         assertEquals(expectedNewsDtoList, actual);
-        assertEquals(expectedNewsDtoList.get(0).getTitle(),actual.get(0).getTitle());
+        assertEquals(expectedNewsDtoList.get(0).getTitle(), actual.get(0).getTitle());
+
+        verify(newsRepository, timeout(1)).searchBy(any(String.class));
     }
 
     private void createInitNewsEntity() {

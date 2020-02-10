@@ -12,9 +12,7 @@ import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.impl.AuthorRepositoryImpl;
 import com.epam.lab.repository.impl.NewsRepositoryImpl;
 import com.epam.lab.service.AuthorService;
-import com.epam.lab.service.Service;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
 
