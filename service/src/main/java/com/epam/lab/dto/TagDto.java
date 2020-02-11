@@ -1,12 +1,16 @@
 package com.epam.lab.dto;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Component("tagDto")
 public class TagDto extends AbstractDto {
 
+    @NotNull
+    @Length(min = 2, max = 30, message = "Name cannot be null and must be between 2 and 30 characters")
     private String name;
 
     public TagDto() {
@@ -42,9 +46,13 @@ public class TagDto extends AbstractDto {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TagDto tagDto = (TagDto) o;
         return Objects.equals(name, tagDto.name);
     }

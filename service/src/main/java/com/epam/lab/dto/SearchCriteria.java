@@ -1,20 +1,19 @@
 package com.epam.lab.dto;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 public class SearchCriteria {
-    private String name;
-    private String surname;
-    private Set<String> tags;
-    private Set<String> orderBy;
-    private boolean desc;
 
-    public SearchCriteria() {
-        this.tags = new HashSet<>();
-        this.orderBy = new LinkedHashSet<>();
-    }
+    @Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE)
+    private String name;
+
+    @Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE)
+    private String surname;
+
+    private Set<@Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE) String> tags;
+    private Set<@Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE) String> orderBy;
+    private boolean desc;
 
     public SearchCriteria(final String nameValue,
             final String surnameValue,

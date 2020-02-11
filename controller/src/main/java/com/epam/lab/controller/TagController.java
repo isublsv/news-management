@@ -1,10 +1,11 @@
 package com.epam.lab.controller;
 
 import com.epam.lab.dto.TagDto;
-import com.epam.lab.exception.ServiceException;
 import com.epam.lab.service.TagService;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,10 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/tag")
+@Validated
 public class TagController {
 
     private TagService tagService;
@@ -32,27 +37,27 @@ public class TagController {
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public TagDto addTag(@RequestBody final TagDto tagDto) {
+    @Valid
+    public TagDto addTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.create(tagDto);
     }
 
-    @GetMapping("/find/{id}")
-    public TagDto findTagById(@PathVariable final Long id) {
+    @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
+    public TagDto findTagById(@PathVariable @NotNull
+    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
         return tagService.find(id);
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public TagDto editTag(@RequestBody final TagDto tagDto) {
+    @Valid
+    public TagDto editTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.update(tagDto);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTag(@PathVariable final Long id) {
-        try {
-            tagService.delete(id);
-        } catch (ServiceException e) {
-           //TODO
-        }
+    public void deleteTag(@PathVariable @NotNull
+    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
+        tagService.delete(id);
     }
 }

@@ -1,15 +1,23 @@
 package com.epam.lab.dto;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
 @Component("authorDto")
 public class AuthorDto extends AbstractDto {
 
+    @NotNull
+    @Length(min = 2, max = 30, message = "Name cannot be null and must be between 2 and 30 characters")
     private String name;
+    
+    @NotNull
+    @Length(min = 2, max = 30, message = "Surname cannot be null and must be between 2 and 30 characters")
     private String surname;
+    
     private List<NewsDto> news;
 
     public AuthorDto() {

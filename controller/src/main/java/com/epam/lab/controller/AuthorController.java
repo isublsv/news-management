@@ -2,8 +2,10 @@ package com.epam.lab.controller;
 
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.service.AuthorService;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/author")
+@Validated
 public class AuthorController {
 
     private AuthorService authorService;
@@ -31,23 +37,28 @@ public class AuthorController {
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public AuthorDto createAuthor(@RequestBody final AuthorDto authorDto) {
+    @Valid
+    public AuthorDto createAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.create(authorDto);
     }
 
-    @GetMapping("/find/{id}")
-    public AuthorDto findAuthorById(@PathVariable final Long id) {
+    @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
+    @Valid
+    public AuthorDto findAuthorById(@PathVariable @NotNull
+    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
         return authorService.find(id);
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public AuthorDto editAuthor(@RequestBody final AuthorDto authorDto) {
+    @Valid
+    public AuthorDto editAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.update(authorDto);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteAuthor(@PathVariable final Long id) {
+    public void deleteAuthor(@PathVariable @NotNull
+    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
         authorService.delete(id);
     }
 }
