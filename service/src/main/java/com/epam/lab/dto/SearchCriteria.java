@@ -1,6 +1,8 @@
 package com.epam.lab.dto;
 
 import javax.validation.constraints.Pattern;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SearchCriteria {
@@ -16,6 +18,8 @@ public class SearchCriteria {
     private boolean desc;
 
     public SearchCriteria() {
+        tags = new HashSet<>();
+        orderBy = new LinkedHashSet<>();
     }
 
     public SearchCriteria(final String nameValue,
