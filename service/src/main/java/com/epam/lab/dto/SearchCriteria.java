@@ -15,11 +15,14 @@ public class SearchCriteria {
     private Set<@Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE) String> orderBy;
     private boolean desc;
 
+    public SearchCriteria() {
+    }
+
     public SearchCriteria(final String nameValue,
-            final String surnameValue,
-            final Set<String> tagsValue,
-            final Set<String> orderByValue,
-            final boolean descValue) {
+                          final String surnameValue,
+                          final Set<String> tagsValue,
+                          final Set<String> orderByValue,
+                          final boolean descValue) {
         name = nameValue;
         surname = surnameValue;
         tags = tagsValue;
