@@ -35,10 +35,10 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     public NewsServiceImpl(final NewsRepository newsRepositoryValue,
-            final AuthorRepository authorRepositoryValue,
-            final TagRepository tagRepositoryValue,
-            final NewsMapper newsMapperValue,
-            final TagMapper tagMapperValue) {
+                           final AuthorRepository authorRepositoryValue,
+                           final TagRepository tagRepositoryValue,
+                           final NewsMapper newsMapperValue,
+                           final TagMapper tagMapperValue) {
         this.newsRepository = newsRepositoryValue;
         this.authorRepository = authorRepositoryValue;
         this.tagRepository = tagRepositoryValue;
@@ -111,6 +111,7 @@ public class NewsServiceImpl implements NewsService {
         News handledNews;
         if (news.getId() != null) {
             handledNews = newsRepository.update(news);
+            newsRepository.removeNewsAuthor(handledNews.getId());
         } else {
             handledNews = newsRepository.create(news);
         }
@@ -128,42 +129,41 @@ public class NewsServiceImpl implements NewsService {
         tags.addAll(tagDtoList.stream().map(tagMapper::toEntity).collect(Collectors.toList()));
         tagRepository.removeTagsByNewsId(newsId);
 
-        Iterator<Tag> it = tags.iterator();
+        handleNewsTags(newsId, tags);
+        return convertTagsToDtos(tags);
+    }
+
+    private void handleNewsTags(final Long newsId, final Set<Tag> tagsValue) {
+        Iterator<Tag> it = tagsValue.iterator();
         while (it.hasNext()) {
             Tag tag = it.next();
-            //if tag has ID
             if (tag.getId() != null) {
-                //than check if tag is valid
-                Tag validTag = tagRepository.findByTag(tag);
-                //if its valid than add this tag for provided news
-                if (validTag != null) {
-                    //than add this tag for provided news
-                    newsRepository.addNewsTag(newsId, tag.getId());
-                } else {
-                    //else remove from the list
+                try {
+                    Tag validTag = tagRepository.findByTag(tag);
+                    newsRepository.addNewsTag(newsId, validTag.getId());
+                } catch (EmptyResultDataAccessException e) {
                     it.remove();
                 }
             } else {
-                //if a tag hasn't ID than we'll try to add it to the DB
-                Tag newTagId = tagRepository.create(tag);
-                //if the operation above was complete successfully
-                if (newTagId != null) {
-                    //than add this tag for provided news
-                    newsRepository.addNewsTag(newsId, newTagId.getId());
-                    tag.setId(newTagId.getId());
-                    //else there is a tag with the same name in the DB
-                } else {
-                    //find tag ID by name
-                    Tag tagByName = tagRepository.findByTagName(tag.getName());
-                    //than add this tag for provided news
-                    if (tagByName != null) {
-                        newsRepository.addNewsTag(newsId, tagByName.getId());
-                        tag.setId(tagByName.getId());
-                    }
-                }
+                Tag handledTag = handleTag(tag);
+                newsRepository.addNewsTag(newsId, handledTag.getId());
+                tag.setId(handledTag.getId());
             }
         }
-        return tags.stream().map(tagMapper::toDto).collect(Collectors.toList());
+    }
+
+    private Tag handleTag(final Tag tag) {
+        Tag handledTag;
+        try {
+            handledTag = tagRepository.findByTagName(tag.getName());
+        } catch (EmptyResultDataAccessException e) {
+            handledTag = tagRepository.create(tag);
+        }
+        return handledTag;
+    }
+
+    private List<TagDto> convertTagsToDtos(final Set<Tag> tagsValue) {
+        return tagsValue.stream().map(tagMapper::toDto).collect(Collectors.toList());
     }
 
     @Override

@@ -10,6 +10,8 @@ public interface NewsRepository extends Repository<News> {
 
     void addNewsAuthor(Long newsId, Long authorId);
 
+    void removeNewsAuthor(Long newsId);
+
     void addNewsTag(Long newsId, Long tagId);
     
     Boolean findNewsByTitle(String title);
@@ -17,4 +19,5 @@ public interface NewsRepository extends Repository<News> {
     List<Long> findNewsByAuthorId(Long authorId);
 
     List<News> searchBy(String sqlQuery);
+
 }

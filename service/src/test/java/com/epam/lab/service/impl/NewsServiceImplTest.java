@@ -205,7 +205,6 @@ public class NewsServiceImplTest {
         verify(authorRepository).create(any(Author.class));
     }
 
-
     @Test
     public void shouldDeleteNewsById() {
         newsService.delete(anyLong());
@@ -215,12 +214,10 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldAddValidTagsForNews() {
-        List<Tag> tags = new ArrayList<>();
-        Tag tag1 = new Tag(1L, "TestTag1");
-        tags.add(tag1);
+        List<Tag> tags = createTagsWithIds();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
-        when(tagRepository.findByTag(any(Tag.class))).thenReturn(tag1);
+        when(tagRepository.findByTag(any(Tag.class))).thenReturn(tags.get(0));
 
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
@@ -233,11 +230,10 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldDoNotAddInvalidTagsForNews() {
-        List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag(1L, "TestTag2"));
+        List<Tag> tags = createTagsWithIds();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
-        when(tagRepository.findByTag(any(Tag.class))).thenReturn(null);
+        when(tagRepository.findByTag(any(Tag.class))).thenThrow(EmptyResultDataAccessException.class);
 
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(0, tagDtoList.size());
@@ -248,43 +244,50 @@ public class NewsServiceImplTest {
         verify(newsRepository, never()).addNewsTag(anyLong(), anyLong());
     }
 
-    @Test
-    public void shouldAddTagsWithoutIdForNews() {
+    private List<Tag> createTagsWithIds() {
         List<Tag> tags = new ArrayList<>();
-        Tag tag1 = new Tag("TestTag2");
-        tags.add(tag1);
-
-        when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
-        when(tagRepository.create(tag1)).thenReturn(new Tag(1L, "TestTag2"));
-
-        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
-        assertEquals(1, tagDtoList.size());
-
-        verify(tagRepository).findTagsByNewsId(anyLong());
-        verify(tagRepository).removeTagsByNewsId(anyLong());
-        verify(tagRepository).create(tag1);
-        verify(newsRepository).addNewsTag(anyLong(), anyLong());
+        tags.add(new Tag(1L, "TestTag2"));
+        return tags;
     }
 
     @Test
     public void shouldAddExistingTagsWithoutIdForNews() {
-        List<Tag> tags = new ArrayList<>();
-        Tag tag1 = new Tag("TestTag2");
-        tags.add(tag1);
+        List<Tag> tags = createTagListWithoutId();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
-        when(tagRepository.create(tag1)).thenReturn(null);
-        Tag existingTag = new Tag(1L, "TestTag2");
-        when(tagRepository.findByTagName(tag1.getName())).thenReturn(existingTag);
+        when(tagRepository.findByTagName(any(String.class))).thenReturn(new Tag(1L, "TestTag2"));
 
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
         verify(tagRepository).findTagsByNewsId(anyLong());
         verify(tagRepository).removeTagsByNewsId(anyLong());
-        verify(tagRepository).create(tag1);
         verify(tagRepository).findByTagName(any(String.class));
         verify(newsRepository).addNewsTag(anyLong(), anyLong());
+    }
+
+    @Test
+    public void shouldAddTagsWithoutIdForNews() {
+        List<Tag> tags = createTagListWithoutId();
+
+        when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
+        when(tagRepository.findByTagName(any(String.class))).thenThrow(EmptyResultDataAccessException.class);
+        when(tagRepository.create(any(Tag.class))).thenReturn(new Tag(1L, "TestTag2"));
+
+        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
+        assertEquals(1, tagDtoList.size());
+
+        verify(tagRepository).findTagsByNewsId(anyLong());
+        verify(tagRepository).removeTagsByNewsId(anyLong());
+        verify(tagRepository).findByTagName(any(String.class));
+        verify(tagRepository).create(any(Tag.class));
+        verify(newsRepository).addNewsTag(anyLong(), anyLong());
+    }
+
+    private List<Tag> createTagListWithoutId() {
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag("TestTag2"));
+        return tags;
     }
 
     @Test

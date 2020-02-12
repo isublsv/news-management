@@ -43,6 +43,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     private static final String INSERT_NEWS_AND_AUTHOR_IDS = "INSERT INTO news.news_author (news_id, author_id) "
             + "VALUES (?, ?);";
+    private static final String REMOVE_AUTHOR_FOR_NEWS = "DELETE FROM news.news_author WHERE news_id=?;";
 
     private static final String INSERT_NEWS_AND_TAG_IDS = "INSERT INTO news.news_tag (news_id, tag_id) VALUES (?, ?);";
 
@@ -117,6 +118,11 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public void addNewsAuthor(final Long newsId, final Long authorId) {
         jdbcTemplate.update(INSERT_NEWS_AND_AUTHOR_IDS, newsId, authorId);
+    }
+
+    @Override
+    public void removeNewsAuthor(final Long newsId) {
+        jdbcTemplate.update(REMOVE_AUTHOR_FOR_NEWS, newsId);
     }
 
     @Override
