@@ -1,11 +1,9 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -47,19 +45,14 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag create(final Tag entity) {
-        try {
-            KeyHolder keyHolder = new GeneratedKeyHolder();
-            jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(INSERT_TAG, new String[]{"id"});
-                ps.setString(1, entity.getName());
-                return ps;
-            }, keyHolder);
-            entity.setId(requireNonNull(keyHolder.getKey()).longValue());
-            return entity;
-        } catch (DataAccessException e) {
-            //TODO log
-            return null;
-        }
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(INSERT_TAG, new String[]{"id"});
+            ps.setString(1, entity.getName());
+            return ps;
+        }, keyHolder);
+        entity.setId(requireNonNull(keyHolder.getKey()).longValue());
+        return entity;
     }
 
     @Override
@@ -75,31 +68,19 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void delete(final Long id) {
-        int rowsNumber = jdbcTemplate.update(DELETE_TAG_BY_ID, id);
-        if (rowsNumber == 0) {
-            throw new RepositoryException("Tag with " + id + " not found!");
-        }
+        jdbcTemplate.update(DELETE_TAG_BY_ID, id);
     }
 
     @Override
     public Tag findByTag(final Tag tag) {
-        try {
-            return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME, new Object[]{tag.getId(), tag.getName()},
-                                               new BeanPropertyRowMapper<>(Tag.class));
-        } catch (DataAccessException e) {
-            //TODO log
-            return null;
-        }
+        return jdbcTemplate.queryForObject(FIND_TAG_BY_ID_NAME, new Object[]{tag.getId(), tag.getName()},
+                                           new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override
     public Tag findByTagName(final String name) {
-        try {
-            return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name}, new BeanPropertyRowMapper<>(Tag.class));
-        } catch (DataAccessException e) {
-            //TODO log
-            return null;
-        }
+        return jdbcTemplate.queryForObject(FIND_TAG_BY_NAME, new Object[]{name},
+                                           new BeanPropertyRowMapper<>(Tag.class));
     }
 
     @Override

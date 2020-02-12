@@ -2,8 +2,6 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.TagMapper;
-import com.epam.lab.exception.RepositoryException;
-import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.TagService;
@@ -43,10 +41,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void delete(final Long id) {
-        try {
-            tagRepository.delete(id);
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
-        }
+        tagRepository.delete(id);
     }
 }

@@ -1,7 +1,6 @@
 package com.epam.lab.repository.impl;
 
 import com.epam.lab.configuration.DataSourceConfiguration;
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
@@ -11,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,7 +23,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,11 +53,9 @@ public class NewsRepositoryImplTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    public void shouldReturnNullIfIfNewsWasNotFound() {
-        News actual = newsRepository.find(21L);
-
-        assertNull(actual);
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void shouldThrowExceptionIfIfNewsWasNotFound() {
+        newsRepository.find(21L);
     }
 
     @Test
@@ -69,17 +67,13 @@ public class NewsRepositoryImplTest {
         assertEquals(expected, actual);
     }
 
-    @Test
+    @Test(expected = EmptyResultDataAccessException.class)
     @Rollback
     public void shouldDeleteNewsById() {
-        newsRepository.delete(1L);
-        News actual = newsRepository.find(1L);
-        assertNull(actual);
-    }
-
-    @Test(expected = RepositoryException.class)
-    public void shouldThrowExceptionIfDeleteByNotExistingId() {
-        newsRepository.delete(21L);
+        Long createdNewsId = newsRepository.create(createNewsForInsertion()).getId();
+        assertNotNull(newsRepository.find(createdNewsId));
+        newsRepository.delete(createdNewsId);
+        newsRepository.find(createdNewsId);
     }
 
     @Test

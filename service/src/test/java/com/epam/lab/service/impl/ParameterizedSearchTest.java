@@ -34,7 +34,6 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -102,7 +101,7 @@ public class ParameterizedSearchTest {
         assertEquals(expectedNewsDtoList, actual);
         assertEquals(expectedNewsDtoList.get(0).getTitle(), actual.get(0).getTitle());
 
-        verify(newsRepository, timeout(1)).searchBy(any(String.class));
+        verify(newsRepository).searchBy(any(String.class));
     }
 
     private void createInitNewsEntity() {

@@ -1,11 +1,9 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -30,9 +28,6 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     private static final String FIND_AUTHOR_BY_ID_NAME_SURNAME =
             "SELECT id, name, surname FROM news.author WHERE id=? AND name=? AND surname=?;";
-
-    private static final String FIND_AUTHOR_BY_NAME_SURNAME =
-            "SELECT id, name, surname FROM news.author WHERE name=? AND surname=?;";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -69,33 +64,13 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public void delete(final Long id) {
-        int rowNumber = jdbcTemplate.update(DELETE_AUTHOR_BY_ID, id);
-        if (rowNumber == 0) {
-            throw new RepositoryException("Author with " + id + " not found!");
-        }
+        jdbcTemplate.update(DELETE_AUTHOR_BY_ID, id);
     }
 
     @Override
     public Author findByAuthor(final Author author) {
-        try {
-            return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_ID_NAME_SURNAME,
-                    new Object[]{author.getId(), author.getName(), author.getSurname()},
-                    new BeanPropertyRowMapper<>(Author.class));
-        } catch (EmptyResultDataAccessException eValue) {
-            //TODO log
-            return null;
-        }
-    }
-
-    @Override
-    public Author findAuthorByNameAndSurname(final Author author) {
-        try {
-            return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_NAME_SURNAME,
-                    new Object[]{author.getName(), author.getSurname()},
-                    new BeanPropertyRowMapper<>(Author.class));
-        } catch (EmptyResultDataAccessException e) {
-            //TODO log
-            return null;
-        }
+        return jdbcTemplate.queryForObject(FIND_AUTHOR_BY_ID_NAME_SURNAME,
+                                           new Object[]{author.getId(), author.getName(), author.getSurname()},
+                                           new BeanPropertyRowMapper<>(Author.class));
     }
 }

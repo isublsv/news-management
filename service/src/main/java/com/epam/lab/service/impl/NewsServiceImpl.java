@@ -6,7 +6,6 @@ import com.epam.lab.dto.SearchCriteriaBuilder;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.mapper.TagMapper;
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -16,6 +15,7 @@ import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -48,94 +48,78 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public NewsDto create(final NewsDto entityDto) {
-        News news = newsMapper.toEntity(entityDto);
-        Long authorId = entityDto.getAuthor().getId();
-        //check if author has ID
-        if (authorId != null) {
-            //check if provided author's name, surname and ID matches the values from DB
-            Author author = authorRepository.findByAuthor(news.getAuthor());
-            if (author != null) {
-                //check if news with provided title exists in the DB
-                checkNewsActuality(news, author);
-            } else {
-                throw new ServiceException("The author entity is invalid");
-            }
-        } else {
-            //create a new author and make link to current news entity
-            Author author = authorRepository.create(news.getAuthor());
-            checkNewsActuality(news, author);
-        }
-        NewsDto newsDto = newsMapper.toDto(news);
-        newsDto.setTags(addTagsForNews(news.getId(), entityDto.getTags()));
-        return newsDto;
-    }
-
-    private void checkNewsActuality(final News news, final Author author) {
-        if (!Boolean.TRUE.equals(newsRepository.findNewsByTitle(news.getTitle()))) {
-            createLinkBetweenAuthorAndNews(news, author);
-        } else {
-            throw new ServiceException("The news is exists with provided title");
-        }
-    }
-
-    private void createLinkBetweenAuthorAndNews(final News news, final Author author) {
-        News fullNewsEntity = newsRepository.create(news);
-        newsRepository.addNewsAuthor(fullNewsEntity.getId(), author.getId());
-
-        news.setId(fullNewsEntity.getId());
-        news.setCreationDate(fullNewsEntity.getCreationDate());
-        news.setModificationDate(fullNewsEntity.getModificationDate());
-        news.setAuthor(author);
+        return handleNews(entityDto);
     }
 
     @Override
     public NewsDto find(final Long id) {
         News news = newsRepository.find(id);
         Author author = authorRepository.find(news.getAuthor().getId());
-        news.setAuthor(author);
         List<Tag> tags = tagRepository.findTagsByNewsId(news.getId());
+
+        news.setAuthor(author);
         news.setTags(tags);
         return newsMapper.toDto(news);
     }
 
     @Override
     public NewsDto update(final NewsDto entityDto) {
-        News news = newsRepository.update(newsMapper.toEntity(entityDto));
-        Author author = news.getAuthor();
-        //if author exist
-        if (author != null) {
-            Long authorId = author.getId();
-            //if author has ID
-            if (authorId != null) {
-                //than find author in the DB
-                Author validAuthor = authorRepository.findByAuthor(author);
-                //if author is valid
-                if (validAuthor != null) {
-                    //than add this author for provided news
-                    newsRepository.addNewsAuthor(news.getId(), authorId);
-                    news.setAuthor(validAuthor);
-                } else {
-                    throw new ServiceException("The author entity is invalid");
-                }
-                //if author hasn't ID
-            } else {
-                //create a new author entity in the DB
-                Author newAuthor = authorRepository.create(author);
-                news.setAuthor(newAuthor);
-            }
+        return handleNews(entityDto);
+    }
+
+    @Override
+    public void delete(final Long id) {
+        newsRepository.delete(id);
+    }
+
+    private NewsDto handleNews(final NewsDto entityDto) {
+        News news = newsMapper.toEntity(entityDto);
+        Long authorId = news.getAuthor().getId();
+        if (authorId != null) {
+            validateAuthorAndHandleNews(news);
+        } else {
+            Author newAuthor = authorRepository.create(news.getAuthor());
+            validateAndHandleNews(news, newAuthor);
         }
         NewsDto newsDto = newsMapper.toDto(news);
         newsDto.setTags(addTagsForNews(news.getId(), entityDto.getTags()));
         return newsDto;
     }
 
-    @Override
-    public void delete(final Long id) {
+    private void validateAuthorAndHandleNews(final News news) {
         try {
-            newsRepository.delete(id);
-        } catch (RepositoryException e) {
-            throw new ServiceException(e);
+            Author validAuthor = authorRepository.findByAuthor(news.getAuthor());
+            validateAndHandleNews(news, validAuthor);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ServiceException("The author entity is invalid", e);
         }
+    }
+
+    private void validateAndHandleNews(final News news, final Author author) {
+        if (isNewsNotActual(news)) {
+            handleNewsAndLinkToAuthor(news, author);
+        } else {
+            throw new ServiceException("The news is exists with provided title");
+        }
+    }
+
+    private boolean isNewsNotActual(final News news) {
+        return !Boolean.TRUE.equals(newsRepository.findNewsByTitle(news.getTitle()));
+    }
+
+    private void handleNewsAndLinkToAuthor(final News news, final Author author) {
+        News handledNews;
+        if (news.getId() != null) {
+            handledNews = newsRepository.update(news);
+        } else {
+            handledNews = newsRepository.create(news);
+        }
+        newsRepository.addNewsAuthor(handledNews.getId(), author.getId());
+
+        news.setId(handledNews.getId());
+        news.setCreationDate(handledNews.getCreationDate());
+        news.setModificationDate(handledNews.getModificationDate());
+        news.setAuthor(author);
     }
 
     @Override

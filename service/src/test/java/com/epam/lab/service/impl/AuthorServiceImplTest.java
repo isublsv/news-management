@@ -3,8 +3,6 @@ package com.epam.lab.service.impl;
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.mapper.AuthorMapper;
-import com.epam.lab.exception.RepositoryException;
-import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.repository.AuthorRepository;
@@ -22,7 +20,6 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.anyLong;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -68,7 +65,7 @@ public class AuthorServiceImplTest {
         AuthorDto actual = authorService.find(anyLong());
         assertEquals(expected, actual);
 
-        verify(authorRepository, times(1)).find(anyLong());
+        verify(authorRepository).find(anyLong());
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
@@ -85,7 +82,7 @@ public class AuthorServiceImplTest {
         AuthorDto actual = authorService.update(new AuthorDto());
         assertEquals(expected, actual);
 
-        verify(authorRepository, times(1)).update(any(Author.class));
+        verify(authorRepository).update(any(Author.class));
     }
 
     @Test
@@ -96,14 +93,8 @@ public class AuthorServiceImplTest {
         when(newsRepository.findNewsByAuthorId(any(Long.class))).thenReturn(idList);
         authorService.delete(anyLong());
 
-        verify(newsRepository, times(1)).findNewsByAuthorId(anyLong());
-        verify(authorRepository, times(1)).delete(anyLong());
+        verify(newsRepository).findNewsByAuthorId(anyLong());
+        verify(authorRepository).delete(anyLong());
         verify(newsRepository, times(idList.size())).delete(anyLong());
-    }
-
-    @Test(expected = ServiceException.class)
-    public void shouldThrowExceptionAfterDeleteAuthorById() {
-        doThrow(RepositoryException.class).when(authorRepository).delete(anyLong());
-        authorService.delete(anyLong());
     }
 }

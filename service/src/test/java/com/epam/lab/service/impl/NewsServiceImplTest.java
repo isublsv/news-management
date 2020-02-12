@@ -5,7 +5,6 @@ import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.NewsMapper;
 import com.epam.lab.dto.mapper.TagMapper;
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -29,8 +28,8 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,7 +41,6 @@ public class NewsServiceImplTest {
     private NewsRepository newsRepository;
     private AuthorRepository authorRepository;
     private TagRepository tagRepository;
-    private NewsMapper newsMapper;
 
     private static News news;
     private static NewsDto expected;
@@ -59,13 +57,9 @@ public class NewsServiceImplTest {
         news.setCreationDate(newsDate);
         news.setModificationDate(newsDate);
 
-        List<News> authorNewsList = new ArrayList<>();
-        author = new Author(1L, "name", "surname", authorNewsList);
-
+        author = new Author(1L, "name", "surname", new ArrayList<>());
         news.setAuthor(author);
-
-        List<Tag> newsTags = new ArrayList<>();
-        news.setTags(newsTags);
+        news.setTags(new ArrayList<>());
 
         expected = new NewsDto();
         expected.setId(1L);
@@ -76,13 +70,10 @@ public class NewsServiceImplTest {
         expected.setCreationDate(newsDtoDate);
         expected.setModificationDate(newsDtoDate);
 
-        List<NewsDto> authorDtoNewsList = new ArrayList<>();
-        AuthorDto authorDto = new AuthorDto(1L, "name", "surname", authorDtoNewsList);
+        AuthorDto authorDto = new AuthorDto(1L, "name", "surname", new ArrayList<>());
 
         expected.setAuthor(authorDto);
-
-        List<TagDto> newsDtoTags = new ArrayList<>();
-        expected.setTags(newsDtoTags);
+        expected.setTags(new ArrayList<>());
     }
 
     @Before
@@ -90,24 +81,27 @@ public class NewsServiceImplTest {
         newsRepository = mock(NewsRepositoryImpl.class);
         authorRepository = mock(AuthorRepositoryImpl.class);
         tagRepository = mock(TagRepositoryImpl.class);
-        newsMapper = new NewsMapper();
+        NewsMapper newsMapper = new NewsMapper();
         TagMapper tagMapper = new TagMapper();
         newsService = new NewsServiceImpl(newsRepository, authorRepository, tagRepository, newsMapper, tagMapper);
     }
 
     @Test
-    public void shouldCreateNewsWithValidAuthor() {
+    public void shouldCreateNewsWithExistingAuthor() {
         when(authorRepository.findByAuthor(any(Author.class))).thenReturn(author);
-        when(newsRepository.findNewsByTitle(news.getTitle())).thenReturn(Boolean.FALSE);
+        when(newsRepository.findNewsByTitle(any(String.class))).thenReturn(Boolean.FALSE);
         when(newsRepository.create(any(News.class))).thenReturn(news);
 
-        NewsDto actual = newsService.create(expected);
+        NewsDto initNewsDto = createInitNewsDto();
+        initNewsDto.getAuthor().setId(1L);
+
+        NewsDto actual = newsService.create(initNewsDto);
         assertEquals(expected, actual);
 
-        verify(authorRepository, times(1)).findByAuthor(any(Author.class));
-        verify(newsRepository, times(1)).findNewsByTitle(any(String.class));
-        verify(newsRepository, times(1)).create(any(News.class));
-        verify(newsRepository, times(1)).addNewsAuthor(anyLong(), anyLong());
+        verify(authorRepository).findByAuthor(any(Author.class));
+        verify(newsRepository).findNewsByTitle(any(String.class));
+        verify(newsRepository).create(any(News.class));
+        verify(newsRepository).addNewsAuthor(anyLong(), anyLong());
     }
 
     @Test(expected = ServiceException.class)
@@ -117,43 +111,30 @@ public class NewsServiceImplTest {
 
         newsService.create(expected);
 
-        verify(authorRepository, times(1)).findByAuthor(any(Author.class));
+        verify(authorRepository).findByAuthor(any(Author.class));
     }
 
     @Test(expected = ServiceException.class)
     public void shouldThrowExceptionWhenAuthorIsNotValid() {
-        when(authorRepository.findByAuthor(any(Author.class))).thenReturn(null);
+        when(authorRepository.findByAuthor(any(Author.class))).thenThrow(EmptyResultDataAccessException.class);
 
         newsService.create(expected);
 
-        verify(authorRepository, times(1)).findByAuthor(any(Author.class));
+        verify(authorRepository).findByAuthor(any(Author.class));
     }
 
     @Test
     public void shouldCreateNewsWithAuthorValue() {
-        AuthorDto authorDtoWithoutId = new AuthorDto();
-        authorDtoWithoutId.setName("name");
-        authorDtoWithoutId.setSurname("surname");
-
-        NewsDto entityDto = new NewsDto();
-        entityDto.setTitle("TestTitle");
-        entityDto.setShortText("TestShortText");
-        entityDto.setFullText("TestFullText");
-        entityDto.setCreationDate(expected.getCreationDate());
-        entityDto.setModificationDate(expected.getModificationDate());
-        entityDto.setAuthor(authorDtoWithoutId);
-        entityDto.setTags(new ArrayList<>());
-
         when(authorRepository.create(any(Author.class))).thenReturn(author);
         when((newsRepository.findNewsByTitle(any(String.class)))).thenReturn(Boolean.FALSE);
         when(newsRepository.create(any(News.class))).thenReturn(news);
 
-        NewsDto actual = newsService.create(entityDto);
+        NewsDto actual = newsService.create(createInitNewsDto());
         assertEquals(expected, actual);
 
-        verify(authorRepository, times(1)).create(any(Author.class));
-        verify(newsRepository, times(1)).create(any(News.class));
-        verify(newsRepository, times(1)).addNewsAuthor(anyLong(), anyLong());
+        verify(authorRepository).create(any(Author.class));
+        verify(newsRepository).create(any(News.class));
+        verify(newsRepository).addNewsAuthor(anyLong(), anyLong());
     }
 
     @Test
@@ -167,9 +148,9 @@ public class NewsServiceImplTest {
 
         assertEquals(expected, actual);
 
-        verify(newsRepository, times(1)).find(anyLong());
-        verify(authorRepository, times(1)).find(anyLong());
-        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
+        verify(newsRepository).find(anyLong());
+        verify(authorRepository).find(anyLong());
+        verify(tagRepository).findTagsByNewsId(anyLong());
     }
 
     @Test(expected = EmptyResultDataAccessException.class)
@@ -180,75 +161,56 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldUpdateNews() {
-        NewsDto entityDto = new NewsDto();
-        entityDto.setTitle("TestTitle");
-        entityDto.setShortText("TestShortText");
-        entityDto.setFullText("TestFullText");
-        entityDto.setCreationDate(expected.getCreationDate());
-        entityDto.setModificationDate(expected.getModificationDate());
-        entityDto.setTags(new ArrayList<>());
+        NewsDto initNewsDto = createInitNewsDto();
+        initNewsDto.setId(1L);
+        initNewsDto.getAuthor().setId(1L);
 
-        when(newsRepository.update(any(News.class))).thenReturn(news);
         when(authorRepository.findByAuthor(any(Author.class))).thenReturn(author);
+        when(newsRepository.findNewsByTitle(any(String.class))).thenReturn(Boolean.FALSE);
+        when(newsRepository.update(any(News.class))).thenReturn(news);
 
-        NewsDto actual = newsService.update(entityDto);
-        assertEquals(actual, expected);
+        NewsDto actual = newsService.update(initNewsDto);
+        assertEquals(expected, actual);
 
-        verify(newsRepository, times(1)).update(any(News.class));
-        verify(authorRepository, times(1)).findByAuthor(any(Author.class));
-        verify(newsRepository, times(1)).addNewsAuthor(anyLong(), anyLong());
+        verify(authorRepository).findByAuthor(any(Author.class));
+        verify(newsRepository).findNewsByTitle(any(String.class));
+        verify(newsRepository).update(any(News.class));
+        verify(newsRepository).addNewsAuthor(anyLong(), anyLong());
     }
 
     @Test(expected = ServiceException.class)
-    public void shouldThrowExceptionAfterUpdateNewsWithInvalidAuthor() {
-        when(newsRepository.update(any(News.class))).thenReturn(news);
-        when(authorRepository.findByAuthor(any(Author.class))).thenReturn(null);
+    public void shouldThrowExceptionIfTryToUpdateNewsWithInvalidAuthor() {
+        NewsDto newsDto = createInitNewsDto();
+        newsDto.setId(1L);
+        newsDto.getAuthor().setId(1L);
 
-        newsService.update(new NewsDto());
+        when(authorRepository.findByAuthor(any(Author.class))).thenThrow(EmptyResultDataAccessException.class);
 
-        verify(newsRepository, times(1)).update(any(News.class));
-        verify(authorRepository, times(1)).findByAuthor(any(Author.class));
+        newsService.update(newsDto);
+
+        verify(authorRepository).findByAuthor(any(Author.class));
     }
 
     @Test
     public void shouldUpdateNewsAndCreateNewAuthor() {
-        NewsDto newsDto = new NewsDto();
-        newsDto.setTitle("TestTitle");
-        newsDto.setShortText("TestShortText");
-        newsDto.setFullText("TestFullText");
-        newsDto.setCreationDate(expected.getCreationDate());
-        newsDto.setModificationDate(expected.getModificationDate());
-
-        AuthorDto authorDtoWithoutId = new AuthorDto();
-        authorDtoWithoutId.setName("name");
-        authorDtoWithoutId.setSurname("surname");
-        newsDto.setAuthor(authorDtoWithoutId);
-
-        newsDto.setTags(new ArrayList<>());
-
-        News news = newsMapper.toEntity(newsDto);
+        NewsDto newsDto = createInitNewsDto();
+        newsDto.setId(1L);
 
         when(newsRepository.update(any(News.class))).thenReturn(news);
         when(authorRepository.create(any(Author.class))).thenReturn(author);
 
-        NewsDto actual = newsService.update(newsDto);
-        assertEquals(expected, actual);
+        assertEquals(expected, newsService.update(newsDto));
 
-        verify(newsRepository, times(1)).update(any(News.class));
-        verify(authorRepository, times(1)).create(any(Author.class));
-
+        verify(newsRepository).update(any(News.class));
+        verify(authorRepository).create(any(Author.class));
     }
+
 
     @Test
     public void shouldDeleteNewsById() {
         newsService.delete(anyLong());
-        verify(newsRepository, times(1)).delete(anyLong());
-    }
 
-    @Test(expected = ServiceException.class)
-    public void shouldThrowExceptionAfterDeleteNewsById() {
-        doThrow(RepositoryException.class).when(newsRepository).delete(anyLong());
-        newsService.delete(anyLong());
+        verify(newsRepository).delete(anyLong());
     }
 
     @Test
@@ -263,8 +225,8 @@ public class NewsServiceImplTest {
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
-        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
+        verify(tagRepository).findTagsByNewsId(anyLong());
+        verify(tagRepository).removeTagsByNewsId(anyLong());
         verify(tagRepository, times(tags.size())).findByTag(any(Tag.class));
         verify(newsRepository, times(tags.size())).addNewsTag(anyLong(), anyLong());
     }
@@ -280,10 +242,10 @@ public class NewsServiceImplTest {
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(0, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
-        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
+        verify(tagRepository).findTagsByNewsId(anyLong());
+        verify(tagRepository).removeTagsByNewsId(anyLong());
         verify(tagRepository, times(tags.size())).findByTag(any(Tag.class));
-        verify(newsRepository, times(0)).addNewsTag(anyLong(), anyLong());
+        verify(newsRepository, never()).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
@@ -298,10 +260,10 @@ public class NewsServiceImplTest {
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
-        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
-        verify(tagRepository, times(1)).create(tag1);
-        verify(newsRepository, times(1)).addNewsTag(anyLong(), anyLong());
+        verify(tagRepository).findTagsByNewsId(anyLong());
+        verify(tagRepository).removeTagsByNewsId(anyLong());
+        verify(tagRepository).create(tag1);
+        verify(newsRepository).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
@@ -318,11 +280,11 @@ public class NewsServiceImplTest {
         List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
         assertEquals(1, tagDtoList.size());
 
-        verify(tagRepository, times(1)).findTagsByNewsId(anyLong());
-        verify(tagRepository, times(1)).removeTagsByNewsId(anyLong());
-        verify(tagRepository, times(1)).create(tag1);
-        verify(tagRepository, times(1)).findByTagName(any(String.class));
-        verify(newsRepository, times(1)).addNewsTag(anyLong(), anyLong());
+        verify(tagRepository).findTagsByNewsId(anyLong());
+        verify(tagRepository).removeTagsByNewsId(anyLong());
+        verify(tagRepository).create(tag1);
+        verify(tagRepository).findByTagName(any(String.class));
+        verify(newsRepository).addNewsTag(anyLong(), anyLong());
     }
 
     @Test
@@ -330,10 +292,26 @@ public class NewsServiceImplTest {
         Long expected = 1L;
         when(newsRepository.countAllNews()).thenReturn(expected);
 
-        Long actual = newsService.countAllNews();
-        assertEquals(expected, actual);
+        assertEquals(expected, newsService.countAllNews());
 
-        verify(newsRepository, times(1)).countAllNews();
+        verify(newsRepository).countAllNews();
     }
 
+    private NewsDto createInitNewsDto() {
+        NewsDto newsDto = new NewsDto();
+        newsDto.setTitle("TestTitle");
+        newsDto.setShortText("TestShortText");
+        newsDto.setFullText("TestFullText");
+        newsDto.setCreationDate(expected.getCreationDate());
+        newsDto.setModificationDate(expected.getModificationDate());
+
+        AuthorDto authorDtoWithoutId = new AuthorDto();
+        authorDtoWithoutId.setName("name");
+        authorDtoWithoutId.setSurname("surname");
+        authorDtoWithoutId.setNews(new ArrayList<>());
+
+        newsDto.setAuthor(authorDtoWithoutId);
+        newsDto.setTags(new ArrayList<>());
+        return newsDto;
+    }
 }

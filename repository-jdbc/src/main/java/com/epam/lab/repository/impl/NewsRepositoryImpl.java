@@ -1,13 +1,11 @@
 package com.epam.lab.repository.impl;
 
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -16,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.Array;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +35,9 @@ public class NewsRepositoryImpl implements NewsRepository {
             "UPDATE news.news SET title=?, short_text=?, full_text=?, modification_date=? WHERE id=?;";
 
     private static final String SELECT_NEWS_BY_ID =
-            "SELECT news.id, title, short_text, full_text, creation_date, modification_date, news.news_author.author_id"
-                    + " FROM news.news LEFT JOIN news.news_author ON news.news.id=news.news_author.news_id WHERE news.id=?;";
+            "SELECT news.id, title, short_text, full_text, creation_date, modification_date," 
+            + " news.news_author.author_id FROM news.news LEFT JOIN news.news_author ON" 
+            + " news.news.id=news.news_author.news_id WHERE news.id=?;";
 
     private static final String DELETE_NEWS_BY_ID = "DELETE FROM news.news WHERE id=?;";
 
@@ -83,26 +84,20 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public News find(final Long id) {
-        try {
-            return jdbcTemplate.queryForObject(SELECT_NEWS_BY_ID, new Object[]{id}, (rs, rowNum) -> {
-                News news = new News();
-                int counter = 1;
-                news.setId(rs.getLong(counter++));
-                news.setTitle(rs.getString(counter++));
-                news.setShortText(rs.getString(counter++));
-                news.setFullText(rs.getString(counter++));
-                news.setCreationDate(rs.getDate(counter++).toLocalDate());
-                news.setModificationDate(rs.getDate(counter++).toLocalDate());
+        return jdbcTemplate.queryForObject(SELECT_NEWS_BY_ID, new Object[]{id}, (rs, rowNum) -> {
+            News news = new News();
+            news.setId(rs.getLong("id"));
+            news.setTitle(rs.getString("title"));
+            news.setShortText(rs.getString("short_text"));
+            news.setFullText(rs.getString("full_text"));
+            news.setCreationDate(rs.getDate("creation_date").toLocalDate());
+            news.setModificationDate(rs.getDate("modification_date").toLocalDate());
 
-                Author author = new Author();
-                author.setId(rs.getLong(counter));
-                news.setAuthor(author);
-                return news;
-            });
-        } catch (EmptyResultDataAccessException e) {
-            //TODO log
-            return null;
-        }
+            Author author = new Author();
+            author.setId(rs.getLong("author_id"));
+            news.setAuthor(author);
+            return news;
+        });
     }
 
     @Override
@@ -116,10 +111,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void delete(final Long id) {
-        int rowNumber = jdbcTemplate.update(DELETE_NEWS_BY_ID, id);
-        if (rowNumber == 0) {
-            throw new RepositoryException("News with " + id + " not found!");
-        }
+        jdbcTemplate.update(DELETE_NEWS_BY_ID, id);
     }
 
     @Override
@@ -146,31 +138,9 @@ public class NewsRepositoryImpl implements NewsRepository {
     public List<News> searchBy(final String sqlQuery) {
         String fullSearchQuery = FIND_BY_QUERY + sqlQuery;
         return jdbcTemplate.query(fullSearchQuery, (rs, rowNum) -> {
-            News news = new News();
-            int counter = 1;
-            news.setId(rs.getLong(counter++));
-            news.setTitle(rs.getString(counter++));
-            news.setShortText(rs.getString(counter++));
-            news.setFullText(rs.getString(counter++));
-            news.setCreationDate(rs.getDate(counter++).toLocalDate());
-
-            Array tagIds = rs.getArray(counter++);
-            Array tagNames = rs.getArray(counter++);
-            List<Tag> tags = new ArrayList<>();
-            if (tagIds != null && tagNames != null) {
-                Long[] arrayIds = (Long[]) tagIds.getArray();
-                String[] arrayNames = (String[]) tagNames.getArray();
-                tags = IntStream.range(0, arrayIds.length)
-                        .mapToObj(i -> new Tag(arrayIds[i], arrayNames[i]))
-                        .collect(Collectors.toList());
-            }
-            news.setTags(tags);
-
-            Author author = new Author();
-            author.setId(rs.getLong(counter++));
-            author.setName(rs.getString(counter++));
-            author.setSurname(rs.getString(counter));
-            news.setAuthor(author);
+            News news = createNewsFromSearchQuery(rs);
+            news.setTags(createNewsTagsFromSearchQuery(rs));
+            news.setAuthor(createAuthorFromSearchQuery(rs));
             return news;
         });
     }
@@ -178,5 +148,37 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public Long countAllNews() {
         return jdbcTemplate.queryForObject(SELECT_ALL_NEWS, Long.class);
+    }
+
+    private News createNewsFromSearchQuery(final ResultSet rs) throws SQLException {
+        News news = new News();
+        news.setId(rs.getLong("news_id"));
+        news.setTitle(rs.getString("title"));
+        news.setShortText(rs.getString("short_text"));
+        news.setFullText(rs.getString("full_text"));
+        news.setCreationDate(rs.getDate("date").toLocalDate());
+        return news;
+    }
+
+    private List<Tag> createNewsTagsFromSearchQuery(final ResultSet rs) throws SQLException {
+        Array tagIds = rs.getArray("tag_ids");
+        Array tagNames = rs.getArray("tag_names");
+        List<Tag> tags = new ArrayList<>();
+        if (tagIds != null && tagNames != null) {
+            Long[] arrayIds = (Long[]) tagIds.getArray();
+            String[] arrayNames = (String[]) tagNames.getArray();
+            tags = IntStream.range(0, arrayIds.length)
+                            .mapToObj(i -> new Tag(arrayIds[i], arrayNames[i]))
+                            .collect(Collectors.toList());
+        }
+        return tags;
+    }
+
+    private Author createAuthorFromSearchQuery(final ResultSet rs) throws SQLException {
+        Author author = new Author();
+        author.setId(rs.getLong("author_id"));
+        author.setName(rs.getString("author_name"));
+        author.setSurname(rs.getString("author_surname"));
+        return author;
     }
 }
