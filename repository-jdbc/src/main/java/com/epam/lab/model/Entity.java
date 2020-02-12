@@ -14,20 +14,10 @@ public abstract class Entity {
         id = ldValue;
     }
 
-    /**
-     * Gets id.
-     *
-     * @return value of id.
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * Sets id.
-     *
-     * @param ldValue value of id.
-     */
     public void setId(final Long ldValue) {
         id = ldValue;
     }

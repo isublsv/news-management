@@ -27,20 +27,10 @@ public class Tag extends Entity {
         name = nameValue;
     }
 
-    /**
-     * Gets name.
-     *
-     * @return value of name.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param nameValue value of name.
-     */
     public void setName(final String nameValue) {
         name = nameValue;
     }

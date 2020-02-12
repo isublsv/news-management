@@ -66,6 +66,7 @@ public class User extends Entity {
 
     @Override
     public String toString() {
-        return String.format("User{id=%d, name='%s', surname='%s', login='%s', password='%s'}", getId(), name, surname, login, password);
+        return String.format("User{id=%d, name='%s', surname='%s', login='%s', password='%s'}",
+                             getId(), name, surname, login, password);
     }
 }
