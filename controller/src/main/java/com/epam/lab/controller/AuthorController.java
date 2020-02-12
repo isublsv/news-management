@@ -1,85 +1,64 @@
 package com.epam.lab.controller;
 
-import com.epam.lab.dto.NewsDto;
-import com.epam.lab.dto.SearchCriteria;
-import com.epam.lab.dto.TagDto;
-import com.epam.lab.service.NewsService;
+import com.epam.lab.dto.AuthorDto;
+import com.epam.lab.service.AuthorService;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequestMapping("/author")
 @Validated
-public class NewsController {
+public class AuthorController {
 
-    private NewsService newsService;
+    private AuthorService authorService;
 
     @Autowired
-    public NewsController(final NewsService newsServiceValue) {
-        this.newsService = newsServiceValue;
+    public AuthorController(final AuthorService authorServiceValue) {
+        authorService = authorServiceValue;
     }
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @Valid
-    public NewsDto createNews(@RequestBody @Valid final NewsDto newsDto) {
-        return newsService.create(newsDto);
+    public AuthorDto createAuthor(@RequestBody @Valid final AuthorDto authorDto) {
+        return authorService.create(authorDto);
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
     @Valid
-    public NewsDto findNewsById(@PathVariable @NotNull
+    public AuthorDto findAuthorById(@PathVariable @NotNull
     @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
-        return newsService.find(id);
+        return authorService.find(id);
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     @Valid
-    public NewsDto editAuthor(@RequestBody @Valid final NewsDto newsDto) {
-        return newsService.update(newsDto);
+    public AuthorDto editAuthor(@RequestBody @Valid final AuthorDto authorDto) {
+        return authorService.update(authorDto);
     }
 
     @DeleteMapping("/delete/{id}")
     public void deleteAuthor(@PathVariable @NotNull
     @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
-        newsService.delete(id);
-    }
-
-    @PutMapping(value = "/add_tags", produces = APPLICATION_JSON_VALUE)
-    public List<@Valid TagDto> addTagForNews(@RequestParam @NotNull
-    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20}") final Long newsId,
-            @RequestParam @NotNull final List<@Valid TagDto> tagDtos) {
-        return newsService.addTagsForNews(newsId, tagDtos);
-    }
-
-    @GetMapping(value = "/search_by", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<@Valid NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteria sc) {
-        return newsService.searchBy(sc);
-    }
-
-    @GetMapping("/findAll")
-    public Long findAllNews() {
-        return newsService.countAllNews();
+        authorService.delete(id);
     }
 }

@@ -3,9 +3,10 @@ package com.epam.lab.model;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component("author")
-public class Author extends Entity{
+public class Author extends Entity {
 
     private String name;
     private String surname;
@@ -15,46 +16,61 @@ public class Author extends Entity{
         super();
     }
 
-    public Author(String name, String surname, List<News> news) {
+    public Author(final String nameValue, final String surnameValue, final List<News> newsValue) {
         super();
-        this.name = name;
-        this.surname = surname;
-        this.news = news;
+        name = nameValue;
+        surname = surnameValue;
+        news = newsValue;
     }
 
-    public Author(long id, String name, String surname, List<News> news) {
+    public Author(final Long id, final String nameValue, final String surnameValue, final List<News> newsValue) {
         super(id);
-        this.name = name;
-        this.surname = surname;
-        this.news = news;
+        name = nameValue;
+        surname = surnameValue;
+        news = newsValue;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(final String nameValue) {
+        name = nameValue;
     }
 
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setSurname(final String surnameValue) {
+        surname = surnameValue;
     }
 
     public List<News> getNews() {
         return news;
     }
 
-    public void setNews(List<News> news) {
-        this.news = news;
+    public void setNews(final List<News> newsValue) {
+        news = newsValue;
+    }
+
+    @Override
+    public boolean equals(Object oValue) {
+        if (this == oValue) return true;
+        if (oValue == null || getClass() != oValue.getClass()) return false;
+        Author author = (Author) oValue;
+        return Objects.equals(name, author.name) &&
+                Objects.equals(surname, author.surname) &&
+                Objects.equals(news, author.news);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, surname, news);
     }
 
     @Override
     public String toString() {
-        return String.format("Author{id=%d, name='%s', surname='%s', news='%s'}", getId(), name, surname, news.toString());
+        return String.format("Author{id=%d, name='%s', surname='%s', news='%s'}", getId(), name, surname, news);
     }
 }

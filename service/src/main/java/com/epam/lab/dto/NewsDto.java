@@ -1,118 +1,125 @@
 package com.epam.lab.dto;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @Component("newsDto")
 public class NewsDto extends AbstractDto {
 
+    @NotNull
+    @Length(min = 2, max = 30, message = "Title cannot be null and must be between 2 and 30 characters")
     private String title;
+
+    @NotNull
+    @Length(min = 2, max = 100, message = "Short text cannot be null and must be between 2 and 100 characters")
     private String shortText;
+
+    @NotNull
+    @Length(min = 2, max = 2000, message = "Full text cannot be null and must be between 2 and 2000 characters")
     private String fullText;
-    private LocalDateTime creationDate;
-    private LocalDateTime modificationDate;
-    private AuthorDto authorDto;
-    private List<TagDto> tagDtos;
+
+    @PastOrPresent
+    private LocalDate creationDate;
+
+    @PastOrPresent
+    private LocalDate modificationDate;
+
+    @NotNull(message = "Author entity cannot be null")
+    @Valid
+    private AuthorDto author;
+
+    private List<TagDto> tags;
 
     public NewsDto() {
         super();
-    }
-
-    public NewsDto(String title, String shortText, String fullText, LocalDateTime creationDate, LocalDateTime modificationDate, AuthorDto authorDto, List<TagDto> tagDtos) {
-        this.title = title;
-        this.shortText = shortText;
-        this.fullText = fullText;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.authorDto = authorDto;
-        this.tagDtos = tagDtos;
-    }
-
-    public NewsDto(Long id, String title, String shortText, String fullText, LocalDateTime creationDate, LocalDateTime modificationDate, AuthorDto authorDto, List<TagDto> tagDtos) {
-        super(id);
-        this.title = title;
-        this.shortText = shortText;
-        this.fullText = fullText;
-        this.creationDate = creationDate;
-        this.modificationDate = modificationDate;
-        this.authorDto = authorDto;
-        this.tagDtos = tagDtos;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(final String titleValue) {
+        title = titleValue;
     }
 
     public String getShortText() {
         return shortText;
     }
 
-    public void setShortText(String shortText) {
-        this.shortText = shortText;
+    public void setShortText(final String shortTextValue) {
+        shortText = shortTextValue;
     }
 
     public String getFullText() {
         return fullText;
     }
 
-    public void setFullText(String fullText) {
-        this.fullText = fullText;
+    public void setFullText(final String fullTextValue) {
+        fullText = fullTextValue;
     }
 
-    public LocalDateTime getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setCreationDate(final LocalDate creationDateValue) {
+        creationDate = creationDateValue;
     }
 
-    public LocalDateTime getModificationDate() {
+    public LocalDate getModificationDate() {
         return modificationDate;
     }
 
-    public void setModificationDate(LocalDateTime modificationDate) {
-        this.modificationDate = modificationDate;
+    public void setModificationDate(final LocalDate modificationDateValue) {
+        modificationDate = modificationDateValue;
     }
 
-    public AuthorDto getAuthorDto() {
-        return authorDto;
+    public AuthorDto getAuthor() {
+        return author;
     }
 
-    public void setAuthorDto(AuthorDto authorDto) {
-        this.authorDto = authorDto;
+    public void setAuthor(final AuthorDto authorValue) {
+        author = authorValue;
     }
 
-    public List<TagDto> getTagDtos() {
-        return tagDtos;
+    public List<TagDto> getTags() {
+        return tags;
     }
 
-    public void setTagDtos(List<TagDto> tagDtos) {
-        this.tagDtos = tagDtos;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NewsDto newsDto = (NewsDto) o;
-        return Objects.equals(shortText, newsDto.shortText) &&
-                Objects.equals(fullText, newsDto.fullText) &&
-                Objects.equals(creationDate, newsDto.creationDate) &&
-                Objects.equals(modificationDate, newsDto.modificationDate) &&
-                Objects.equals(authorDto, newsDto.authorDto) &&
-                Objects.equals(tagDtos, newsDto.tagDtos);
+    public void setTags(final List<TagDto> tagsValue) {
+        tags = tagsValue;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(shortText, fullText, creationDate, modificationDate, authorDto, tagDtos);
+        return Objects.hash(title, shortText, fullText, creationDate, modificationDate, author, tags);
+    }
+
+    @Override
+    public boolean equals(final Object oValue) {
+        if (this == oValue) {
+            return true;
+        }
+        if (oValue == null || getClass() != oValue.getClass()) {
+            return false;
+        }
+        NewsDto newsDto = (NewsDto) oValue;
+        return title.equals(newsDto.title) && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
+               && creationDate.equals(newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate)
+               && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("NewsDto{id=%d, title='%s', shortText='%s', fullText='%s', creationDate=%s,"
+                + " modificationDate=%s, author=%s, tags=%s}",
+                getId(), title, shortText, fullText, creationDate, modificationDate, author, tags);
     }
 }
