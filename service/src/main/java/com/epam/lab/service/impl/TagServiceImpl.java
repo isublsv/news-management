@@ -2,7 +2,6 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.mapper.TagMapper;
-import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,30 +16,31 @@ public class TagServiceImpl implements TagService {
     private final TagMapper tagMapper;
 
     @Autowired
-    public TagServiceImpl(final TagRepository tagRepositoryValue, final TagMapper tagMapperValue) {
-        this.tagRepository = tagRepositoryValue;
-        this.tagMapper = tagMapperValue;
+    public TagServiceImpl(final TagRepository tagRepository, TagMapper tagMapper) {
+        this.tagRepository = tagRepository;
+        this.tagMapper = tagMapper;
     }
 
     @Override
-    public TagDto create(final TagDto entityDto) {
-        Tag tag = tagMapper.toEntity(entityDto);
-        return tagMapper.toDto(tagRepository.create(tag));
+    public void create(TagDto entityDto) {
+        tagRepository.create(tagMapper.toEntity(entityDto));
+        System.out.println("The Tag was added!");
     }
 
     @Override
-    public TagDto find(final Long id) {
+    public TagDto find(long id) {
         return tagMapper.toDto(tagRepository.find(id));
     }
 
     @Override
-    public TagDto update(final TagDto entityDto) {
-        Tag tag = tagRepository.update(tagMapper.toEntity(entityDto));
-        return tagMapper.toDto(tag);
+    public void update(TagDto entityDto) {
+        tagRepository.update(tagMapper.toEntity(entityDto));
+        System.out.println("The Tag was updated! " + entityDto);
     }
 
     @Override
-    public void delete(final Long id) {
+    public void delete(long id) {
         tagRepository.delete(id);
+        System.out.println("The Tag was deleted by id=" + id);
     }
 }

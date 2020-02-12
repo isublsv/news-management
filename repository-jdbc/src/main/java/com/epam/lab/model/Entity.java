@@ -5,21 +5,21 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class Entity {
 
-    private Long id;
+    private long id;
 
     public Entity() {
     }
 
-    public Entity(final Long ldValue) {
-        id = ldValue;
+    public Entity(long id) {
+        this.id = id;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(final Long ldValue) {
-        id = ldValue;
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Override

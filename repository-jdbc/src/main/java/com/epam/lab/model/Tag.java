@@ -2,8 +2,6 @@ package com.epam.lab.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component("tag")
 public class Tag extends Entity {
     
@@ -13,16 +11,12 @@ public class Tag extends Entity {
         super();
     }
 
-    public Tag(final Long idValue) {
-        super(idValue);
-    }
-
-    public Tag(final String nameValue) {
+    public Tag(String nameValue) {
         super();
         name = nameValue;
     }
 
-    public Tag(final Long id, final String nameValue) {
+    public Tag(final long id, final String nameValue) {
         super(id);
         name = nameValue;
     }
@@ -33,23 +27,6 @@ public class Tag extends Entity {
 
     public void setName(final String nameValue) {
         name = nameValue;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
-    }
-
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Tag tag = (Tag) o;
-        return name.equals(tag.name);
     }
 
     @Override

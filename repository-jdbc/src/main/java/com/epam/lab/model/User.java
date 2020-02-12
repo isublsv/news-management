@@ -2,10 +2,8 @@ package com.epam.lab.model;
 
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component("user")
-public class User extends Entity {
+public class User extends Entity{
 
     private String name;
     private String surname;
@@ -16,11 +14,27 @@ public class User extends Entity {
         super();
     }
 
+    public User(String name, String surname, String login, String password) {
+        super();
+        this.name = name;
+        this.surname = surname;
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(long id, String name, String surname, String login, String password) {
+        super(id);
+        this.name = name;
+        this.surname = surname;
+        this.login = login;
+        this.password = password;
+    }
+
     public String getName() {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -28,7 +42,7 @@ public class User extends Entity {
         return surname;
     }
 
-    public void setSurname(final String surname) {
+    public void setSurname(String surname) {
         this.surname = surname;
     }
 
@@ -36,7 +50,7 @@ public class User extends Entity {
         return login;
     }
 
-    public void setLogin(final String login) {
+    public void setLogin(String login) {
         this.login = login;
     }
 
@@ -44,29 +58,12 @@ public class User extends Entity {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return name.equals(user.name) &&
-                surname.equals(user.surname) &&
-                login.equals(user.login) &&
-                password.equals(user.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, surname, login, password);
-    }
-
-    @Override
     public String toString() {
-        return String.format("User{id=%d, name='%s', surname='%s', login='%s', password='%s'}",
-                             getId(), name, surname, login, password);
+        return String.format("User{id=%d, name='%s', surname='%s', login='%s', password='%s'}", getId(), name, surname, login, password);
     }
 }
