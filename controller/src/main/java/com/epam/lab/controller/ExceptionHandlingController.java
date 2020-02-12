@@ -2,6 +2,7 @@ package com.epam.lab.controller;
 
 import com.epam.lab.exception.ServiceException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,18 +31,23 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("YYYY-MM-DD HH:mm:ss");
 
     @ExceptionHandler(ServiceException.class)
-    public void serviceError(final HttpServletResponse response, final Exception e) throws IOException {
+    public void handleServiceError(final HttpServletResponse response, final Exception e) throws IOException {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public void dbError(final HttpServletResponse response, final Exception e) throws IOException {
+    public void handleNotFoundError(final HttpServletResponse response, final Exception e) throws IOException {
         response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
     }
 
+    @ExceptionHandler(DuplicateKeyException.class)
+    public void handleConflictError(final HttpServletResponse response, final Exception e) throws IOException {
+        response.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handle(ConstraintViolationException constraintViolationException) {
-        Set<ConstraintViolation<?>> violations = constraintViolationException.getConstraintViolations();
+    public ResponseEntity<Object> handleEntityConstraintNotValid(ConstraintViolationException exception) {
+        Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         String errorMessage;
         Map<String, Object> body = new LinkedHashMap<>();
         if (!violations.isEmpty()) {
