@@ -16,20 +16,10 @@ public abstract class AbstractDto implements Serializable {
         this.id = idValue;
     }
 
-    /**
-     * Gets id.
-     *
-     * @return value of id.
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * Sets id.
-     *
-     * @param idValue value of id.
-     */
     public void setId(final Long idValue) {
         id = idValue;
     }

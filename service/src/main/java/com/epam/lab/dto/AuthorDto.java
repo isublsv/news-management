@@ -32,56 +32,26 @@ public class AuthorDto extends AbstractDto {
         news = newsValue;
     }
 
-    /**
-     * Gets name.
-     *
-     * @return value of name.
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param nameValue value of name.
-     */
     public void setName(final String nameValue) {
         name = nameValue;
     }
 
-    /**
-     * Gets surname.
-     *
-     * @return value of surname.
-     */
     public String getSurname() {
         return surname;
     }
 
-    /**
-     * Sets surname.
-     *
-     * @param surnameValue value of surname.
-     */
     public void setSurname(final String surnameValue) {
         surname = surnameValue;
     }
 
-    /**
-     * Gets news.
-     *
-     * @return value of news.
-     */
     public List<NewsDto> getNews() {
         return news;
     }
 
-    /**
-     * Sets news.
-     *
-     * @param newsValue value of news.
-     */
     public void setNews(final List<NewsDto> newsValue) {
         news = newsValue;
     }
