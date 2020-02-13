@@ -1,7 +1,6 @@
-package com.epam.lab.repository.impl;
+package com.epam.lab.repository;
 
 import com.epam.lab.model.Tag;
-import com.epam.lab.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

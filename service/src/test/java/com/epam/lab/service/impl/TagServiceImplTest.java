@@ -1,11 +1,12 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.TagDto;
-import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.dto.TagMapper;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.repository.impl.TagRepositoryImpl;
+import com.epam.lab.repository.TagRepositoryImpl;
 import com.epam.lab.service.TagService;
+import com.epam.lab.service.TagServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,7 +27,7 @@ public class TagServiceImplTest {
     private TagDto expected;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         tagRepository = mock(TagRepositoryImpl.class);
         TagMapper tagMapper = new TagMapper();
         tagService = new TagServiceImpl(tagRepository, tagMapper);

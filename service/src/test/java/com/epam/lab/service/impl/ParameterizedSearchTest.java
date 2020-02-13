@@ -2,20 +2,21 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.dto.NewsMapper;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDto;
-import com.epam.lab.dto.mapper.NewsMapper;
-import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.dto.TagMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
+import com.epam.lab.repository.AuthorRepositoryImpl;
 import com.epam.lab.repository.NewsRepository;
+import com.epam.lab.repository.NewsRepositoryImpl;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.repository.impl.AuthorRepositoryImpl;
-import com.epam.lab.repository.impl.NewsRepositoryImpl;
-import com.epam.lab.repository.impl.TagRepositoryImpl;
+import com.epam.lab.repository.TagRepositoryImpl;
 import com.epam.lab.service.NewsService;
+import com.epam.lab.service.NewsServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +46,11 @@ public class ParameterizedSearchTest {
     private NewsRepository newsRepository;
 
     private SearchCriteria searchCriteria;
-    private List<NewsDto> expectedNewsDtoList;
+    private List<NewsDto> expectedNewsDtos;
 
-    public ParameterizedSearchTest(final SearchCriteria scValue, List<NewsDto> expectedNewsDtoListValue) {
+    public ParameterizedSearchTest(final SearchCriteria scValue, List<NewsDto> expectedNewsDtosValue) {
         searchCriteria = scValue;
-        expectedNewsDtoList = expectedNewsDtoListValue;
+        expectedNewsDtos = expectedNewsDtosValue;
     }
 
     @Parameterized.Parameters(name = "{index}: test with {0}, result = {1}")
@@ -57,24 +58,24 @@ public class ParameterizedSearchTest {
         Set<String> tags = new HashSet<>();
         tags.add("Tag");
 
-        Set<String> orderBy = new LinkedHashSet<>();
-        orderBy.add("date");
-        orderBy.add("tag_names");
-        orderBy.add("srname");
+        Set<String> columns = new LinkedHashSet<>();
+        columns.add("date");
+        columns.add("tag_names");
+        columns.add("srname");
 
-        List<NewsDto> dtoList = new ArrayList<>();
-        dtoList.add(createNewsDto());
+        List<NewsDto> dtos = new ArrayList<>();
+        dtos.add(createNewsDto());
 
         return Arrays.asList(
                 new Object[][]{
-                        {new SearchCriteria("name", "surname", tags, orderBy, true), dtoList},
-                        {new SearchCriteria("","surname", tags, orderBy,true), dtoList},
-                        {new SearchCriteria(null, "surname", tags, orderBy, true), dtoList},
-                        {new SearchCriteria("name", "", tags, orderBy,true), dtoList},
-                        {new SearchCriteria("name", null, tags, orderBy, true), dtoList},
-                        {new SearchCriteria("name", null, Collections.emptySet(), orderBy,true), dtoList},
-                        {new SearchCriteria("name", null, tags, Collections.emptySet(), true), dtoList},
-                        {new SearchCriteria(null, null, tags, orderBy, true), dtoList},
+                        {new SearchCriteria("name", "surname", tags, columns, true), dtos},
+                        {new SearchCriteria("","surname", tags, columns,true), dtos},
+                        {new SearchCriteria(null, "surname", tags, columns, true), dtos},
+                        {new SearchCriteria("name", "", tags, columns,true), dtos},
+                        {new SearchCriteria("name", null, tags, columns, true), dtos},
+                        {new SearchCriteria("name", null, Collections.emptySet(), columns,true), dtos},
+                        {new SearchCriteria("name", null, tags, Collections.emptySet(), true), dtos},
+                        {new SearchCriteria(null, null, tags, columns, true), dtos},
                 });
     }
 
@@ -92,14 +93,14 @@ public class ParameterizedSearchTest {
 
     @Test
     public void shouldSearchBy() {
-        List<News> newsList = new ArrayList<>();
-        newsList.add(news);
+        List<News> news = new ArrayList<>();
+        news.add(ParameterizedSearchTest.news);
 
-        when(newsRepository.searchBy(any(String.class))).thenReturn(newsList);
+        when(newsRepository.searchBy(any(String.class))).thenReturn(news);
 
         List<NewsDto> actual = newsService.searchBy(searchCriteria);
-        assertEquals(expectedNewsDtoList, actual);
-        assertEquals(expectedNewsDtoList.get(0).getTitle(), actual.get(0).getTitle());
+        assertEquals(expectedNewsDtos, actual);
+        assertEquals(expectedNewsDtos.get(0).getTitle(), actual.get(0).getTitle());
 
         verify(newsRepository).searchBy(any(String.class));
     }
@@ -114,8 +115,7 @@ public class ParameterizedSearchTest {
         news.setCreationDate(newsDate);
         news.setModificationDate(newsDate);
 
-        List<News> authorNewsList = new ArrayList<>();
-        Author author = new Author(1L, "name", "surname", authorNewsList);
+        Author author = new Author(1L, "name", "surname", new ArrayList<>());
 
         news.setAuthor(author);
 
@@ -134,8 +134,7 @@ public class ParameterizedSearchTest {
         newsDto.setCreationDate(newsDtoDate);
         newsDto.setModificationDate(newsDtoDate);
 
-        List<NewsDto> authorDtoNewsList = new ArrayList<>();
-        AuthorDto authorDto = new AuthorDto(1L, "name", "surname", authorDtoNewsList);
+        AuthorDto authorDto = new AuthorDto(1L, "name", "surname", new ArrayList<>());
 
         newsDto.setAuthor(authorDto);
 

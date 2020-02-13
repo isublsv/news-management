@@ -1,7 +1,6 @@
-package com.epam.lab.repository.impl;
+package com.epam.lab.repository;
 
 import com.epam.lab.model.Author;
-import com.epam.lab.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

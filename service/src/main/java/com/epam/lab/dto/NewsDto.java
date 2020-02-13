@@ -1,7 +1,6 @@
 package com.epam.lab.dto;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-@Component("newsDto")
 public class NewsDto extends AbstractDto {
 
     @NotNull

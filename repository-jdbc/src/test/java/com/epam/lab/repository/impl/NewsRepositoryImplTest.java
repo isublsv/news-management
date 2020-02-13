@@ -5,7 +5,9 @@ import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.NewsRepository;
+import com.epam.lab.repository.NewsRepositoryImpl;
 import com.epam.lab.repository.TagRepository;
+import com.epam.lab.repository.TagRepositoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +40,7 @@ public class NewsRepositoryImplTest {
     private JdbcTemplate jdbcTemplate;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         newsRepository = new NewsRepositoryImpl(jdbcTemplate);
         tagRepository = new TagRepositoryImpl(jdbcTemplate);
     }

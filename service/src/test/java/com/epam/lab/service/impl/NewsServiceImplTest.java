@@ -2,20 +2,21 @@ package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.dto.NewsMapper;
 import com.epam.lab.dto.TagDto;
-import com.epam.lab.dto.mapper.NewsMapper;
-import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.dto.TagMapper;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
+import com.epam.lab.repository.AuthorRepositoryImpl;
 import com.epam.lab.repository.NewsRepository;
+import com.epam.lab.repository.NewsRepositoryImpl;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.repository.impl.AuthorRepositoryImpl;
-import com.epam.lab.repository.impl.NewsRepositoryImpl;
-import com.epam.lab.repository.impl.TagRepositoryImpl;
+import com.epam.lab.repository.TagRepositoryImpl;
 import com.epam.lab.service.NewsService;
+import com.epam.lab.service.NewsServiceImpl;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class NewsServiceImplTest {
     private static Author author;
 
     @BeforeClass
-    public static void setUp() throws Exception {
+    public static void setUp() {
         news = new News();
         news.setId(1L);
         news.setTitle("TestTitle");
@@ -214,13 +215,13 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldAddValidTagsForNews() {
-        List<Tag> tags = createTagsWithIds();
+        List<Tag> tags = createTagsWithId();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTag(any(Tag.class))).thenReturn(tags.get(0));
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
-        assertEquals(1, tagDtoList.size());
+        List<TagDto> tagDtos = newsService.addTagsForNews(anyLong(), new ArrayList<>());
+        assertEquals(1, tagDtos.size());
 
         verify(tagRepository).findTagsByNewsId(anyLong());
         verify(tagRepository).removeTagsByNewsId(anyLong());
@@ -230,13 +231,13 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldDoNotAddInvalidTagsForNews() {
-        List<Tag> tags = createTagsWithIds();
+        List<Tag> tags = createTagsWithId();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTag(any(Tag.class))).thenThrow(EmptyResultDataAccessException.class);
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
-        assertEquals(0, tagDtoList.size());
+        List<TagDto> tagDtos = newsService.addTagsForNews(anyLong(), new ArrayList<>());
+        assertEquals(0, tagDtos.size());
 
         verify(tagRepository).findTagsByNewsId(anyLong());
         verify(tagRepository).removeTagsByNewsId(anyLong());
@@ -244,7 +245,7 @@ public class NewsServiceImplTest {
         verify(newsRepository, never()).addNewsTag(anyLong(), anyLong());
     }
 
-    private List<Tag> createTagsWithIds() {
+    private List<Tag> createTagsWithId() {
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag(1L, "TestTag2"));
         return tags;
@@ -252,13 +253,13 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldAddExistingTagsWithoutIdForNews() {
-        List<Tag> tags = createTagListWithoutId();
+        List<Tag> tags = createTagsWithoutId();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTagName(any(String.class))).thenReturn(new Tag(1L, "TestTag2"));
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
-        assertEquals(1, tagDtoList.size());
+        List<TagDto> tagDtos = newsService.addTagsForNews(anyLong(), new ArrayList<>());
+        assertEquals(1, tagDtos.size());
 
         verify(tagRepository).findTagsByNewsId(anyLong());
         verify(tagRepository).removeTagsByNewsId(anyLong());
@@ -268,14 +269,14 @@ public class NewsServiceImplTest {
 
     @Test
     public void shouldAddTagsWithoutIdForNews() {
-        List<Tag> tags = createTagListWithoutId();
+        List<Tag> tags = createTagsWithoutId();
 
         when(tagRepository.findTagsByNewsId(anyLong())).thenReturn(tags);
         when(tagRepository.findByTagName(any(String.class))).thenThrow(EmptyResultDataAccessException.class);
         when(tagRepository.create(any(Tag.class))).thenReturn(new Tag(1L, "TestTag2"));
 
-        List<TagDto> tagDtoList = newsService.addTagsForNews(anyLong(), new ArrayList<>());
-        assertEquals(1, tagDtoList.size());
+        List<TagDto> tagDtos = newsService.addTagsForNews(anyLong(), new ArrayList<>());
+        assertEquals(1, tagDtos.size());
 
         verify(tagRepository).findTagsByNewsId(anyLong());
         verify(tagRepository).removeTagsByNewsId(anyLong());
@@ -284,7 +285,7 @@ public class NewsServiceImplTest {
         verify(newsRepository).addNewsTag(anyLong(), anyLong());
     }
 
-    private List<Tag> createTagListWithoutId() {
+    private List<Tag> createTagsWithoutId() {
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag("TestTag2"));
         return tags;

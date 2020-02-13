@@ -1,11 +1,10 @@
-package com.epam.lab.service.impl;
+package com.epam.lab.service;
 
 import com.epam.lab.dto.AuthorDto;
-import com.epam.lab.dto.mapper.AuthorMapper;
+import com.epam.lab.dto.AuthorMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
-import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,8 +46,8 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void delete(final Long id) {
-        List<Long> newsList = newsRepository.findNewsByAuthorId(id);
+        List<Long> news = newsRepository.findNewsByAuthorId(id);
         authorRepository.delete(id);
-        newsList.forEach(newsRepository::delete);
+        news.forEach(newsRepository::delete);
     }
 }

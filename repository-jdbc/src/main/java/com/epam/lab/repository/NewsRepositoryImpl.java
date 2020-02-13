@@ -1,9 +1,8 @@
-package com.epam.lab.repository.impl;
+package com.epam.lab.repository;
 
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
-import com.epam.lab.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;

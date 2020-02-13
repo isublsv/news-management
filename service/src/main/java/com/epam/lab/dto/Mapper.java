@@ -1,6 +1,5 @@
-package com.epam.lab.dto.mapper;
+package com.epam.lab.dto;
 
-import com.epam.lab.dto.AbstractDto;
 import com.epam.lab.model.Entity;
 
 public interface Mapper<E extends Entity, D extends AbstractDto> {

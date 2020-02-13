@@ -1,11 +1,11 @@
-package com.epam.lab.service.impl;
+package com.epam.lab.service;
 
 import com.epam.lab.dto.NewsDto;
+import com.epam.lab.dto.NewsMapper;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.SearchCriteriaBuilder;
 import com.epam.lab.dto.TagDto;
-import com.epam.lab.dto.mapper.NewsMapper;
-import com.epam.lab.dto.mapper.TagMapper;
+import com.epam.lab.dto.TagMapper;
 import com.epam.lab.exception.ServiceException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -13,7 +13,6 @@ import com.epam.lab.model.Tag;
 import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.TagRepository;
-import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -124,17 +123,17 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtoList) {
+    public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtos) {
         Set<Tag> tags = new HashSet<>(tagRepository.findTagsByNewsId(newsId));
-        tags.addAll(tagDtoList.stream().map(tagMapper::toEntity).collect(Collectors.toList()));
+        tags.addAll(tagDtos.stream().map(tagMapper::toEntity).collect(Collectors.toList()));
         tagRepository.removeTagsByNewsId(newsId);
 
         handleNewsTags(newsId, tags);
         return convertTagsToDtos(tags);
     }
 
-    private void handleNewsTags(final Long newsId, final Set<Tag> tagsValue) {
-        Iterator<Tag> it = tagsValue.iterator();
+    private void handleNewsTags(final Long newsId, final Set<Tag> tags) {
+        Iterator<Tag> it = tags.iterator();
         while (it.hasNext()) {
             Tag tag = it.next();
             if (tag.getId() != null) {

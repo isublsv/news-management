@@ -1,11 +1,8 @@
 package com.epam.lab.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.Objects;
 
-@Component("author")
 public class Author extends Entity {
 
     private String name;

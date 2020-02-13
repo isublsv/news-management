@@ -1,15 +1,16 @@
 package com.epam.lab.service.impl;
 
 import com.epam.lab.dto.AuthorDto;
+import com.epam.lab.dto.AuthorMapper;
 import com.epam.lab.dto.NewsDto;
-import com.epam.lab.dto.mapper.AuthorMapper;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.repository.AuthorRepository;
+import com.epam.lab.repository.AuthorRepositoryImpl;
 import com.epam.lab.repository.NewsRepository;
-import com.epam.lab.repository.impl.AuthorRepositoryImpl;
-import com.epam.lab.repository.impl.NewsRepositoryImpl;
+import com.epam.lab.repository.NewsRepositoryImpl;
 import com.epam.lab.service.AuthorService;
+import com.epam.lab.service.AuthorServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,7 +36,7 @@ public class AuthorServiceImplTest {
     private AuthorDto expected;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         authorRepository = mock(AuthorRepositoryImpl.class);
         newsRepository = mock(NewsRepositoryImpl.class);
         AuthorMapper authorMapper = new AuthorMapper();
@@ -44,8 +45,8 @@ public class AuthorServiceImplTest {
         List<News> news = new ArrayList<>();
         author = new Author(1L, "name", "surname", news);
 
-        List<NewsDto> newsDtoList = new ArrayList<>();
-        expected = new AuthorDto(1L, "name", "surname", newsDtoList);
+        List<NewsDto> newsDtos = new ArrayList<>();
+        expected = new AuthorDto(1L, "name", "surname", newsDtos);
     }
 
     @Test
@@ -87,14 +88,14 @@ public class AuthorServiceImplTest {
 
     @Test
     public void shouldDeleteAuthorById() {
-        List<Long> idList = new ArrayList<>();
-        idList.add(1L);
+        List<Long> ids = new ArrayList<>();
+        ids.add(1L);
 
-        when(newsRepository.findNewsByAuthorId(any(Long.class))).thenReturn(idList);
+        when(newsRepository.findNewsByAuthorId(any(Long.class))).thenReturn(ids);
         authorService.delete(anyLong());
 
         verify(newsRepository).findNewsByAuthorId(anyLong());
         verify(authorRepository).delete(anyLong());
-        verify(newsRepository, times(idList.size())).delete(anyLong());
+        verify(newsRepository, times(ids.size())).delete(anyLong());
     }
 }

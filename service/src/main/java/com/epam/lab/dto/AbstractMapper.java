@@ -1,15 +1,12 @@
-package com.epam.lab.dto.mapper;
+package com.epam.lab.dto;
 
-import com.epam.lab.dto.AbstractDto;
 import com.epam.lab.model.Entity;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
 public abstract class AbstractMapper<E extends Entity, D extends AbstractDto> implements Mapper<E, D> {
 
-    @Autowired
     private ModelMapper mapper;
 
     private Class<E> entity;

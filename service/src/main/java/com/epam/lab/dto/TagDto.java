@@ -1,12 +1,10 @@
 package com.epam.lab.dto;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
-@Component("tagDto")
 public class TagDto extends AbstractDto {
 
     @NotNull

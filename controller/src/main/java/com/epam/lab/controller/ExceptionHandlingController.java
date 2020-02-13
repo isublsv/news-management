@@ -50,16 +50,22 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         String errorMessage;
         Map<String, Object> body = new LinkedHashMap<>();
-        if (!violations.isEmpty()) {
+        errorMessage = createErrorMessage(violations);
+        body.put("timestamp", LocalDateTime.now().format(DATE_TIME_FORMATTER));
+        body.put("violation", errorMessage);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    private String createErrorMessage(final Set<ConstraintViolation<?>> violationsValue) {
+        String errorMessage;
+        if (!violationsValue.isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            violations.forEach(violation -> builder.append(" ").append(violation.getMessage()));
+            violationsValue.forEach(violation -> builder.append(" ").append(violation.getMessage()));
             errorMessage = builder.toString();
         } else {
             errorMessage = "ConstraintViolationException occurred.";
         }
-        body.put("timestamp", LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        body.put("violation", errorMessage);
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return errorMessage;
     }
 
     @Override
