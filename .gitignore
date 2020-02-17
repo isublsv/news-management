@@ -1,6 +1,8 @@
+#Folders
 /.idea
+*/target
+
+#Files
 *.iml
-/target
-/controller/target/
-/repository-jdbc/target/
-/service/target/
+*.log
+

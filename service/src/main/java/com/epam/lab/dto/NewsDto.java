@@ -1,5 +1,6 @@
 package com.epam.lab.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
@@ -24,9 +25,11 @@ public class NewsDto extends AbstractDto {
     private String fullText;
 
     @PastOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate creationDate;
 
     @PastOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate modificationDate;
 
     @NotNull(message = "Author entity cannot be null")
@@ -110,14 +113,14 @@ public class NewsDto extends AbstractDto {
         }
         NewsDto newsDto = (NewsDto) oValue;
         return title.equals(newsDto.title) && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
-               && creationDate.equals(newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate)
-               && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
+                && creationDate.equals(newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate)
+                && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
     }
 
     @Override
     public String toString() {
         return String.format("NewsDto{id=%d, title='%s', shortText='%s', fullText='%s', creationDate=%s,"
-                + " modificationDate=%s, author=%s, tags=%s}",
+                        + " modificationDate=%s, author=%s, tags=%s}",
                 getId(), title, shortText, fullText, creationDate, modificationDate, author, tags);
     }
 }
