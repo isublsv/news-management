@@ -1,4 +1,4 @@
-package com.epam.lab.service.impl;
+package com.epam.lab.service;
 
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.dto.AuthorMapper;

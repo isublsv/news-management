@@ -1,4 +1,4 @@
-package com.epam.lab.service.impl;
+package com.epam.lab.service;
 
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.dto.NewsDto;
@@ -15,8 +15,6 @@ import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.NewsRepositoryImpl;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.repository.TagRepositoryImpl;
-import com.epam.lab.service.NewsService;
-import com.epam.lab.service.NewsServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
