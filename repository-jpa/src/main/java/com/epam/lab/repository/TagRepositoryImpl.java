@@ -1,5 +1,6 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import org.springframework.stereotype.Repository;
 
@@ -26,10 +27,7 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag update(final Tag entity) {
-        Tag tag = find(entity.getId());
-        tag.setName(entity.getName());
-        entityManager.merge(tag);
-        return tag;
+        return entityManager.merge(entity);
     }
 
     @Override
@@ -37,7 +35,7 @@ public class TagRepositoryImpl implements TagRepository {
         entityManager.remove(find(id));
     }
 
-        @Override
+    @Override
     public Tag findByTag(final Tag tag) {
         return null;
     }
@@ -49,7 +47,8 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<Tag> findTagsByNewsId(final Long newsId) {
-        return null;
+        News news = entityManager.find(News.class, newsId);
+        return news.getTags();
     }
 
     @Override
