@@ -113,7 +113,7 @@ public class ParameterizedSearchTest {
         news.setCreationDate(newsDate);
         news.setModificationDate(newsDate);
 
-        Author author = new Author(1L, "name", "surname", new ArrayList<>());
+        Author author = new Author(1L, "name", "surname");
 
         news.setAuthor(author);
 
@@ -132,7 +132,7 @@ public class ParameterizedSearchTest {
         newsDto.setCreationDate(newsDtoDate);
         newsDto.setModificationDate(newsDtoDate);
 
-        AuthorDto authorDto = new AuthorDto(1L, "name", "surname", new ArrayList<>());
+        AuthorDto authorDto = new AuthorDto(1L, "name", "surname");
 
         newsDto.setAuthor(authorDto);
 

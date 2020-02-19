@@ -9,8 +9,6 @@ import com.epam.lab.repository.AuthorRepository;
 import com.epam.lab.repository.AuthorRepositoryImpl;
 import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.NewsRepositoryImpl;
-import com.epam.lab.service.AuthorService;
-import com.epam.lab.service.AuthorServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -42,11 +40,9 @@ public class AuthorServiceImplTest {
         AuthorMapper authorMapper = new AuthorMapper();
         authorService = new AuthorServiceImpl(authorRepository, newsRepository, authorMapper);
 
-        List<News> news = new ArrayList<>();
-        author = new Author(1L, "name", "surname", news);
+        author = new Author(1L, "name", "surname");
 
-        List<NewsDto> newsDtos = new ArrayList<>();
-        expected = new AuthorDto(1L, "name", "surname", newsDtos);
+        expected = new AuthorDto(1L, "name", "surname");
     }
 
     @Test

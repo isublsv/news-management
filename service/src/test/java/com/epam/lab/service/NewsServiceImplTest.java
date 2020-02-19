@@ -15,8 +15,6 @@ import com.epam.lab.repository.NewsRepository;
 import com.epam.lab.repository.NewsRepositoryImpl;
 import com.epam.lab.repository.TagRepository;
 import com.epam.lab.repository.TagRepositoryImpl;
-import com.epam.lab.service.NewsService;
-import com.epam.lab.service.NewsServiceImpl;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -58,7 +56,7 @@ public class NewsServiceImplTest {
         news.setCreationDate(newsDate);
         news.setModificationDate(newsDate);
 
-        author = new Author(1L, "name", "surname", new ArrayList<>());
+        author = new Author(1L, "name", "surname");
         news.setAuthor(author);
         news.setTags(new ArrayList<>());
 
@@ -71,7 +69,7 @@ public class NewsServiceImplTest {
         expected.setCreationDate(newsDtoDate);
         expected.setModificationDate(newsDtoDate);
 
-        AuthorDto authorDto = new AuthorDto(1L, "name", "surname", new ArrayList<>());
+        AuthorDto authorDto = new AuthorDto(1L, "name", "surname");
 
         expected.setAuthor(authorDto);
         expected.setTags(new ArrayList<>());
@@ -312,7 +310,6 @@ public class NewsServiceImplTest {
         AuthorDto authorDtoWithoutId = new AuthorDto();
         authorDtoWithoutId.setName("name");
         authorDtoWithoutId.setSurname("surname");
-        authorDtoWithoutId.setNews(new ArrayList<>());
 
         newsDto.setAuthor(authorDtoWithoutId);
         newsDto.setTags(new ArrayList<>());
