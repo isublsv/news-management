@@ -1,11 +1,13 @@
 package com.epam.lab.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
@@ -16,29 +18,29 @@ import java.util.Objects;
 @Table(name = "news", schema = "news")
 public class News extends AbstractEntity {
 
-    @Column(name = "title", length = 30)
+    @Column(name = "title", length = 30, nullable = false)
     private String title;
 
-    @Column(name = "short_text", length = 100)
+    @Column(name = "short_text", length = 100, nullable = false)
     private String shortText;
 
-    @Column(name = "full_text", length = 2000)
+    @Column(name = "full_text", length = 2000, nullable = false)
     private String fullText;
 
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", nullable = false)
     private LocalDate creationDate;
 
-    @Column(name = "modification_date")
+    @Column(name = "modification_date", nullable = false)
     private LocalDate modificationDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "news_author", schema = "news",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
             uniqueConstraints = @UniqueConstraint(columnNames = "news_id"))
     private Author author;
 
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "news_tag", schema = "news",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"),

@@ -9,7 +9,7 @@ import java.util.Objects;
 @Table(name = "tag", schema = "news")
 public class Tag extends AbstractEntity {
 
-    @Column(name = "name", length = 30, unique = true)
+    @Column(name = "name", length = 30, unique = true, nullable = false)
     private String name;
 
     public Tag() {

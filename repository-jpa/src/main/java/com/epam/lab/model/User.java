@@ -9,16 +9,16 @@ import java.util.Objects;
 @Table(name = "user", schema = "news")
 public class User extends AbstractEntity {
 
-    @Column(name = "name", length = 20)
+    @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Column(name = "surname", length = 20)
+    @Column(name = "surname", length = 20, nullable = false)
     private String surname;
 
-    @Column(name = "login", length = 30)
+    @Column(name = "login", length = 30, nullable = false)
     private String login;
 
-    @Column(name = "password", length = 30)
+    @Column(name = "password", length = 30, nullable = false)
     private String password;
 
     public User() {
