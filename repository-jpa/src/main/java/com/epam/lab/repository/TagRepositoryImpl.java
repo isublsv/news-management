@@ -13,7 +13,6 @@ public class TagRepositoryImpl implements TagRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
-
     @Override
     public Tag create(final Tag entity) {
         entityManager.persist(entity);
