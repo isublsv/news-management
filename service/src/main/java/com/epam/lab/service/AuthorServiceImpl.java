@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 @Service("authorService")
 public class AuthorServiceImpl implements AuthorService {
 
@@ -28,6 +27,7 @@ public class AuthorServiceImpl implements AuthorService {
         this.authorMapper = authorMapperValue;
     }
 
+    @Transactional
     @Override
     public AuthorDto create(final AuthorDto entityDto) {
         return authorMapper.toDto(authorRepository.create(authorMapper.toEntity(entityDto)));
@@ -38,12 +38,14 @@ public class AuthorServiceImpl implements AuthorService {
         return authorMapper.toDto(authorRepository.find(id));
     }
 
+    @Transactional
     @Override
     public AuthorDto update(final AuthorDto entityDto) {
         Author author = authorRepository.update(authorMapper.toEntity(entityDto));
         return authorMapper.toDto(author);
     }
 
+    @Transactional
     @Override
     public void delete(final Long id) {
         List<Long> news = newsRepository.findNewsByAuthorId(id);

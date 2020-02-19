@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Service("tagService")
 public class TagServiceImpl implements TagService {
 
@@ -21,6 +20,7 @@ public class TagServiceImpl implements TagService {
         this.tagMapper = tagMapperValue;
     }
 
+    @Transactional
     @Override
     public TagDto create(final TagDto entityDto) {
         Tag tag = tagMapper.toEntity(entityDto);
@@ -32,12 +32,14 @@ public class TagServiceImpl implements TagService {
         return tagMapper.toDto(tagRepository.find(id));
     }
 
+    @Transactional
     @Override
     public TagDto update(final TagDto entityDto) {
         Tag tag = tagRepository.update(tagMapper.toEntity(entityDto));
         return tagMapper.toDto(tag);
     }
 
+    @Transactional
     @Override
     public void delete(final Long id) {
         tagRepository.delete(id);

@@ -16,12 +16,14 @@ import com.epam.lab.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @Service("newsService")
 public class NewsServiceImpl implements NewsService {
@@ -45,6 +47,7 @@ public class NewsServiceImpl implements NewsService {
         this.tagMapper = tagMapperValue;
     }
 
+    @Transactional
     @Override
     public NewsDto create(final NewsDto entityDto) {
         return handleNews(entityDto);
@@ -61,11 +64,13 @@ public class NewsServiceImpl implements NewsService {
         return newsMapper.toDto(news);
     }
 
+    @Transactional
     @Override
     public NewsDto update(final NewsDto entityDto) {
         return handleNews(entityDto);
     }
 
+    @Transactional
     @Override
     public void delete(final Long id) {
         newsRepository.delete(id);
@@ -122,6 +127,7 @@ public class NewsServiceImpl implements NewsService {
         news.setAuthor(author);
     }
 
+    @Transactional
     @Override
     public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtos) {
         Set<Tag> tags = new HashSet<>(tagRepository.findTagsByNewsId(newsId));
