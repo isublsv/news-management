@@ -2,9 +2,12 @@ package com.epam.lab.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -29,9 +32,17 @@ public class News extends AbstractEntity {
     private LocalDate modificationDate;
 
     @ManyToOne
+    @JoinTable(name = "news_author", schema = "news",
+            joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = "news_id"))
     private Author author;
 
     @OneToMany
+    @JoinTable(name = "news_tag", schema = "news",
+            joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"news_id", "tag_id"}))
     private List<Tag> tags;
 
     public News() {

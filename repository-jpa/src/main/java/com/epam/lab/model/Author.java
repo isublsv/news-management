@@ -17,7 +17,7 @@ public class Author extends AbstractEntity {
     @Column(name = "surname", length = 30)
     private String surname;
 
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private List<News> news;
 
     public Author() {
