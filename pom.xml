@@ -10,6 +10,7 @@
   <modules>
     <module>controller</module>
     <module>service</module>
+    <module>service-jpa</module>
     <module>repository-jdbc</module>
     <module>repository-jpa</module>
   </modules>
