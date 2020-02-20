@@ -1,11 +1,11 @@
 package com.epam.lab.dto;
 
-import com.epam.lab.model.AbstractEntity;
+import com.epam.lab.model.Entity;
 import org.modelmapper.ModelMapper;
 
 import java.util.Objects;
 
-public abstract class AbstractMapper<E extends AbstractEntity, D extends AbstractDto> implements Mapper<E, D> {
+public abstract class AbstractMapper<E extends Entity, D extends AbstractDto> implements Mapper<E, D> {
 
     private ModelMapper mapper;
 

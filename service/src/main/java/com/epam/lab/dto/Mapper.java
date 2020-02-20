@@ -1,8 +1,8 @@
 package com.epam.lab.dto;
 
-import com.epam.lab.model.AbstractEntity;
+import com.epam.lab.model.Entity;
 
-public interface Mapper<E extends AbstractEntity, D extends AbstractDto> {
+public interface Mapper<E extends Entity, D extends AbstractDto> {
 
     E toEntity(D dto);
 
