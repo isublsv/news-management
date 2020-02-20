@@ -2,7 +2,6 @@ package com.epam.lab.controller;
 
 import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.service.AuthorService;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -45,7 +45,7 @@ public class AuthorController {
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
     @Valid
     public AuthorDto findAuthorById(@PathVariable @NotNull
-    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
+    @Positive(message = "Id cannot be null and must positive") final Long id) {
         return authorService.find(id);
     }
 
@@ -58,7 +58,7 @@ public class AuthorController {
 
     @DeleteMapping("/delete/{id}")
     public void deleteAuthor(@PathVariable @NotNull
-    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
+    @Positive(message = "Id cannot be null and must positive") final Long id) {
         authorService.delete(id);
     }
 }

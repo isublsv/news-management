@@ -2,7 +2,6 @@ package com.epam.lab.controller;
 
 import com.epam.lab.exception.ServiceException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.PersistenceException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -40,7 +40,7 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
         response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler(DuplicateKeyException.class)
+    @ExceptionHandler(PersistenceException.class)
     public void handleConflictError(final HttpServletResponse response, final Exception e) throws IOException {
         response.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
     }

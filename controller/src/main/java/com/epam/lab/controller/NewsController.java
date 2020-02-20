@@ -4,7 +4,6 @@ import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.SearchCriteria;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.service.NewsService;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -48,7 +48,7 @@ public class NewsController {
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
     @Valid
     public NewsDto findNewsById(@PathVariable @NotNull
-    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
+                                @Positive(message = "Id cannot be null and must positive") final Long id) {
         return newsService.find(id);
     }
 
@@ -61,14 +61,14 @@ public class NewsController {
 
     @DeleteMapping("/delete/{id}")
     public void deleteAuthor(@PathVariable @NotNull
-    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20") final Long id) {
+                             @Positive(message = "Id cannot be null and must positive") final Long id) {
         newsService.delete(id);
     }
 
     @PutMapping(value = "/add_tags", produces = APPLICATION_JSON_VALUE)
     public List<@Valid TagDto> addTagForNews(@RequestParam @NotNull
-    @Range(min = 1, max = 20, message = "Id cannot be null and must be more than 1 and less than 20}") final Long newsId,
-            @RequestParam @NotNull final List<@Valid TagDto> tagDtos) {
+                                             @Positive(message = "Id cannot be null and must positive") final Long newsId,
+                                             @RequestParam @NotNull final List<@Valid TagDto> tagDtos) {
         return newsService.addTagsForNews(newsId, tagDtos);
     }
 
