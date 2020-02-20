@@ -1,11 +1,13 @@
 package com.epam.lab.repository;
 
 import com.epam.lab.model.News;
-import com.epam.lab.model.Tag;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,10 +28,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public News find(final Long id) {
-        News news = entityManager.find(News.class, id);
-        List<Tag> tags = news.getTags();
-        news.setTags(tags);
-        return news;
+        return entityManager.find(News.class, id);
     }
 
     @Override
@@ -52,7 +51,11 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public Long countAllNews() {
-        return null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<News> root = criteriaQuery.from(News.class);
+        criteriaQuery.select(criteriaBuilder.count(root));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
     @Override
