@@ -1,8 +1,13 @@
 package com.epam.lab.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +19,9 @@ public class Author extends AbstractEntity {
 
     @Column(name = "surname", length = 30, nullable = false)
     private String surname;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<News> news = new ArrayList<>();
 
     public Author() {
         super();
@@ -45,6 +53,24 @@ public class Author extends AbstractEntity {
 
     public void setSurname(final String surnameValue) {
         surname = surnameValue;
+    }
+
+    public List<News> getNews() {
+        return news;
+    }
+
+    public void setNews(final List<News> newsValue) {
+        news = newsValue;
+    }
+
+    public void addNews(News newsValue) {
+        news.add(newsValue);
+        newsValue.setAuthor(this);
+    }
+
+    public void removeNews(News newsValue) {
+        news.remove(newsValue);
+        newsValue.setAuthor(null);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.epam.lab.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,13 +29,14 @@ public class News extends AbstractEntity {
     @Column(name = "full_text", length = 2000, nullable = false)
     private String fullText;
 
-    @Column(name = "creation_date", nullable = false)
+    @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDate creationDate;
 
     @Column(name = "modification_date", nullable = false)
     private LocalDate modificationDate;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Cascade({org.hibernate.annotations.CascadeType.REPLICATE})
     @JoinTable(name = "news_author", schema = "news",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
