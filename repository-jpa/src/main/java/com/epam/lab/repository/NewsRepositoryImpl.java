@@ -1,12 +1,16 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.model.Author;
+import com.epam.lab.model.Author_;
 import com.epam.lab.model.News;
+import com.epam.lab.model.News_;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.List;
@@ -45,8 +49,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void delete(final Long id) {
-        News news = find(id);
-        entityManager.remove(news);
+        entityManager.remove(find(id));
     }
 
     @Override
@@ -80,7 +83,12 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public List<Long> findNewsByAuthorId(final Long authorId) {
-        return null;
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<News> root = query.from(News.class);
+        Join<News, Author> author = root.join(News_.AUTHOR);
+        query.select(root.get(News_.ID)).where(criteriaBuilder.equal(author.get(Author_.ID), authorId));
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
