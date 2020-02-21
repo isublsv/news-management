@@ -25,20 +25,11 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author update(final Author entity) {
-        Author author = find(entity.getId());
-        author.setName(entity.getName());
-        author.setSurname(entity.getSurname());
-        entityManager.merge(author);
-        return author;
+        return entityManager.merge(entity);
     }
 
     @Override
     public void delete(final Long id) {
         entityManager.remove(find(id));
-    }
-
-    @Override
-    public Author findByAuthor(final Author author) {
-        return null;
     }
 }

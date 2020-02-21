@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -37,14 +38,13 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public News update(final News entity) {
-        News news = find(entity.getId());
-        news.setTitle(entity.getTitle());
-        news.setShortText(entity.getShortText());
-        news.setFullText(entity.getFullText());
-        news.setCreationDate(entity.getCreationDate());
-        news.setModificationDate(LocalDate.now());
-        entityManager.merge(news);
-        return news;
+        entity.setModificationDate(LocalDate.now());
+
+        //update author and tags
+/*        news.getTags().clear();
+        news.getTags().addAll(entity.getTags());*/
+
+        return entityManager.merge(entity);
     }
 
     @Override
@@ -61,27 +61,6 @@ public class NewsRepositoryImpl implements NewsRepository {
         return entityManager.createQuery(criteriaQuery).getSingleResult();
     }
 
-    @Override
-    public void addNewsAuthor(final Long newsId, final Long authorId) {
-
-    }
-
-    @Override
-    public void removeNewsAuthor(final Long newsId) {
-
-    }
-
-    @Override
-    public void addNewsTag(final Long newsId, final Long tagId) {
-
-    }
-
-    @Override
-    public Boolean findNewsByTitle(final String title) {
-        return null;
-    }
-
-    @Override
     public List<Long> findNewsByAuthorId(final Long authorId) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
@@ -93,7 +72,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public List<News> searchBy(final String sqlQuery) {
-        return null;
+        return Collections.emptyList();
     }
 
 

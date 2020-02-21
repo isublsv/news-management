@@ -1,12 +1,10 @@
 package com.epam.lab.repository;
 
-import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -33,26 +31,5 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public void delete(final Long id) {
         entityManager.remove(find(id));
-    }
-
-    @Override
-    public Tag findByTag(final Tag tag) {
-        return null;
-    }
-
-    @Override
-    public Tag findByTagName(final String name) {
-        return null;
-    }
-
-    @Override
-    public List<Tag> findTagsByNewsId(final Long newsId) {
-        News news = entityManager.find(News.class, newsId);
-        return news.getTags();
-    }
-
-    @Override
-    public void removeTagsByNewsId(final Long newsId) {
-
     }
 }
