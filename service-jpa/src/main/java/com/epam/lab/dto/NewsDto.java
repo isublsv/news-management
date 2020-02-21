@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ public class NewsDto extends AbstractDto {
     @Valid
     private AuthorDto author;
 
-    private List<TagDto> tags;
+    private List<TagDto> tags = new ArrayList<>();
 
     public NewsDto() {
         super();

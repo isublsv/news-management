@@ -27,6 +27,7 @@
     <servlet.ver>4.0.1</servlet.ver>
     <jackson.ver>2.10.2</jackson.ver>
     <mapper.module.ver>1.1.0</mapper.module.ver>
+    <log4j2.ver>2.13.0</log4j2.ver>
   </properties>
 
   <dependencies>
@@ -127,6 +128,16 @@
           <groupId>org.hibernate.validator</groupId>
           <artifactId>hibernate-validator</artifactId>
           <version>6.1.2.Final</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+          <version>${log4j2.ver}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-core</artifactId>
+          <version>${log4j2.ver}</version>
       </dependency>
   </dependencies>
 
