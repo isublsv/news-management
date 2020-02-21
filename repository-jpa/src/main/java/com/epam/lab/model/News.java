@@ -1,7 +1,5 @@
 package com.epam.lab.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,7 +38,6 @@ public class News extends AbstractEntity {
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
             uniqueConstraints = @UniqueConstraint(columnNames = "news_id"))
-    @JsonIgnoreProperties("news")
     private Author author;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
