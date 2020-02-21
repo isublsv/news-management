@@ -48,6 +48,8 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     @Override
     public void delete(final Long id) {
+        List<Long> news = newsRepository.findNewsByAuthorId(id);
         authorRepository.delete(id);
+        news.forEach(newsRepository::delete);
     }
 }
