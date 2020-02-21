@@ -3,8 +3,6 @@ package com.epam.lab.dto;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class AuthorDto extends AbstractDto {
@@ -16,8 +14,6 @@ public class AuthorDto extends AbstractDto {
     @NotNull
     @Length(min = 2, max = 30, message = "Surname cannot be null and must be between 2 and 30 characters")
     private String surname;
-
-    private List<NewsDto> news = new ArrayList<>();
 
     public AuthorDto() {
         super();
@@ -43,14 +39,6 @@ public class AuthorDto extends AbstractDto {
 
     public void setSurname(final String surnameValue) {
         surname = surnameValue;
-    }
-
-    public List<NewsDto> getNews() {
-        return news;
-    }
-
-    public void setNews(final List<NewsDto> newsValue) {
-        news = newsValue;
     }
 
     @Override
