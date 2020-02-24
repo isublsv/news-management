@@ -2,10 +2,11 @@ package com.epam.lab.service;
 
 import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.NewsMapper;
-import com.epam.lab.dto.SearchCriteria;
-import com.epam.lab.dto.SearchCriteriaBuilder;
+import com.epam.lab.dto.SearchCriteriaDto;
+import com.epam.lab.dto.SearchCriteriaMapper;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.model.News;
+import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,15 @@ public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
+    private final SearchCriteriaMapper searchCriteriaMapper;
 
     @Autowired
     public NewsServiceImpl(final NewsRepository newsRepositoryValue,
-                           final NewsMapper newsMapperValue) {
+                           final NewsMapper newsMapperValue,
+                           final SearchCriteriaMapper searchCriteriaMapperValue) {
         this.newsRepository = newsRepositoryValue;
         this.newsMapper = newsMapperValue;
+        this.searchCriteriaMapper = searchCriteriaMapperValue;
     }
 
     @Transactional
@@ -65,13 +69,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsDto> searchBy(final SearchCriteria sc) {
-        String sql = new SearchCriteriaBuilder()
-                .setAuthorName(sc.getName())
-                .setAuthorSurname(sc.getSurname())
-                .setTags(sc.getTags())
-                .setSortAndOrder(sc.getOrderBy(), sc.isDesc())
-                .buildSearchQuery();
-        return newsRepository.searchBy(sql).stream().map(newsMapper::toDto).collect(Collectors.toList());
+    public List<NewsDto> searchBy(final SearchCriteriaDto sc) {
+        SearchCriteria searchCriteria = searchCriteriaMapper.toEntity(sc);
+        return newsRepository.searchBy(searchCriteria).stream().map(newsMapper::toDto).collect(Collectors.toList());
     }
 }
