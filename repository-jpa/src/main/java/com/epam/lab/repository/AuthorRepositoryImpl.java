@@ -30,6 +30,9 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public void delete(final Long id) {
-        entityManager.remove(find(id));
+        Author author = find(id);
+        if (author != null) {
+            entityManager.remove(author);
+        }
     }
 }

@@ -30,6 +30,9 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void delete(final Long id) {
-        entityManager.remove(find(id));
+        Tag tag = find(id);
+        if (tag != null) {
+            entityManager.remove(tag);
+        }
     }
 }

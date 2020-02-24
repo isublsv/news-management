@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,7 +49,7 @@ public class News extends AbstractEntity {
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"news_id", "tag_id"}))
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     public News() {
         super();
@@ -109,6 +110,14 @@ public class News extends AbstractEntity {
     public void setTags(final List<Tag> tagsValue) {
         tags = tagsValue;
     }
+    
+    public void addTag(final Tag tagValue) {
+        tags.add(tagValue);
+    }
+    
+    public void removeTag(final Tag tagValue) {
+        tags.remove(tagValue);
+    }
 
     @Override
     public int hashCode() {
@@ -133,7 +142,7 @@ public class News extends AbstractEntity {
     public String toString() {
         return String.format(
                 "News{id=%d, title='%s', shortText='%s', fullText='%s', creationDate=%s, modificationDate=%s, "
-                        + "author='%s', tags='%s'}", getId(), title, shortText, fullText, creationDate, modificationDate,
-                author, tags);
+                        + "author='%s', tags='%s'}", getId(), title, shortText, fullText, creationDate,
+                modificationDate, author, tags);
     }
 }
