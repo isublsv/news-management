@@ -40,13 +40,11 @@ public class NewsController {
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @Valid
     public NewsDto createNews(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.create(newsDto);
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
-    @Valid
     public NewsDto findNewsById(@PathVariable @NotNull
                                 @Positive(message = "Id cannot be null and must positive") final Long id) {
         return newsService.find(id);
@@ -54,7 +52,6 @@ public class NewsController {
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    @Valid
     public NewsDto editAuthor(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.update(newsDto);
     }
@@ -66,7 +63,7 @@ public class NewsController {
     }
 
     @PutMapping(value = "/add_tags", produces = APPLICATION_JSON_VALUE)
-    public List<@Valid TagDto> addTagForNews(@RequestParam @NotNull
+    public List<TagDto> addTagForNews(@RequestParam @NotNull
                                              @Positive(message = "Id cannot be null and must positive") final Long newsId,
                                              @RequestParam @NotNull final List<@Valid TagDto> tagDtos) {
         return newsService.addTagsForNews(newsId, tagDtos);
@@ -74,7 +71,7 @@ public class NewsController {
 
     @GetMapping(value = "/search_by", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<@Valid NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc) {
+    public List<NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc) {
         return newsService.searchBy(sc);
     }
 

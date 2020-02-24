@@ -37,13 +37,11 @@ public class AuthorController {
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @Valid
     public AuthorDto createAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.create(authorDto);
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
-    @Valid
     public AuthorDto findAuthorById(@PathVariable @NotNull
     @Positive(message = "Id cannot be null and must positive") final Long id) {
         return authorService.find(id);
@@ -51,7 +49,6 @@ public class AuthorController {
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    @Valid
     public AuthorDto editAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.update(authorDto);
     }

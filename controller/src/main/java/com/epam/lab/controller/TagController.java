@@ -37,7 +37,6 @@ public class TagController {
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @Valid
     public TagDto addTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.create(tagDto);
     }
@@ -50,7 +49,6 @@ public class TagController {
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    @Valid
     public TagDto editTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.update(tagDto);
     }
