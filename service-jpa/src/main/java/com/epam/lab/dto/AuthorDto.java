@@ -1,18 +1,21 @@
 package com.epam.lab.dto;
 
-import org.hibernate.validator.constraints.Length;
-
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 public class AuthorDto extends AbstractDto {
 
     @NotNull
-    @Length(min = 2, max = 30, message = "Name cannot be null and must be between 2 and 30 characters")
+    @Pattern(regexp = "[A-ZА-Я]{2,30}",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Provided name is not valid")
     private String name;
     
     @NotNull
-    @Length(min = 2, max = 30, message = "Surname cannot be null and must be between 2 and 30 characters")
+    @Pattern(regexp = "[A-ZА-Я\\-]{2,30}",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Provided surname is not valid")
     private String surname;
 
     public AuthorDto() {

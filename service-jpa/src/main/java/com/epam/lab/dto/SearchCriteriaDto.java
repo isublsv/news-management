@@ -5,24 +5,34 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class SearchCriteria {
+public class SearchCriteriaDto extends AbstractDto{
 
-    @Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = "[A-ZА-Я]{2,30}",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Provided name is not valid")
     private String name;
 
-    @Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = "[A-ZА-Я\\-]{2,30}",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Provided surname is not valid")
     private String surname;
 
-    private Set<@Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE) String> tags;
-    private Set<@Pattern(regexp = "\\w+", flags = Pattern.Flag.CASE_INSENSITIVE) String> orderBy;
+    private Set<@Pattern(regexp = "[A-ZА-Я_!?\\-\\d ]{2,30}",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Provided tag name is not valid") String> tags;
+
+    private Set<@Pattern(regexp = "[A-ZА-Я_]+",
+            flags = Pattern.Flag.CASE_INSENSITIVE,
+            message = "Provided column name is not valid") String> orderBy;
+
     private boolean desc;
 
-    public SearchCriteria() {
+    public SearchCriteriaDto() {
         tags = new HashSet<>();
         orderBy = new LinkedHashSet<>();
     }
 
-    public SearchCriteria(final String nameValue,
+    public SearchCriteriaDto(final String nameValue,
                           final String surnameValue,
                           final Set<String> tagsValue,
                           final Set<String> orderByValue,

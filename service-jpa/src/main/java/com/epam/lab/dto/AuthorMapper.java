@@ -3,7 +3,7 @@ package com.epam.lab.dto;
 import com.epam.lab.model.Author;
 import org.springframework.stereotype.Component;
 
-@Component("authorMapper")
+@Component
 public class AuthorMapper extends AbstractMapper<Author, AuthorDto> {
 
     public AuthorMapper() {

@@ -1,7 +1,7 @@
 package com.epam.lab.controller;
 
 import com.epam.lab.dto.NewsDto;
-import com.epam.lab.dto.SearchCriteria;
+import com.epam.lab.dto.SearchCriteriaDto;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class NewsController {
 
     @GetMapping(value = "/search_by", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<@Valid NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteria sc) {
+    public List<@Valid NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc) {
         return newsService.searchBy(sc);
     }
 
