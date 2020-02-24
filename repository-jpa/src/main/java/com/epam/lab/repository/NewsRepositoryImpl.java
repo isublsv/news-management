@@ -1,29 +1,20 @@
 package com.epam.lab.repository;
 
-import com.epam.lab.model.AbstractEntity;
+import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Author;
-import com.epam.lab.model.Author_;
 import com.epam.lab.model.News;
-import com.epam.lab.model.News_;
-import com.epam.lab.model.OrderBy;
 import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
-import com.epam.lab.model.Tag_;
+import org.hibernate.ReplicationMode;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -37,13 +28,18 @@ public class NewsRepositoryImpl implements NewsRepository {
         LocalDate date = LocalDate.now();
         entity.setCreationDate(date);
         entity.setModificationDate(date);
-        entityManager.persist(entity);
+        entityManager.unwrap(Session.class).replicate(entity, ReplicationMode.IGNORE);
         return entity;
     }
 
     @Override
     public News find(final Long id) {
-        return entityManager.find(News.class, id);
+        News news = entityManager.find(News.class, id);
+        if (news != null) {
+            return news;
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     @Override
@@ -55,8 +51,8 @@ public class NewsRepositoryImpl implements NewsRepository {
         news.setFullText(entity.getFullText());
         news.setModificationDate(LocalDate.now());
 
-        Long authorId = entity.getAuthor().getId();
-        if (authorId != null) {
+        long authorId = entity.getAuthor().getId();
+        if (authorId != 0) {
             Author author = entityManager.find(Author.class, authorId);
             news.setAuthor(author);
         } else {
@@ -71,10 +67,7 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void delete(final Long id) {
-        News news = find(id);
-        if (news != null) {
-            entityManager.remove(news);
-        }
+        entityManager.remove(find(id));
     }
 
     @Override
@@ -89,61 +82,7 @@ public class NewsRepositoryImpl implements NewsRepository {
     @Override
     public List<News> searchBy(final SearchCriteria searchCriteria) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<News> query = builder.createQuery(News.class);
-        Root<News> newsRoot = query.from(News.class);
-        Join<News, Author> authorJoin = newsRoot.join(News_.AUTHOR);
-        Join<News, Tag> tagJoin = newsRoot.join(News_.TAGS, JoinType.LEFT);
-
-        List<Predicate> predicates = new ArrayList<>();
-
-        String name = searchCriteria.getName();
-        if (name != null) {
-            predicates.add(builder.equal(builder.upper(authorJoin.get(Author_.NAME)), name.toUpperCase()));
-        }
-
-        String surname = searchCriteria.getSurname();
-        if (surname != null) {
-            predicates.add(builder.equal(builder.upper(authorJoin.get(Author_.SURNAME)), surname.toUpperCase()));
-        }
-
-        searchCriteria.getTags().forEach(tagName -> predicates
-                .add( builder.equal(builder.upper(tagJoin.get(Tag_.NAME)), tagName.toUpperCase())));
-
-        List<Order> orders = new ArrayList<>();
-
-        for (String column : searchCriteria.getOrderBy()) {
-            orders.add(builder.asc(getOrder(column, newsRoot)));
-        }
-
-        if (isNotEmpty(predicates)) {
-            //faster than .toArray(new Predicate[predicates.size()]
-            //https://stackoverflow.com/questions/174093/toarraynew-myclass0-or-toarraynew-myclassmylist-size
-            query.where(builder.and(predicates.toArray(new Predicate[0])));
-        }
-        if (isNotEmpty(orders)) {
-            query.orderBy(orders);
-        }
-        return entityManager.createQuery(query).getResultList();
-    }
-
-    private boolean isNotEmpty(final List<?> value) {
-        return !value.isEmpty();
-    }
-
-    public <T extends AbstractEntity> Path<T> getOrder(final String column, final Root<T> root) {
-        try {
-            return root.get(OrderBy.valueOf(column.toUpperCase()).getColumnName());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-    }
-
-    public <T extends AbstractEntity, E extends AbstractEntity> Path<T> getOrder(final String column,
-            final Join<T, E> join) {
-        try {
-            return join.get(OrderBy.valueOf(column.toUpperCase()).getColumnName());
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
+        SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, searchCriteria);
+        return entityManager.createQuery(searchNewsQuery.buildQuery()).getResultList();
     }
 }

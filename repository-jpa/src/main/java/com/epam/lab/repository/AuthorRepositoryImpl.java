@@ -1,5 +1,6 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Author;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,12 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public Author find(final Long id) {
-        return entityManager.find(Author.class, id);
+        Author author = entityManager.find(Author.class, id);
+        if (author != null) {
+            return author;
+        }  else {
+            throw new EntityNotFoundException();
+        }
     }
 
     @Override
@@ -30,9 +36,6 @@ public class AuthorRepositoryImpl implements AuthorRepository {
 
     @Override
     public void delete(final Long id) {
-        Author author = find(id);
-        if (author != null) {
-            entityManager.remove(author);
-        }
+        entityManager.remove(find(id));
     }
 }

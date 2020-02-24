@@ -1,6 +1,9 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.exception.EntityDuplicatedException;
+import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Tag;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -14,13 +17,22 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag create(final Tag entity) {
-        entityManager.persist(entity);
+        try {
+            entityManager.persist(entity);
+        } catch (ConstraintViolationException e) {
+            throw new EntityDuplicatedException();
+        }
         return entity;
     }
 
     @Override
     public Tag find(final Long id) {
-        return entityManager.find(Tag.class, id);
+        Tag tag = entityManager.find(Tag.class, id);
+        if (tag != null) {
+            return tag;
+        } else {
+            throw new EntityNotFoundException();
+        }
     }
 
     @Override
@@ -30,9 +42,6 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void delete(final Long id) {
-        Tag tag = find(id);
-        if (tag != null) {
-            entityManager.remove(tag);
-        }
+        entityManager.remove(find(id));
     }
 }

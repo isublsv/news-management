@@ -11,20 +11,20 @@ public abstract class AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     public AbstractEntity() {
     }
 
-    public AbstractEntity(final Long ldValue) {
+    public AbstractEntity(final long ldValue) {
         id = ldValue;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(final Long ldValue) {
+    public void setId(final long ldValue) {
         id = ldValue;
     }
 
