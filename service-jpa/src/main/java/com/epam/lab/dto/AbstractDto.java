@@ -1,26 +1,25 @@
 package com.epam.lab.dto;
 
-import org.hibernate.validator.constraints.Range;
-
+import javax.validation.constraints.PositiveOrZero;
 import java.io.Serializable;
 
 public abstract class AbstractDto implements Serializable {
 
-    @Range(min = 1L, message = "Id cannot be less 1 and more than Long.MAX_VALUE")
-    private Long id;
+    @PositiveOrZero(message = "Id must be positive")
+    private long id;
 
     public AbstractDto() {
     }
 
-    public AbstractDto(final Long idValue) {
+    public AbstractDto(final long idValue) {
         this.id = idValue;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(final Long idValue) {
+    public void setId(final long idValue) {
         id = idValue;
     }
 }
