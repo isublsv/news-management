@@ -1,5 +1,6 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.exception.EntityDuplicatedException;
 import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
@@ -7,6 +8,7 @@ import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -77,6 +79,23 @@ public class NewsRepositoryImpl implements NewsRepository {
         Root<News> root = criteriaQuery.from(News.class);
         criteriaQuery.select(criteriaBuilder.count(root));
         return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
+
+    @Override
+    public List<Tag> addTagsForNews(final Long newsId, final List<Tag> tags) {
+        News news = find(newsId);
+        List<Tag> newsTags = news.getTags();
+        for (Tag tag : tags) {
+            try {
+                entityManager.unwrap(Session.class).replicate(tag, ReplicationMode.IGNORE);
+                if (!newsTags.contains(tag)) {
+                    news.addTag(tag);
+                }
+            } catch (ConstraintViolationException e) {
+                throw new EntityDuplicatedException();
+            }
+        }
+        return newsTags;
     }
 
     @Override

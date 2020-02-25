@@ -17,6 +17,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,30 +38,30 @@ final class SearchNewsQuery {
         Join<News, Author> authorJoin = newsRoot.join(News_.AUTHOR);
         Join<News, Tag> tagJoin = newsRoot.join(News_.TAGS, JoinType.LEFT);
 
-        getPredicates(authorJoin, tagJoin);
-        getGroupsAndOrdersColumns(newsRoot, authorJoin);
-        return query;
-    }
-
-    private void getPredicates(final Join<News, Author> authorJoinValue, final Join<News, Tag> tagJoinValue) {
         List<Predicate> predicates = new ArrayList<>();
 
         String name = searchCriteria.getName();
         if (name != null) {
-            predicates.add(builder.equal(builder.upper(authorJoinValue.get(Author_.NAME)), name.toUpperCase()));
+            predicates.add(builder.equal(builder.upper(authorJoin.get(Author_.NAME)), name.toUpperCase()));
         }
 
         String surname = searchCriteria.getSurname();
         if (surname != null) {
-            predicates.add(builder.equal(builder.upper(authorJoinValue.get(Author_.SURNAME)), surname.toUpperCase()));
+            predicates.add(builder.equal(builder.upper(authorJoin.get(Author_.SURNAME)), surname.toUpperCase()));
         }
 
-        searchCriteria.getTags().forEach(tagName -> predicates
-                .add(builder.equal(builder.upper(tagJoinValue.get(Tag_.NAME)), tagName.toUpperCase())));
+        Subquery<Long> tagSubquery = query.subquery(Long.class);
+
+        for (String tagName : searchCriteria.getTags()) {
+            tagSubquery.select(newsRoot.get(News_.TAGS).get(News_.ID)).where(builder.equal(tagJoin.get(Tag_.NAME), tagName));
+            predicates.add(builder.equal(builder.upper(newsRoot.get(News_.ID)), builder.any(tagSubquery)));
+        }
 
         if (isNotEmpty(predicates)) {
             query.where(builder.and(predicates.toArray(new Predicate[0])));
         }
+        getGroupsAndOrdersColumns(newsRoot, authorJoin);
+        return query;
     }
 
     private boolean isNotEmpty(final List<Predicate> value) {
