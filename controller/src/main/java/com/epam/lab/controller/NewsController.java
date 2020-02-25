@@ -45,8 +45,7 @@ public class NewsController {
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
-    public NewsDto findNewsById(@PathVariable @NotNull
-                                @Positive(message = "Id cannot be null and must positive") final Long id) {
+    public NewsDto findNewsById(@PathVariable @Positive(message = "Id must positive") final Long id) {
         return newsService.find(id);
     }
 
@@ -57,15 +56,14 @@ public class NewsController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteAuthor(@PathVariable @NotNull
-                             @Positive(message = "Id cannot be null and must positive") final Long id) {
+    public void deleteAuthor(@PathVariable  @Positive(message = "Id must positive") final Long id) {
         newsService.delete(id);
     }
 
     @PutMapping(value = "/add_tags", produces = APPLICATION_JSON_VALUE)
-    public List<TagDto> addTagForNews(@RequestParam @NotNull
-                                             @Positive(message = "Id cannot be null and must positive") final Long newsId,
-                                             @RequestParam @NotNull final List<@Valid TagDto> tagDtos) {
+    public List<TagDto> addTagForNews(@RequestParam(value = "id")
+                                      @Positive(message = "Id must positive") final Long newsId,
+                                      @RequestBody @NotNull final List<@Valid TagDto> tagDtos) {
         return newsService.addTagsForNews(newsId, tagDtos);
     }
 

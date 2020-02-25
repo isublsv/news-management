@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -42,8 +41,7 @@ public class AuthorController {
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
-    public AuthorDto findAuthorById(@PathVariable @NotNull
-    @Positive(message = "Id cannot be null and must positive") final Long id) {
+    public AuthorDto findAuthorById(@PathVariable @Positive(message = "Id  must positive") final Long id) {
         return authorService.find(id);
     }
 
@@ -54,8 +52,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteAuthor(@PathVariable @NotNull
-    @Positive(message = "Id cannot be null and must positive") final Long id) {
+    public void deleteAuthor(@PathVariable @Positive(message = "Id must positive") final Long id) {
         authorService.delete(id);
     }
 }

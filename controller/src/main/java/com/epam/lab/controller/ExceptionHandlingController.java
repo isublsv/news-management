@@ -1,6 +1,5 @@
 package com.epam.lab.controller;
 
-import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,11 +36,6 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public void handleNotFoundError(final HttpServletResponse response, final Exception e) throws IOException {
-        response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
-    }
-
-    @ExceptionHandler(RepositoryException.class)
-    public void handleRepositoryError(final HttpServletResponse response, final Exception e) throws IOException {
         response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
     }
 
