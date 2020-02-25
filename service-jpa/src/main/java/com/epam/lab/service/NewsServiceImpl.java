@@ -5,14 +5,15 @@ import com.epam.lab.dto.NewsMapper;
 import com.epam.lab.dto.SearchCriteriaDto;
 import com.epam.lab.dto.SearchCriteriaMapper;
 import com.epam.lab.dto.TagDto;
+import com.epam.lab.dto.TagMapper;
 import com.epam.lab.model.News;
 import com.epam.lab.model.SearchCriteria;
+import com.epam.lab.model.Tag;
 import com.epam.lab.repository.NewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,14 +22,17 @@ public class NewsServiceImpl implements NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
+    private final TagMapper tagMapper;
     private final SearchCriteriaMapper searchCriteriaMapper;
 
     @Autowired
     public NewsServiceImpl(final NewsRepository newsRepositoryValue,
                            final NewsMapper newsMapperValue,
+                           final TagMapper tagMapperValue,
                            final SearchCriteriaMapper searchCriteriaMapperValue) {
         this.newsRepository = newsRepositoryValue;
         this.newsMapper = newsMapperValue;
+        this.tagMapper = tagMapperValue;
         this.searchCriteriaMapper = searchCriteriaMapperValue;
     }
 
@@ -60,7 +64,9 @@ public class NewsServiceImpl implements NewsService {
     @Transactional
     @Override
     public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtos) {
-        return new ArrayList<>();
+        List<Tag> tags = tagDtos.stream().map(tagMapper::toEntity).collect(Collectors.toList());
+        List<Tag> newsTags = newsRepository.addTagsForNews(newsId, tags);
+        return newsTags.stream().map(tagMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
