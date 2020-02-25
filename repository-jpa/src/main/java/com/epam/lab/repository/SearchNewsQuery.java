@@ -59,7 +59,8 @@ final class SearchNewsQuery {
         Join<Object, Object> subJoinTag = subRoot.join(News_.TAGS, JoinType.LEFT);
 
         for (String tagName : searchCriteria.getTags()) {
-            tagSubquery.select(subRoot.get(News_.ID)).where(builder.equal(subJoinTag.get(Tag_.NAME), tagName));
+            tagSubquery.select(subRoot.get(News_.ID)).where(builder.equal(
+                    builder.upper(subJoinTag.get(Tag_.NAME)), tagName.toUpperCase()));
             predicates.add(builder.equal(newsRoot.get(News_.ID), builder.any(tagSubquery)));
         }
 
