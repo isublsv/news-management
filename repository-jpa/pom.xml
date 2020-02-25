@@ -42,6 +42,11 @@
             <artifactId>hibernate-jpamodelgen</artifactId>
             <version>${hibernate.ver}</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-testing</artifactId>
+            <version>${hibernate.ver}</version>
+        </dependency>
     </dependencies>
 
     <build>
