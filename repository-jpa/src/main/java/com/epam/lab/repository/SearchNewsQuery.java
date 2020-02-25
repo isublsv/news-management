@@ -6,6 +6,7 @@ import com.epam.lab.model.News;
 import com.epam.lab.model.News_;
 import com.epam.lab.model.OrderBy;
 import com.epam.lab.model.SearchCriteria;
+import com.epam.lab.model.Tag;
 import com.epam.lab.model.Tag_;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -56,7 +57,7 @@ final class SearchNewsQuery {
 
         Subquery<Long> tagSubquery = query.subquery(Long.class);
         Root<News> subRoot = tagSubquery.from(News.class);
-        Join<Object, Object> subJoinTag = subRoot.join(News_.TAGS, JoinType.LEFT);
+        Join<News, Tag> subJoinTag = subRoot.join(News_.TAGS, JoinType.LEFT);
 
         for (String tagName : searchCriteria.getTags()) {
             tagSubquery.select(subRoot.get(News_.ID)).where(builder.equal(
