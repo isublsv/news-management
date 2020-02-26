@@ -30,7 +30,11 @@ public class NewsRepositoryImpl implements NewsRepository {
         LocalDate date = LocalDate.now();
         entity.setCreationDate(date);
         entity.setModificationDate(date);
-        entityManager.unwrap(Session.class).replicate(entity, ReplicationMode.IGNORE);
+        try {
+            entityManager.unwrap(Session.class).replicate(entity, ReplicationMode.IGNORE);
+        } catch (ConstraintViolationException e) {
+            throw new EntityDuplicatedException();
+        }
         return entity;
     }
 
@@ -53,15 +57,17 @@ public class NewsRepositoryImpl implements NewsRepository {
         news.setFullText(entity.getFullText());
         news.setModificationDate(LocalDate.now());
 
-        long authorId = entity.getAuthor().getId();
-        if (authorId != 0) {
-            Author author = entityManager.find(Author.class, authorId);
-            news.setAuthor(author);
-        } else {
-            news.setAuthor(entity.getAuthor());
-        }
+        Author author = entity.getAuthor();
+        entityManager.unwrap(Session.class).replicate(author, ReplicationMode.IGNORE);
+        news.setAuthor(author);
+
         List<Tag> tags = news.getTags();
         tags.clear();
+        try {
+            entity.getTags().forEach(tag -> entityManager.unwrap(Session.class).replicate(tag, ReplicationMode.IGNORE));
+        } catch (ConstraintViolationException e) {
+            throw new EntityDuplicatedException();
+        }
         tags.addAll(entity.getTags());
 
         return entityManager.merge(news);
