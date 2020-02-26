@@ -41,14 +41,14 @@ public class NewsServiceImplTest {
 
     @BeforeClass
     public static void setUp() {
+        LocalDate date = LocalDate.now();
         news = new News();
         news.setId(1L);
         news.setTitle("TestTitle");
         news.setShortText("TestShortText");
         news.setFullText("TestFullText");
-        LocalDate newsDate = LocalDate.now();
-        news.setCreationDate(newsDate);
-        news.setModificationDate(newsDate);
+        news.setCreationDate(date);
+        news.setModificationDate(date);
 
         news.setAuthor(new Author(1L, "name", "surname"));
         news.setTags(new ArrayList<>());
@@ -58,13 +58,10 @@ public class NewsServiceImplTest {
         expected.setTitle("TestTitle");
         expected.setShortText("TestShortText");
         expected.setFullText("TestFullText");
-        LocalDate newsDtoDate = LocalDate.now();
-        expected.setCreationDate(newsDtoDate);
-        expected.setModificationDate(newsDtoDate);
+        expected.setCreationDate(date);
+        expected.setModificationDate(date);
 
-        AuthorDto authorDto = new AuthorDto(1L, "name", "surname");
-
-        expected.setAuthor(authorDto);
+        expected.setAuthor(new AuthorDto(1L, "name", "surname"));
         expected.setTags(new ArrayList<>());
     }
 
