@@ -56,3 +56,17 @@ It is forbidden to use:
 * Lombok,
 * Powermock.
 
+#### Task #4. Create module for accessing the database.
+
+##### Technology stack:
+
+* Application container: Spring IoC (Spring Framework version 5.x).
+* Data access: JPA (Hibernate as JPA Provider).
+* Bean validation: Hibernate Validator.
+
+##### Tech requirements:
+
+* Create new module for data access to use JPA. Use different Criteria Queries (but be sure to speak and learn theory about other types of queries: Named Queries, Native Queries).
+* Enable logging of SQL queries.
+* Add transactions support using Spring declarative transactions management. Don't forget to test your transactional methods.
+* There is option switching between JPA+Hibernate or Spring JDBC in configuration file.
