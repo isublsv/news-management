@@ -1,6 +1,7 @@
 package com.epam.lab.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -14,18 +15,21 @@ import java.util.Objects;
 public class NewsDto extends AbstractDto {
 
     @NotNull
+    @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters")
     @Pattern(regexp = "[A-ZА-Я_!?\\-\\d ]{2,30}",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news title is not valid")
     private String title;
 
     @NotNull
+    @Length(min = 2, max = 30, message = "The news description length must be between 2 and 100 characters")
     @Pattern(regexp = "[A-ZА-Я_!?\\-\\d\\s]{2,100}",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news description is not valid")
     private String shortText;
 
     @NotNull
+    @Length(min = 2, max = 30, message = "The news text length must be between 2 and 2000 characters")
     @Pattern(regexp = "[A-ZА-Я_!?\\-\\d\\s]{2,2000}",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news text is not valid")
