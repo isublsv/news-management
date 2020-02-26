@@ -2,7 +2,6 @@ package com.epam.lab.model;
 
 import org.hibernate.annotations.Cascade;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +35,7 @@ public class News extends AbstractEntity {
     @Column(name = "modification_date", nullable = false)
     private LocalDate modificationDate;
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     @Cascade({org.hibernate.annotations.CascadeType.REPLICATE})
     @JoinTable(name = "news_author", schema = "news",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
@@ -44,7 +43,7 @@ public class News extends AbstractEntity {
             uniqueConstraints = @UniqueConstraint(columnNames = "news_id"))
     private Author author;
 
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Cascade({org.hibernate.annotations.CascadeType.REPLICATE})
     @JoinTable(name = "news_tag", schema = "news",
             joinColumns = @JoinColumn(name = "news_id", referencedColumnName = "id"),
