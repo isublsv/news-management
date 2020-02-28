@@ -41,7 +41,7 @@ public class AuthorServiceImplTest {
         when(authorRepository.create(any(Author.class))).thenReturn(author);
 
         AuthorDto actual = authorService.create(new AuthorDto());
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
 
         verify(authorRepository).create(any(Author.class));
     }
