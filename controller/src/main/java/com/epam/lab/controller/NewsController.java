@@ -6,6 +6,7 @@ import com.epam.lab.dto.TagDto;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +70,7 @@ public class NewsController {
 
     @GetMapping(value = "/search_by", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc) {
+    public List<NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc, BindingResult bindingResult) {
         return newsService.searchBy(sc);
     }
 
