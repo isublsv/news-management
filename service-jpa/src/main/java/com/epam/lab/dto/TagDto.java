@@ -9,10 +9,10 @@ import java.util.Objects;
 public class TagDto extends AbstractDto {
 
     @NotNull
-    @Length(min = 2, max = 30, message = "The tag name length must be between 2 and 30 characters")
-    @Pattern(regexp = "[A-ZА-Я_!?\\-\\d ]{2,30}",
+    @Length(min = 2, max = 30, message = "The tag name length must be between 2 and 30 characters.")
+    @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided tag name is not valid")
+            message = "Provided tag name is not valid.")
     private String name;
 
     public TagDto() {

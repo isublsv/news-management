@@ -15,24 +15,24 @@ import java.util.Objects;
 public class NewsDto extends AbstractDto {
 
     @NotNull
-    @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters")
-    @Pattern(regexp = "[A-ZА-Я_!?\\-\\d ]{2,30}",
+    @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters.")
+    @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news title is not valid")
     private String title;
 
     @NotNull
-    @Length(min = 2, max = 30, message = "The news description length must be between 2 and 100 characters")
-    @Pattern(regexp = "[A-ZА-Я_!?\\-\\d\\s]{2,100}",
+    @Length(min = 2, max = 100, message = "The news description length must be between 2 and 100 characters.")
+    @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided news description is not valid")
+            message = "Provided news description is not valid.")
     private String shortText;
 
     @NotNull
-    @Length(min = 2, max = 30, message = "The news text length must be between 2 and 2000 characters")
-    @Pattern(regexp = "[A-ZА-Я_!?\\-\\d\\s]{2,2000}",
+    @Length(min = 2, max = 2000, message = "The news text length must be between 2 and 2000 characters.")
+    @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided news text is not valid")
+            message = "Provided news text is not valid.")
     private String fullText;
 
     @PastOrPresent

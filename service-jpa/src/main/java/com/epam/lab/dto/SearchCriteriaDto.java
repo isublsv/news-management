@@ -2,35 +2,38 @@ package com.epam.lab.dto;
 
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class SearchCriteriaDto extends AbstractDto{
+public class SearchCriteriaDto extends AbstractDto {
 
-    @Length(min = 2, max = 30, message = "The author name length must be between 2 and 30 characters")
-    @Pattern(regexp = "[A-ZА-Я]{2,30}",
+    @Length(min = 2, max = 30, message = "The author name length must be between 2 and 30 characters.")
+    @Pattern(regexp = "^[A-ZА-Я]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided name is not valid")
+            message = "Provided name is not valid.")
     private String name;
 
-    @Length(min = 2, max = 30, message = "The author surname length must be between 2 and 30 characters")
-    @Pattern(regexp = "[A-ZА-Я\\-]{2,30}",
+    @Length(min = 2, max = 30, message = "The author surname length must be between 2 and 30 characters.")
+    @Pattern(regexp = "^[A-ZА-Я\\-]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided surname is not valid")
+            message = "Provided surname is not valid.")
     private String surname;
 
-    @Length(min = 2, max = 30, message = "The tag name length must be between 2 and 30 characters")
-    private Set<@Pattern(regexp = "[A-ZА-Я_!?\\-\\d ]{2,30}",
+    private Set<
+            @Valid
+            @Length(min = 2, max = 30, message = "The tag name length must be between 2 and 30 characters.")
+            @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided tag name is not valid") String> tags;
+            message = "Provided tag name is not valid.") String> tags;
 
-    private Set<@Pattern(regexp = "[A-ZА-Я_]+",
+    private Set<
+            @Valid
+            @Pattern(regexp = "^[A-ZА-Я_]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Provided column name is not valid") String> orderBy;
-
-    private boolean desc;
+            message = "Provided column name is not valid.") String> orderBy;
 
     public SearchCriteriaDto() {
         tags = new HashSet<>();
@@ -38,15 +41,13 @@ public class SearchCriteriaDto extends AbstractDto{
     }
 
     public SearchCriteriaDto(final String nameValue,
-                          final String surnameValue,
-                          final Set<String> tagsValue,
-                          final Set<String> orderByValue,
-                          final boolean descValue) {
+                             final String surnameValue,
+                             final Set<String> tagsValue,
+                             final Set<String> orderByValue) {
         name = nameValue;
         surname = surnameValue;
         tags = tagsValue;
         orderBy = orderByValue;
-        desc = descValue;
     }
 
     public String getName() {
@@ -81,17 +82,9 @@ public class SearchCriteriaDto extends AbstractDto{
         orderBy = orderByValue;
     }
 
-    public boolean isDesc() {
-        return desc;
-    }
-
-    public void setDesc(final boolean descValue) {
-        desc = descValue;
-    }
-
     @Override
     public String toString() {
-        return String.format("SearchCriteria{name='%s', surname='%s', tags=%s, orderBy=%s, desc=%s}",
-                name, surname, tags, orderBy, desc);
+        return String.format("SearchCriteria{name='%s', surname='%s', tags=%s, orderBy=%s}",
+                name, surname, tags, orderBy);
     }
 }
