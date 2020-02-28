@@ -21,6 +21,8 @@ import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.epam.lab.model.AbstractEntity_.ID;
+
 final class SearchNewsQuery {
 
     private CriteriaBuilder builder;
@@ -60,9 +62,9 @@ final class SearchNewsQuery {
         Join<News, Tag> subJoinTag = subRoot.join(News_.TAGS, JoinType.LEFT);
 
         for (String tagName : searchCriteria.getTags()) {
-            tagSubquery.select(subRoot.get(News_.ID)).where(builder.equal(
+            tagSubquery.select(subRoot.get(ID)).where(builder.equal(
                     builder.upper(subJoinTag.get(Tag_.NAME)), tagName.toUpperCase()));
-            predicates.add(builder.equal(newsRoot.get(News_.ID), builder.any(tagSubquery)));
+            predicates.add(builder.equal(newsRoot.get(ID), builder.any(tagSubquery)));
         }
 
         if (isNotEmpty(predicates)) {
@@ -77,8 +79,8 @@ final class SearchNewsQuery {
     private void getGroupsAndOrdersColumns(final Root<News> newsRootValue, final Join<News, Author> authorJoinValue) {
         List<Order> orders = new ArrayList<>();
         List<Expression<?>> expressions = new ArrayList<>();
-        expressions.add(newsRootValue.get(News_.ID));
-        expressions.add(newsRootValue.get(News_.AUTHOR).get(Author_.ID));
+        expressions.add(newsRootValue.get(ID));
+        expressions.add(newsRootValue.get(News_.AUTHOR).get(ID));
 
         for (String columnValue : searchCriteria.getOrderBy()) {
             try {
@@ -98,6 +100,7 @@ final class SearchNewsQuery {
                         break;
                 }
             } catch (IllegalArgumentException ignored) {
+                return;
             }
         }
 
