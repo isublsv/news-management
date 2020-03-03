@@ -6,7 +6,6 @@ import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
 import com.epam.lab.model.Tag;
-import org.apache.log4j.BasicConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,7 +33,7 @@ public class NewsRepositoryImplTest {
 
     @BeforeClass
     public static void setUp() {
-        BasicConfigurator.configure();
+        //BasicConfigurator.configure();
     }
 
     @Test
