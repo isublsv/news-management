@@ -70,3 +70,126 @@ It is forbidden to use:
 * Enable logging of SQL queries.
 * Add transactions support using Spring declarative transactions management. Don't forget to test your transactional methods.
 * There is option switching between JPA+Hibernate or Spring JDBC in configuration file.
+
+#### Task #5. CI with Jenkins.
+
+##### Link to project: http://epbyminw7596.minsk.epam.com:8080/news/
+
+##### Jenkins (developer: developer): http://epbyminw7596:8081/job/News/
+
+#####  SonarQube: http://epbyminw7596:9000/dashboard?id=com.epam.lab%3Anews
+
+##### Rest API:
+
+##### News:
+* POST: /add - adds news.
+```
+curl --location --request POST 'http://epbyminw7596.minsk.epam.com:8080/news/add' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "title": "Attention",
+    "shortText": "News description",
+    "fullText": "News full text",
+    "author": {
+        "name": "Name",
+        "surname": "Surname"
+    },
+    "tags": [
+        {
+            "name": "important news"
+        }
+    ]
+}'
+```
+* GET: /find/id - finds news by ID.
+* PUT: /edit - updates news.
+```
+curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/edit' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 5,
+    "title": "New title",
+    "shortText": "New description",
+    "fullText": "New text",
+    "author": {
+        "name": "Danila",
+        "surname": "Bobrov"
+    },
+    "tags": [
+        {
+            "id": 5,
+            "name": "football"
+        }
+    ]
+}'
+```
+* DELETE: /delete/id - deletes news by ID.
+* GET: /findAll - finds the total number of news.
+* PUT: /add_tags/id - adds tags for news by news ID.
+```
+curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/add_tags?id=5' \
+--header 'Content-Type: application/json' \
+--data-raw '[
+    {
+        "id": 4,
+        "name": "car"
+    },
+    {
+        "id": 7,
+        "name": "hockey"
+    },
+    {
+        "id": 5,
+        "name": "football"
+    }
+]'
+```
+* GET: /search_by - searchs news by several parameters.
+ Example: http://epbyminw7596.minsk.epam.com:8080/news/search_by?name=igor&surname=bikov&tags=CAR&tags=Football&orderBy=date&orderBy=author_name&orderBy=author_surname
+1. name = author name (Ex. Igor)
+2. surname = author surname (Ex. Bikov)
+3. tags = tag name (Ex. car, football)
+4. orderBy = column name for order operation (Ex. date, author_name or author_surname).
+##### Author:
+* POST: /author/add - adds author.
+```
+curl --location --request POST 'http://epbyminw7596.minsk.epam.com:8080/news/author/add' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Mike",
+    "surname": "Davidson"
+}'
+```
+* GET: /author/find/id - finds author by ID.
+* PUT: /author/edit/id - updates author.
+```
+curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/author/edit' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 54,
+    "name": "David",
+    "surname": "Davidson"
+}'
+```
+* DELETE: /author/delete/id - deletes author by ID.
+##### Tag:
+* POST /tag/add - adds tags.
+```
+curl --location --request POST 'http://epbyminw7596.minsk.epam.com:8080/news/tag/add' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Java"
+}'
+}'
+```
+* GET: /tag/find/id - finds tag.
+* PUT: /tag/edit/id - updates tag.
+```
+curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/tag/edit' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 5,
+    "name": "Good news!"
+}'
+```
+* DELETE: /tag/delete/id - deletes tag by ID.
