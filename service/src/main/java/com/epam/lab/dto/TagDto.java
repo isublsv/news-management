@@ -2,12 +2,12 @@ package com.epam.lab.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 public class TagDto extends AbstractDto {
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 30, message = "Name cannot be null and must be between 2 and 30 characters")
     private String name;
 

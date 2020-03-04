@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
@@ -12,15 +13,15 @@ import java.util.Objects;
 
 public class NewsDto extends AbstractDto {
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 30, message = "Title cannot be null and must be between 2 and 30 characters")
     private String title;
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 100, message = "Short text cannot be null and must be between 2 and 100 characters")
     private String shortText;
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 2000, message = "Full text cannot be null and must be between 2 and 2000 characters")
     private String fullText;
 
@@ -40,6 +41,7 @@ public class NewsDto extends AbstractDto {
 
     public NewsDto() {
         super();
+        author = new AuthorDto();
     }
 
     public String getTitle() {
