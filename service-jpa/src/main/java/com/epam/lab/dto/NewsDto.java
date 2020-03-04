@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
@@ -14,21 +15,21 @@ import java.util.Objects;
 
 public class NewsDto extends AbstractDto {
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news title is not valid")
     private String title;
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 100, message = "The news description length must be between 2 and 100 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news description is not valid.")
     private String shortText;
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 2000, message = "The news text length must be between 2 and 2000 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
@@ -43,7 +44,7 @@ public class NewsDto extends AbstractDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate modificationDate;
 
-    @NotNull(message = "Author entity cannot be null")
+    @NotNull(message = "Author entity cannot be null.")
     @Valid
     private AuthorDto author;
 
@@ -51,6 +52,7 @@ public class NewsDto extends AbstractDto {
 
     public NewsDto() {
         super();
+        author = new AuthorDto();
     }
 
     public String getTitle() {

@@ -2,13 +2,13 @@ package com.epam.lab.dto;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 public class TagDto extends AbstractDto {
 
-    @NotNull
+    @NotBlank
     @Length(min = 2, max = 30, message = "The tag name length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
