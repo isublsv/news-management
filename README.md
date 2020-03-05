@@ -127,7 +127,7 @@ curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/edit
 * GET: /findAll - finds the total number of news.
 * PUT: /add_tags/id - adds tags for news by news ID.
 ```
-curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/add_tags?id=5' \
+curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/add_tags/5' \
 --header 'Content-Type: application/json' \
 --data-raw '[
     {
@@ -137,18 +137,14 @@ curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/add_
     {
         "id": 7,
         "name": "hockey"
-    },
-    {
-        "id": 5,
-        "name": "football"
     }
 ]'
 ```
-* GET: /search_by - searchs news by several parameters.
- Example: http://epbyminw7596.minsk.epam.com:8080/news/search_by?name=igor&surname=bikov&tags=CAR&tags=Football&orderBy=date&orderBy=author_name&orderBy=author_surname
+* GET: /search_by - searches news by several parameters.
+ Example: http://epbyminw7596.minsk.epam.com:8080/news/search_by?name=igor&surname=bikov&tags=CAR&tags=hockey&orderBy=date&orderBy=author_name&orderBy=author_surname
 1. name = author name (Ex. Igor)
 2. surname = author surname (Ex. Bikov)
-3. tags = tag name (Ex. car, football)
+3. tags = tag name (Ex. car, hockey)
 4. orderBy = column name for order operation (Ex. date, author_name or author_surname).
 ##### Author:
 * POST: /author/add - adds author.
@@ -161,7 +157,7 @@ curl --location --request POST 'http://epbyminw7596.minsk.epam.com:8080/news/aut
 }'
 ```
 * GET: /author/find/id - finds author by ID.
-* PUT: /author/edit/id - updates author.
+* PUT: /author/edit - updates author.
 ```
 curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/author/edit' \
 --header 'Content-Type: application/json' \
@@ -173,7 +169,7 @@ curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/auth
 ```
 * DELETE: /author/delete/id - deletes author by ID.
 ##### Tag:
-* POST /tag/add - adds tags.
+* POST: /tag/add - adds tags.
 ```
 curl --location --request POST 'http://epbyminw7596.minsk.epam.com:8080/news/tag/add' \
 --header 'Content-Type: application/json' \
@@ -183,7 +179,7 @@ curl --location --request POST 'http://epbyminw7596.minsk.epam.com:8080/news/tag
 }'
 ```
 * GET: /tag/find/id - finds tag.
-* PUT: /tag/edit/id - updates tag.
+* PUT: /tag/edit - updates tag.
 ```
 curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/tag/edit' \
 --header 'Content-Type: application/json' \
