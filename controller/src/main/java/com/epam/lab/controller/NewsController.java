@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,9 +60,9 @@ public class NewsController {
         newsService.delete(id);
     }
 
-    @PutMapping(value = "/add_tags", produces = APPLICATION_JSON_VALUE)
-    public List<TagDto> addTagForNews(@RequestParam(value = "id")
-                                      @Positive(message = "Id must positive") final Long newsId,
+    @PutMapping(value = "/add_tags/{newsId}", produces = APPLICATION_JSON_VALUE)
+    public List<TagDto> addTagForNews(@PathVariable
+                                      @Positive(message = "News Id must positive") final Long newsId,
                                       @RequestBody @NotNull final List<@Valid TagDto> tagDtos) {
         return newsService.addTagsForNews(newsId, tagDtos);
     }
