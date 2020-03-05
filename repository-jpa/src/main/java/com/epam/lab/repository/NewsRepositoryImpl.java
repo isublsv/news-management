@@ -75,6 +75,14 @@ public class NewsRepositoryImpl implements NewsRepository {
 
     @Override
     public void delete(final Long id) {
+        News news = find(id);
+        //remove associations
+        news.setAuthor(null);
+        news.setTags(null);
+        //synchronize and clear context
+        entityManager.flush();
+        entityManager.clear();
+        //remove entity
         entityManager.remove(find(id));
     }
 
