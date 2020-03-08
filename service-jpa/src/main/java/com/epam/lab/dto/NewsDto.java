@@ -125,9 +125,11 @@ public class NewsDto extends AbstractDto {
             return false;
         }
         NewsDto newsDto = (NewsDto) oValue;
-        return title.equals(newsDto.title) && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
-                && creationDate.equals(newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate)
-                && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
+        return title.equals(newsDto.title)
+               && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
+               && creationDate.equals(newsDto.creationDate)
+               && modificationDate.equals(newsDto.modificationDate)
+               && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
     }
 
     @Override
