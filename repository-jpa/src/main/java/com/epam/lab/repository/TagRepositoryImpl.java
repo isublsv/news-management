@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -43,5 +47,14 @@ public class TagRepositoryImpl implements TagRepository {
     @Override
     public void delete(final Long id) {
         entityManager.remove(find(id));
+    }
+
+    @Override
+    public List<Tag> findAll() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> query = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> from = query.from(Tag.class);
+        query.select(from);
+        return entityManager.createQuery(query).getResultList();
     }
 }

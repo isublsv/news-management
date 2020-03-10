@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
@@ -43,5 +46,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void delete(final Long id) {
         authorRepository.delete(id);
+    }
+
+    @Override
+    public List<AuthorDto> findAll() {
+        return authorRepository.findAll().stream().map(authorMapper::toDto).collect(Collectors.toList());
     }
 }

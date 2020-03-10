@@ -87,6 +87,15 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
+    public List<News> findAll() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<News> query = criteriaBuilder.createQuery(News.class);
+        Root<News> from = query.from(News.class);
+        query.select(from);
+        return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
     public Long countAllNews() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);

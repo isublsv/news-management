@@ -61,6 +61,11 @@ public class NewsServiceImpl implements NewsService {
         newsRepository.delete(id);
     }
 
+    @Override
+    public List<NewsDto> findAll() {
+        return newsRepository.findAll().stream().map(newsMapper::toDto).collect(Collectors.toList());
+    }
+
     @Transactional
     @Override
     public List<TagDto> addTagsForNews(final Long newsId, final List<TagDto> tagDtos) {

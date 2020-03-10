@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +27,7 @@ import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
 @Validated
 public class NewsController {
@@ -59,6 +61,12 @@ public class NewsController {
     public void deleteAuthor(@PathVariable  @Positive(message = "Id must positive") final Long id) {
         newsService.delete(id);
     }
+    
+    @GetMapping("/findAll")
+    @ResponseBody
+    public List<NewsDto> findAllNews() {
+        return newsService.findAll();
+    }
 
     @PutMapping(value = "/add_tags/{newsId}", produces = APPLICATION_JSON_VALUE)
     public List<TagDto> addTagForNews(@PathVariable
@@ -73,8 +81,8 @@ public class NewsController {
         return newsService.searchBy(sc);
     }
 
-    @GetMapping("/findAll")
-    public Long findAllNews() {
+    @GetMapping("/countAll")
+    public Long countAllNews() {
         return newsService.countAllNews();
     }
 }

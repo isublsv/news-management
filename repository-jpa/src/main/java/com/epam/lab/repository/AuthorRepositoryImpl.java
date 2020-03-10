@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.List;
 
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
@@ -37,5 +41,14 @@ public class AuthorRepositoryImpl implements AuthorRepository {
     @Override
     public void delete(final Long id) {
         entityManager.remove(find(id));
+    }
+
+    @Override
+    public List<Author> findAll() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Author> query = criteriaBuilder.createQuery(Author.class);
+        Root<Author> from = query.from(Author.class);
+        query.select(from);
+        return entityManager.createQuery(query).getResultList();
     }
 }
