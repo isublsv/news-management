@@ -13,6 +13,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+import static com.epam.lab.model.AbstractEntity_.ID;
+
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
@@ -54,7 +56,7 @@ public class TagRepositoryImpl implements TagRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> query = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> from = query.from(Tag.class);
-        query.select(from);
+        query.select(from).orderBy(criteriaBuilder.asc(from.get(ID)));
         return entityManager.createQuery(query).getResultList();
     }
 }

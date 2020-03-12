@@ -11,6 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+import static com.epam.lab.model.AbstractEntity_.ID;
+
 @Repository
 public class AuthorRepositoryImpl implements AuthorRepository {
 
@@ -48,7 +50,7 @@ public class AuthorRepositoryImpl implements AuthorRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Author> query = criteriaBuilder.createQuery(Author.class);
         Root<Author> from = query.from(Author.class);
-        query.select(from);
+        query.select(from).orderBy(criteriaBuilder.asc(from.get(ID)));
         return entityManager.createQuery(query).getResultList();
     }
 }

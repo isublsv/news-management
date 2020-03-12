@@ -19,6 +19,8 @@ import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.epam.lab.model.AbstractEntity_.ID;
+
 @Repository
 public class NewsRepositoryImpl implements NewsRepository {
 
@@ -91,7 +93,7 @@ public class NewsRepositoryImpl implements NewsRepository {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<News> query = criteriaBuilder.createQuery(News.class);
         Root<News> from = query.from(News.class);
-        query.select(from);
+        query.select(from).orderBy(criteriaBuilder.asc(from.get(ID)));
         return entityManager.createQuery(query).getResultList();
     }
 
