@@ -15,21 +15,21 @@ import java.util.Objects;
 
 public class NewsDto extends AbstractDto {
 
-    @NotBlank
+    @NotBlank(message = "Provided news title must not be blank")
     @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news title is not valid")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "Provided news description must not be blank")
     @Length(min = 2, max = 100, message = "The news description length must be between 2 and 100 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news description is not valid.")
     private String shortText;
 
-    @NotBlank
+    @NotBlank(message = "Provided news text must not be blank")
     @Length(min = 2, max = 2000, message = "The news text length must be between 2 and 2000 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,

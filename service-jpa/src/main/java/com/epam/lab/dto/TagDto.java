@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class TagDto extends AbstractDto {
 
-    @NotBlank
+    @NotBlank(message = "Provided tag name must not be blank")
     @Length(min = 2, max = 30, message = "The tag name length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,

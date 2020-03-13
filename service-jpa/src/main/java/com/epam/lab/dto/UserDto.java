@@ -8,28 +8,28 @@ import java.util.Objects;
 
 public class UserDto extends AbstractDto {
 
-    @NotBlank
+    @NotBlank(message = "Provided user name must not be blank")
     @Length(min = 2, max = 30, message = "The user name length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided user name is not valid")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "Provided user surname must not be blank")
     @Length(min = 2, max = 30, message = "The user surname length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я\\-]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided user surname is not valid")
     private String surname;
 
-    @NotBlank
+    @NotBlank(message = "Provided user login must not be blank")
     @Length(min = 2, max = 30, message = "The user login length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я_\\-\\d]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided user login is not valid")
     private String login;
 
-    @NotBlank
+    @NotBlank(message = "Provided user password must not be blank")
     @Length(min = 8, max = 30, message = "The user password length must be between 8 and 30 characters.")
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,30}$",
             flags = Pattern.Flag.CASE_INSENSITIVE,

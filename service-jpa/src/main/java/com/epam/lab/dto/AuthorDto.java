@@ -8,14 +8,14 @@ import java.util.Objects;
 
 public class AuthorDto extends AbstractDto {
 
-    @NotBlank
+    @NotBlank(message = "Provided author name must not be blank")
     @Length(min = 2, max = 30, message = "The author name length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided author name is not valid.")
     private String name;
     
-    @NotBlank
+    @NotBlank(message = "Provided author surname must not be blank")
     @Length(min = 2, max = 30, message = "The author surname length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я\\-]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
