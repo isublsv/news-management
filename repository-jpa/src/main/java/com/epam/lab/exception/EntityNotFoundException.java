@@ -1,12 +1,16 @@
 package com.epam.lab.exception;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Entity not found")
 public class EntityNotFoundException extends RepositoryException {
+    private static final String REASON = "Entity not found";
 
     public EntityNotFoundException() {
-        super();
+        super(REASON);
+    }
+
+    @Override
+    public HttpStatus getStatusCode() {
+        return HttpStatus.NOT_FOUND;
     }
 }

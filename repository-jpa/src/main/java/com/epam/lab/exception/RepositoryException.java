@@ -1,7 +1,15 @@
 package com.epam.lab.exception;
 
-public class RepositoryException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+
+public abstract class RepositoryException extends RuntimeException {
     public RepositoryException() {
         super();
     }
+
+    public RepositoryException(String message) {
+        super(message);
+    }
+
+    public abstract HttpStatus getStatusCode();
 }

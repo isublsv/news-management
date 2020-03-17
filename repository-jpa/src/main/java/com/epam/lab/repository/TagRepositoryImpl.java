@@ -3,11 +3,11 @@ package com.epam.lab.repository;
 import com.epam.lab.exception.EntityDuplicatedException;
 import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Tag;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -25,7 +25,7 @@ public class TagRepositoryImpl implements TagRepository {
     public Tag create(final Tag entity) {
         try {
             entityManager.persist(entity);
-        } catch (ConstraintViolationException e) {
+        } catch (PersistenceException e) {
             throw new EntityDuplicatedException();
         }
         return entity;
