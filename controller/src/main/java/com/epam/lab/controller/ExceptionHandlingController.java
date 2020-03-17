@@ -46,7 +46,7 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
     }
 
     @ExceptionHandler(RepositoryException.class)
-    public final ResponseEntity<Object> handleRepositoryException(final RepositoryException ex) {
+    public ResponseEntity<Object> handleRepositoryException(final RepositoryException ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
         body.put(ERROR, ex.getMessage());
