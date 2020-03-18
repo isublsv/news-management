@@ -72,7 +72,7 @@ public class NewsRepositoryImpl implements NewsRepository {
         }
         tags.addAll(entity.getTags());
 
-        return entityManager.merge(news);
+        return news;
     }
 
     @Override
