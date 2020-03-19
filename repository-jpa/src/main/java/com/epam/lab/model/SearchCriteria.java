@@ -11,6 +11,9 @@ public class SearchCriteria extends AbstractEntity {
     private Set<String> tags = new HashSet<>();
     private Set<String> orderBy = new LinkedHashSet<>();
 
+    private int activePage;
+    private int pageSize;
+
     public String getName() {
         return name;
     }
@@ -41,6 +44,22 @@ public class SearchCriteria extends AbstractEntity {
 
     public void setOrderBy(final Set<String> orderByValue) {
         orderBy = orderByValue;
+    }
+
+    public int getActivePage() {
+        return activePage;
+    }
+
+    public void setActivePage(int activePage) {
+        this.activePage = activePage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 
     @Override

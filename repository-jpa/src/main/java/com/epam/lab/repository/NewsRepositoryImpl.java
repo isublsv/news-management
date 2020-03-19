@@ -127,6 +127,10 @@ public class NewsRepositoryImpl implements NewsRepository {
     public List<News> searchBy(final SearchCriteria searchCriteria) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, searchCriteria);
-        return entityManager.createQuery(searchNewsQuery.buildQuery()).getResultList();
+        return entityManager
+                .createQuery(searchNewsQuery.buildQuery())
+                .setFirstResult(searchCriteria.getActivePage() - 1)
+                .setMaxResults(searchCriteria.getPageSize())
+                .getResultList();
     }
 }
