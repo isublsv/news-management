@@ -66,7 +66,9 @@ public class NewsRepositoryImpl implements NewsRepository {
         List<Tag> tags = news.getTags();
         tags.clear();
         try {
-            entity.getTags().forEach(tag -> entityManager.unwrap(Session.class).replicate(tag, ReplicationMode.IGNORE));
+            entity.getTags().forEach(tag -> entityManager
+                    .unwrap(Session.class)
+                    .replicate(tag, ReplicationMode.IGNORE));
         } catch (ConstraintViolationException e) {
             throw new EntityDuplicatedException();
         }
@@ -127,10 +129,17 @@ public class NewsRepositoryImpl implements NewsRepository {
     public List<News> searchBy(final SearchCriteria searchCriteria) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, searchCriteria);
-        return entityManager
-                .createQuery(searchNewsQuery.buildQuery())
-                .setFirstResult((searchCriteria.getActivePage() - 1) * searchCriteria.getPageSize())
-                .setMaxResults(searchCriteria.getPageSize())
-                .getResultList();
+
+        if (searchCriteria.getActivePage() != 0 || searchCriteria.getPageSize() != 0) {
+            return entityManager
+                    .createQuery(searchNewsQuery.buildQuery())
+                    .setFirstResult((searchCriteria.getActivePage() - 1) * searchCriteria.getPageSize())
+                    .setMaxResults(searchCriteria.getPageSize())
+                    .getResultList();
+        } else {
+            return entityManager
+                    .createQuery(searchNewsQuery.buildQuery())
+                    .getResultList();
+        }
     }
 }

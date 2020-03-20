@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -37,11 +37,11 @@ public class SearchCriteriaDto extends AbstractDto {
             message = "Provided column name is not valid.") String> orderBy;
 
     @Valid
-    @Positive(message = "The number must be positive")
+    @PositiveOrZero(message = "The number must be positive or zero")
     private int activePage;
 
     @Valid
-    @Positive(message = "The number must be positive")
+    @PositiveOrZero(message = "The number must be positive or zero")
     private int pageSize;
 
     public SearchCriteriaDto() {
