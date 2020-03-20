@@ -129,7 +129,7 @@ public class NewsRepositoryImpl implements NewsRepository {
         SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, searchCriteria);
         return entityManager
                 .createQuery(searchNewsQuery.buildQuery())
-                .setFirstResult(searchCriteria.getActivePage() - 1)
+                .setFirstResult((searchCriteria.getActivePage() - 1) * searchCriteria.getPageSize())
                 .setMaxResults(searchCriteria.getPageSize())
                 .getResultList();
     }
