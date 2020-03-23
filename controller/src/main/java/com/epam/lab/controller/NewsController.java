@@ -3,6 +3,7 @@ package com.epam.lab.controller;
 import com.epam.lab.dto.NewsDto;
 import com.epam.lab.dto.SearchCriteriaDto;
 import com.epam.lab.dto.TagDto;
+import com.epam.lab.model.Page;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +41,6 @@ public class NewsController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public NewsDto createNews(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.create(newsDto);
     }
@@ -52,7 +51,6 @@ public class NewsController {
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     public NewsDto editAuthor(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.update(newsDto);
     }
@@ -63,7 +61,6 @@ public class NewsController {
     }
     
     @GetMapping("/findAll")
-    @ResponseBody
     public List<NewsDto> findAllNews() {
         return newsService.findAll();
     }
@@ -76,8 +73,7 @@ public class NewsController {
     }
 
     @GetMapping(value = "/search_by", produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public List<NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc, BindingResult bindingResult) {
+    public Page<NewsDto> searchNewsBy(@ModelAttribute @Valid final SearchCriteriaDto sc, BindingResult bindingResult) {
         return newsService.searchBy(sc);
     }
 

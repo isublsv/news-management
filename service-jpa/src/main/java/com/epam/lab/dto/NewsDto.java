@@ -1,5 +1,6 @@
 package com.epam.lab.dto;
 
+import com.epam.lab.model.Pageable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NewsDto extends AbstractDto {
+public class NewsDto extends AbstractDto implements Pageable {
 
     @NotBlank(message = "Provided news title must not be blank")
     @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters.")

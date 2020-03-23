@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "author", schema = "news")
-public class Author extends AbstractEntity {
+public class Author extends AbstractEntity implements Pageable {
 
     @Column(name = "name", length = 30, nullable = false)
     private String name;

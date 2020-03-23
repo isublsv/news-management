@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +37,6 @@ public class UserController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public UserDto createUser(@RequestBody @Valid final UserDto userDto) {
         return userService.create(userDto);
     }
@@ -49,7 +47,6 @@ public class UserController {
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     public UserDto editUser(@RequestBody @Valid final UserDto userDto) {
         return userService.update(userDto);
     }
@@ -60,7 +57,6 @@ public class UserController {
     }
 
     @GetMapping("/findAll")
-    @ResponseBody
     public List<UserDto> findAllNews() {
         return userService.findAll();
     }

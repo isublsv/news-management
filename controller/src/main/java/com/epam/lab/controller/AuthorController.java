@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +37,6 @@ public class AuthorController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public AuthorDto createAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.create(authorDto);
     }
@@ -49,7 +47,6 @@ public class AuthorController {
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     public AuthorDto editAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.update(authorDto);
     }
@@ -60,7 +57,6 @@ public class AuthorController {
     }
 
     @GetMapping("/findAll")
-    @ResponseBody
     public List<AuthorDto> findAllNews() {
         return authorService.findAll();
     }

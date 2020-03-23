@@ -4,6 +4,7 @@ import com.epam.lab.exception.EntityDuplicatedException;
 import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
+import com.epam.lab.model.Page;
 import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
 import org.hibernate.ReplicationMode;
@@ -126,20 +127,18 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public List<News> searchBy(final SearchCriteria searchCriteria) {
+    public Page<News> searchBy(final SearchCriteria sc) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, searchCriteria);
+        SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, sc);
 
-        if (searchCriteria.getActivePage() != 0 || searchCriteria.getPageSize() != 0) {
-            return entityManager
-                    .createQuery(searchNewsQuery.buildQuery())
-                    .setFirstResult((searchCriteria.getActivePage() - 1) * searchCriteria.getPageSize())
-                    .setMaxResults(searchCriteria.getPageSize())
-                    .getResultList();
-        } else {
-            return entityManager
-                    .createQuery(searchNewsQuery.buildQuery())
-                    .getResultList();
-        }
+        Page<News> page = new Page<>();
+        CriteriaQuery<News> query = searchNewsQuery.buildQuery();
+
+        page.setTotalCount(entityManager.createQuery(query).getResultList().size());
+        page.setEntities(entityManager.createQuery(query)
+                                      .setFirstResult((sc.getActivePage() - 1) * sc.getPageSize())
+                                      .setMaxResults(sc.getPageSize())
+                                      .getResultList());
+        return page;
     }
 }

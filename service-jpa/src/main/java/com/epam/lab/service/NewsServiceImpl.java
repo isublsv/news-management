@@ -7,6 +7,7 @@ import com.epam.lab.dto.SearchCriteriaMapper;
 import com.epam.lab.dto.TagDto;
 import com.epam.lab.dto.TagMapper;
 import com.epam.lab.model.News;
+import com.epam.lab.model.Page;
 import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
 import com.epam.lab.repository.NewsRepository;
@@ -80,8 +81,10 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsDto> searchBy(final SearchCriteriaDto sc) {
+    public Page<NewsDto> searchBy(final SearchCriteriaDto sc) {
         SearchCriteria searchCriteria = searchCriteriaMapper.toEntity(sc);
-        return newsRepository.searchBy(searchCriteria).stream().map(newsMapper::toDto).collect(Collectors.toList());
+        Page<News> newsPage = newsRepository.searchBy(searchCriteria);        
+        return new Page<>(newsPage.getEntities().stream().map(newsMapper::toDto).collect(Collectors.toList()),
+                          newsPage.getTotalCount());
     }
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +37,6 @@ public class TagController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public TagDto addTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.create(tagDto);
     }
@@ -49,7 +47,6 @@ public class TagController {
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    @ResponseBody
     public TagDto editTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.update(tagDto);
     }
@@ -60,7 +57,6 @@ public class TagController {
     }
 
     @GetMapping("/findAll")
-    @ResponseBody
     public List<TagDto> findAllNews() {
         return tagService.findAll();
     }

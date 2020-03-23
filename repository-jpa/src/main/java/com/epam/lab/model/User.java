@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user", schema = "news", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Pageable {
 
     @Column(name = "name", length = 20, nullable = false)
     private String name;

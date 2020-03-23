@@ -1,12 +1,13 @@
 package com.epam.lab.dto;
 
+import com.epam.lab.model.Pageable;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
-public class UserDto extends AbstractDto {
+public class UserDto extends AbstractDto implements Pageable {
 
     @NotBlank(message = "Provided user name must not be blank")
     @Length(min = 2, max = 30, message = "The user name length must be between 2 and 30 characters.")
