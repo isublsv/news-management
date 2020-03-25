@@ -189,3 +189,43 @@ curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/tag/
 }'
 ```
 * DELETE: /tag/delete/id - deletes tag by ID.
+
+#### Task #8. Security  
+  
+Application should support user-based authentication. This means a user is stored in a database with some basic information and a password.  
+  
+##### User Permissions:  
+ - Guest
+  
+1. Read operations for News.  
+2. Sign up.  
+3. Log in.  
+  
+* User:  
+  
+1. All read operations.  
+2. All create operations.  
+3. All update operations.  
+  
+* Administrator (can be added only via database call):  
+  
+ 1. All operations.  
+  
+##### Tools and Implementation Requirements:  
+Please note that only GA versions of tools, frameworks, and libraries are allowed.  
+  
+- Spring Boot.  
+- Server should support only stateless user authentication and verify integrity of JWT token.  
+- Use OAuth2 as an authorization protocol.  
+- OAuth2 scopes should be used to restrict data.  
+- Implicit grant and Resource owner credentials grant should be implemented.  
+- Implement CSRF protection.  
+- APIs should be demonstrated using Postman tool.  
+- For demo, prepare Postman collections with APIs.  
+  
+##### Restrictions:  
+It is forbidden to use:  
+  
+- Spring Data Repositories,,  
+- Lombok,  
+- Powermock.
