@@ -1,5 +1,6 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.model.Role;
 import com.epam.lab.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User create(final User entity) {
+        entity.getRoles().add(Role.USER);
         entityManager.persist(entity);
         return entity;
     }
@@ -35,7 +37,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(final User entity) {
-        return entityManager.merge(entity);
+        User user = find(entity.getId());
+        user.setName(entity.getName());
+        user.setSurname(entity.getSurname());
+        return user;
     }
 
     @Override
