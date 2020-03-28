@@ -2,6 +2,7 @@ package com.epam.lab.dto;
 
 import com.epam.lab.model.Pageable;
 import com.epam.lab.model.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -38,6 +39,7 @@ public class UserDto extends AbstractDto implements Pageable {
     @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,30}$",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided user password is not valid")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private Set<Role> roles = new HashSet<>();
