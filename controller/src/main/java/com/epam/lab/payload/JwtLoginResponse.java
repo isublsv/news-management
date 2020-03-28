@@ -1,8 +1,8 @@
-package com.epam.lab.controller;
+package com.epam.lab.payload;
 
 import java.util.List;
 
-public class JwtResponse {
+public class JwtLoginResponse {
     private String token;
     private String type;
     private Long id;
@@ -11,7 +11,7 @@ public class JwtResponse {
     private String login;
     private List<String> roles;
 
-    public JwtResponse(
+    public JwtLoginResponse(
             final String tokenValue,
             final Long idValue,
             final String nameValue,
