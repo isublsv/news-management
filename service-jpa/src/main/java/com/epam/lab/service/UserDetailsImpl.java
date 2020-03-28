@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 public class UserDetailsImpl implements UserDetails {
     
     private Long id;
-    private String login;
     private String name;
     private String surname;
+    private String login;
 
     @JsonIgnore
     private String password;
@@ -25,15 +25,15 @@ public class UserDetailsImpl implements UserDetails {
 
     public UserDetailsImpl(
             final Long idValue,
-            final String loginValue,
             final String nameValue,
             final String surnameValue,
+            final String loginValue,
             final String passwordValue,
             final Collection<? extends GrantedAuthority> authoritiesValue) {
         id = idValue;
-        login = loginValue;
         name = nameValue;
         surname = surnameValue;
+        login = loginValue;
         password = passwordValue;
         authorities = authoritiesValue;
     }
