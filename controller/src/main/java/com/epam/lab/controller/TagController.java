@@ -57,7 +57,7 @@ public class TagController {
     }
 
     @GetMapping("/findAll")
-    public List<TagDto> findAllNews() {
+    public List<TagDto> findAllTags() {
         return tagService.findAll();
     }
 }

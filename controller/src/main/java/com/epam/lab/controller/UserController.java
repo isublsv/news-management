@@ -92,7 +92,7 @@ public class UserController {
     }
 
     @GetMapping("/findAll")
-    public List<UserDto> findAllNews() {
+    public List<UserDto> findAllUsers() {
         return userService.findAll();
     }
     

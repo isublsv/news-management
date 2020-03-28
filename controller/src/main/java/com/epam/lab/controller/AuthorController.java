@@ -57,7 +57,7 @@ public class AuthorController {
     }
 
     @GetMapping("/findAll")
-    public List<AuthorDto> findAllNews() {
+    public List<AuthorDto> findAllAuthors() {
         return authorService.findAll();
     }
 }
