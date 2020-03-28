@@ -1,4 +1,4 @@
-package com.epam.lab.configuration;
+package com.epam.lab.security;
 
 import com.epam.lab.service.UserService;
 import org.apache.log4j.LogManager;
