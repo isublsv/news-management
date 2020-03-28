@@ -37,7 +37,7 @@ public class HibernateConfiguration {
     @Bean
     DataSource dataSource() {
         HikariConfig dataSourceConfig = new HikariConfig();
-        dataSourceConfig.setDataSourceClassName(environment.getRequiredProperty(PROPERTY_NAME_DB_DRIVER_CLASS));
+        dataSourceConfig.setDriverClassName(environment.getRequiredProperty(PROPERTY_NAME_DB_DRIVER_CLASS));
         dataSourceConfig.setJdbcUrl(environment.getRequiredProperty(PROPERTY_NAME_DB_URL));
         dataSourceConfig.setUsername(environment.getRequiredProperty(PROPERTY_NAME_DB_USER));
         dataSourceConfig.setPassword(environment.getRequiredProperty(PROPERTY_NAME_DB_PASSWORD));
