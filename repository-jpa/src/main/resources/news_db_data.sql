@@ -110,27 +110,28 @@ INSERT INTO news.news_tag (news_id, tag_id) VALUES
     (16, 2),
     (10, 5);
 
+--password = Asdsf123!
 INSERT INTO news."user" (name, surname, login, password) VALUES
-    ('Sergei', 'Crachev', 'crach', 'password'),
-    ('Andrew', 'Bubkov', 'bub', 'password'),
-    ('Igor', 'Bikov', 'bib', 'password'),
-    ('Lena', 'Lavrenteva', 'lav', 'password'),
-    ('Viktoria', 'Tolstaya', 'tol', 'password'),
-    ('Petr', 'Ivanov', 'ivan', 'password'),
-    ('Egor', 'Pilec', 'pilec', 'password'),
-    ('Igor', 'Rudakovski', 'ridik', 'password'),
-    ('Yaugeni', 'Metelski', 'metel', 'password'),
-    ('Sergei', 'Podorognikov', 'podik', 'password'),
-    ('Vlad', 'Berezkin', 'bereza', 'password'),
-    ('Tolik', 'Petrov', 'petrov', 'password'),
-    ('Alexey', 'Sidorov', 'sidor', 'password'),
-    ('Vasya', 'Pupkin', 'pupok', 'password'),
-    ('Svetlana', 'Meleg', 'meleg', 'password'),
-    ('Tatiana', 'Belaya', 'belka', 'password'),
-    ('Natali', 'Ivanova', 'nata', 'password'),
-    ('Sahsa', 'Golikov', 'sanek', 'password'),
-    ('Vladimir', 'Kolesnikov', 'vlad', 'password'),
-    ('Igor', 'Mishkin', 'misha', 'password');
+    ('Sergei', 'Crachev', 'crach', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Andrew', 'Bubkov', 'bub', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Igor', 'Bikov', 'bib', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Lena', 'Lavrenteva', 'lav', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Viktoria', 'Tolstaya', 'tol', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Petr', 'Ivanov', 'ivan', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Egor', 'Pilec', 'pilec', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Igor', 'Rudakovski', 'ridik', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Yaugeni', 'Metelski', 'metel', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Sergei', 'Podorognikov', 'podik', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Vlad', 'Berezkin', 'bereza', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Tolik', 'Petrov', 'petrov', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Alexey', 'Sidorov', 'sidor', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Vasya', 'Pupkin', 'pupok', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Svetlana', 'Meleg', 'meleg', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Tatiana', 'Belaya', 'belka', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Natali', 'Ivanova', 'nata', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Sahsa', 'Golikov', 'sanek', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Vladimir', 'Kolesnikov', 'vlad', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi'),
+    ('Igor', 'Mishkin', 'misha', '$2a$10$1qtGLG/C3VlFWEGFPy7OWOGvOdBPI7Ms006aCW4zplrDJKWy8Vyxi');
 
 INSERT INTO news.roles (user_id, role_name) VALUES
     (1, 'ADMIN'),

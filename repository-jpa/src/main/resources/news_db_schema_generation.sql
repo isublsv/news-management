@@ -38,7 +38,7 @@ CREATE TABLE news."user" (
     name character varying(20) NOT NULL,
     surname character varying(20) NOT NULL,
     login character varying(30) NOT NULL,
-    password character varying(30) NOT NULL,
+    password character varying(120) NOT NULL,
     CONSTRAINT uniq_login_name UNIQUE (login),
 	PRIMARY KEY (id)
 );
