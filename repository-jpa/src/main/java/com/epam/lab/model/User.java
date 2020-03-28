@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "user", schema = "news", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
+@Table(name = "\"user\"", schema = "news", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
 public class User extends AbstractEntity implements Pageable {
 
     @Column(name = "name", length = 20, nullable = false)
