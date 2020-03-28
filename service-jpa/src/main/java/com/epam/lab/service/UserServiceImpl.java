@@ -5,6 +5,8 @@ import com.epam.lab.dto.UserMapper;
 import com.epam.lab.model.User;
 import com.epam.lab.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -51,5 +53,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAll() {
         return userRepository.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public UserDetails loadUserByUsername(final String username) {
+        User user = userRepository.findByUsername(username)
+                                  .orElseThrow(() -> new UsernameNotFoundException("User not found with login: " + username));
+        return UserDetailsImpl.build(user);
     }
 }
