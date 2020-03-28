@@ -1,5 +1,6 @@
 package com.epam.lab.repository;
 
+import com.epam.lab.exception.EntityDuplicatedException;
 import com.epam.lab.model.Role;
 import com.epam.lab.model.User;
 import com.epam.lab.model.User_;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -23,7 +25,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User create(final User entity) {
         entity.getRoles().add(Role.USER);
-        entityManager.persist(entity);
+        try {
+            entityManager.persist(entity);
+        } catch (PersistenceException e) {
+            throw new EntityDuplicatedException();
+        }
         return entity;
     }
 
