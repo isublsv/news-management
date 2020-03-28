@@ -2,6 +2,7 @@ package com.epam.lab.repository;
 
 import com.epam.lab.model.Role;
 import com.epam.lab.model.User;
+import com.epam.lab.model.User_;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -55,5 +57,14 @@ public class UserRepositoryImpl implements UserRepository {
         Root<User> from = query.from(User.class);
         query.select(from);
         return entityManager.createQuery(query).getResultList();
+    }
+
+    @Override
+    public Optional<User> findByUsername(final String username) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+        Root<User> from = query.from(User.class);
+        query.select(from).where(criteriaBuilder.equal(from.get(User_.LOGIN), username));
+        return Optional.of(entityManager.createQuery(query).getSingleResult());
     }
 }
