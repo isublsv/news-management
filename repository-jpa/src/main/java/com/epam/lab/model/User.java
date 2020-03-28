@@ -27,7 +27,7 @@ public class User extends AbstractEntity implements Pageable {
     @Column(name = "login", length = 30, unique = true, nullable = false)
     private String login;
 
-    @Column(name = "password", length = 30, nullable = false)
+    @Column(name = "password", length = 120, nullable = false)
     private String password;
     
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
