@@ -7,6 +7,7 @@ import com.epam.lab.model.Page;
 import com.epam.lab.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -41,6 +42,7 @@ public class NewsController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public NewsDto createNews(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.create(newsDto);
     }
@@ -51,11 +53,13 @@ public class NewsController {
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public NewsDto editAuthor(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.update(newsDto);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteAuthor(@PathVariable  @Positive(message = "Id must positive") final Long id) {
         newsService.delete(id);
     }
@@ -66,6 +70,7 @@ public class NewsController {
     }
 
     @PutMapping(value = "/add_tags/{newsId}", produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<TagDto> addTagForNews(@PathVariable
                                       @Positive(message = "News Id must positive") final Long newsId,
                                       @RequestBody @NotNull final List<@Valid TagDto> tagDtos) {
