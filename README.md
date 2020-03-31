@@ -229,3 +229,43 @@ It is forbidden to use:
 - Spring Data Repositories,,  
 - Lombok,  
 - Powermock.
+
+#### How to use.
+
+- To work with News API you should create new user use the next link http://epbyminw7596.minsk.epam.com:8080/news/auth/register
+
+Json for new user:
+> {
+	"name": "Petr",
+	"surname": "Petrov",
+	"login": "petrovich",
+	"password": "Asdsf123!"
+}
+
+Or login: http://epbyminw7596.minsk.epam.com:8080/news/auth/login
+
+JSON for existing ADMIN user:
+> {
+	"login": "crach",
+	"password": "Asdsf123!"
+}
+
+for regular USER:
+> {
+	"login": "bub",
+	"password": "Asdsf123!"
+}
+
+- After login or creation new USER you will get access token from response and csrf token from cookie.
+
+Access token example:
+> eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw
+
+SCRF token example:
+> 7080cdc8-6eff-43a1-a5aa-fdec3beeba96
+
+- The list of examples of request you can see above at **task #7** or you can import **Postman request collection** and just change headers in existing requests.
+
+Header Example:
+> Authorization:Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw
+X-XSRF-TOKEN:7080cdc8-6eff-43a1-a5aa-fdec3beeba96
