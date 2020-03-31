@@ -921,7 +921,13 @@
 			"name": "SIGNUP",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "9ad2f4d6-2837-463e-9108-90a52be9abf4",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n\t\"name\": \"Petr\",\n\t\"surname\": \"Petrov\",\n\t\"login\": \"isu\",\n\t\"password\": \"Asdsf123!\"\n}",
@@ -932,7 +938,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/news/auth/register?X-XSRF-TOKEN=7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+					"raw": "http://localhost:8080/news/auth/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -942,12 +948,6 @@
 						"news",
 						"auth",
 						"register"
-					],
-					"query": [
-						{
-							"key": "X-XSRF-TOKEN",
-							"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96"
-						}
 					]
 				}
 			},
@@ -960,7 +960,7 @@
 				"header": [
 					{
 						"key": "X-XSRF-TOKEN",
-						"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+						"value": "9ad2f4d6-2837-463e-9108-90a52be9abf4",
 						"type": "text"
 					}
 				],
