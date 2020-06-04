@@ -20,6 +20,8 @@
         <module>service-jpa</module>
         <module>repository-jdbc</module>
         <module>repository-jpa</module>
+        <module>news-producer</module>
+        <module>news-scanner</module>
     </modules>
 
     <packaging>pom</packaging>

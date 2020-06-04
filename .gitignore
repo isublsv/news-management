@@ -1,6 +1,7 @@
 #Folders
 /.idea
 target/
+json/
 
 #Files
 *.iml
