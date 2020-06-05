@@ -4,6 +4,9 @@ import com.epam.lab.service.ScannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.nio.file.Path;
+import java.util.List;
+
 @Controller
 public class ScannerController {
 
@@ -14,9 +17,16 @@ public class ScannerController {
         scannerService = scannerServiceValue;
     }
 
-    public void scanFolder(final String root, final int threadCount, final double scanDelay) {
-        if (!root.isEmpty() && threadCount > 0 && scanDelay > 0) {
-            scannerService.scanFolder(root, threadCount, scanDelay);
+    public List<Path> findFiles(final String root, final List<Path> paths) {
+        if (!root.isEmpty()) {
+            return scannerService.findFiles(root, paths);
+        }
+        return paths;
+    }
+
+    public void scanFiles(final List<Path> paths, final int threadCount) {
+        if (!paths.isEmpty() && threadCount > 0) {
+            scannerService.scanFiles(paths, threadCount);
         }
     }
 }

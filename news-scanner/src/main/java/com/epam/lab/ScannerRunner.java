@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.nio.file.Path;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
+
 @Component
 public class ScannerRunner implements CommandLineRunner {
 
@@ -32,6 +37,18 @@ public class ScannerRunner implements CommandLineRunner {
     @Override
     public void run(final String... args) {
         LOGGER.info("Scanner started!");
-        controller.scanFolder(rootFolder, Integer.parseInt(threadCount), Double.parseDouble(scanDelay));
+        final long scanDelayMs = (long) (Double.parseDouble(scanDelay) * 1000);
+        List<Path> paths = new CopyOnWriteArrayList<>();
+        while (true) {
+            paths = controller.findFiles(rootFolder, paths);
+            controller.scanFiles(paths, Integer.parseInt(threadCount));
+            try {
+                TimeUnit.MILLISECONDS.sleep(scanDelayMs);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                final String message = String.format("The scanner has been interrupted! %s", e);
+                LOGGER.error(message);
+            }
+        }
     }
 }

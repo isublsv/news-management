@@ -2,6 +2,8 @@ package com.epam.lab.model;
 
 import com.epam.lab.dao.FileReaderDao;
 import com.epam.lab.dao.NewsDao;
+import com.epam.lab.exception.EntityDuplicatedException;
+import com.epam.lab.exception.InvalidJsonFieldNameException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,18 +40,31 @@ public class FileConsumer implements Runnable {
     @Override
     public void run() {
         synchronized (path) {
-            final String start = String.format("Scanner thread started %s", Thread.currentThread().getName());
-            LOGGER.info(start);
-            final List<News> news = fileReaderDao.readFile(path);
-            if (!news.isEmpty()) {
-                if (!newsDao.addNews(news)) {
+            final String start = String.format("Scanner thread started %s for file %s",
+                                               Thread.currentThread().getName(), path.toAbsolutePath());
+            LOGGER.debug(start);
+
+            try {
+                final List<News> news = fileReaderDao.readFile(path);
+                if (!news.isEmpty()) {
+                    newsDao.addNews(news);
+                } else {
                     moveFileToErrorFolder(path);
                 }
-            } else {
+            } catch (InvalidJsonFieldNameException | EntityDuplicatedException e) {
+                final String message = String.format("Error during parsing or saving a file to database %s",
+                                                     e.getMessage());
+                LOGGER.error(message);
                 moveFileToErrorFolder(path);
+            } catch (IOException e) {
+                final String message = String.format("Error during reading a file %s, %s",
+                                                     path.getFileName(), e.getMessage());
+                LOGGER.error(message);
             }
-            final String finish = String.format("Scanner thread finished %s", Thread.currentThread().getName());
-            LOGGER.info(finish);
+
+            final String finish = String.format("Scanner thread finished %s for file %s",
+                                                Thread.currentThread().getName(), path.toAbsolutePath());
+            LOGGER.debug(finish);
         }
     }
 
@@ -64,7 +79,7 @@ public class FileConsumer implements Runnable {
             move(path, newFilePath, ATOMIC_MOVE);
         } catch (IOException e) {
             final String message = String.format("Error during moving a file : %s", e);
-            LOGGER.info(message);
+            LOGGER.error(message);
         }
     }
 }

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface NewsDao extends Dao {
 
-    boolean addNews(List<News> news);
+    void addNews(List<News> news);
 }

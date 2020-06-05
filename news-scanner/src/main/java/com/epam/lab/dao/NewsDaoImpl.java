@@ -1,5 +1,6 @@
 package com.epam.lab.dao;
 
+import com.epam.lab.exception.EntityDuplicatedException;
 import com.epam.lab.model.News;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,9 +25,9 @@ public class NewsDaoImpl implements NewsDao {
         entityManager = entityManagerValue;
     }
 
+    @Transactional
     @Override
-    public boolean addNews(final List<News> news) {
-        entityManager.getTransaction().begin();
+    public void addNews(final List<News> news) {
         for (News newsValue : news) {
             LocalDate date = LocalDate.now();
             newsValue.setCreationDate(date);
@@ -33,11 +35,8 @@ public class NewsDaoImpl implements NewsDao {
             try {
                 entityManager.unwrap(Session.class).replicate(newsValue, ReplicationMode.IGNORE);
             } catch (ConstraintViolationException e) {
-                entityManager.getTransaction().rollback();
-                return false;
+                throw new EntityDuplicatedException();
             }
         }
-        entityManager.getTransaction().commit();
-        return true;
     }
 }
