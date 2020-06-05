@@ -29,6 +29,7 @@ public class FileGenerator extends TimerTask {
     private final JsonProducer producer;
     private final Path path;
     private final int filesCount;
+    private final int invalidIndexCount;
 
     public FileGenerator(final Path pathValue,
             final int filesCountValue,
@@ -36,6 +37,7 @@ public class FileGenerator extends TimerTask {
         this.producer = newsJsonProducerValue;
         this.path = pathValue;
         this.filesCount = filesCountValue;
+        this.invalidIndexCount = filesCountValue / 5;
     }
 
     @Override
@@ -71,19 +73,19 @@ public class FileGenerator extends TimerTask {
             integers.add(i);
         }
         Collections.shuffle(integers);
-        return integers.subList(0, 200);
+        return integers.subList(0, invalidIndexCount);
     }
 
     private String generateInvalidJson(final int index) {
         String invalidNewsJson;
         switch (isBetween(index)) {
-            case ZERO_FIFTY:
+            case FIRST_RANGE:
                 invalidNewsJson = producer.generateInvalidNewsJson();
                 break;
-            case FIFTY_HUNDRED:
+            case SECOND_RANGE:
                 invalidNewsJson = producer.generateFakeNewsJson();
                 break;
-            case HUNDRED_FIFTY:
+            case THIRD_RANGE:
                 invalidNewsJson = producer.generateInvalidFormatJson();
                 break;
             default:
@@ -94,14 +96,16 @@ public class FileGenerator extends TimerTask {
     }
     
     private Range isBetween(final int index) {
-        if (index >= 0 && index < 50) {
-            return Range.ZERO_FIFTY;
-        } else if (index >= 50 && index < 100) {
-            return Range.FIFTY_HUNDRED;
-        } else if (index >= 100 && index < 150) {
-            return Range.HUNDRED_FIFTY;
+        if (index >= 0 && index < invalidIndexCount * Range.FIRST_RANGE.getCoefficient()) {
+            return Range.FIRST_RANGE;
+        } else if (index >= invalidIndexCount * Range.FIRST_RANGE.getCoefficient()
+                   && index < invalidIndexCount * Range.SECOND_RANGE.getCoefficient()) {
+            return Range.SECOND_RANGE;
+        } else if (index >= invalidIndexCount * Range.SECOND_RANGE.getCoefficient()
+                   && index < invalidIndexCount * Range.THIRD_RANGE.getCoefficient()) {
+            return Range.THIRD_RANGE;
         } else {
-            return Range.REST;
+            return Range.FORTH_RANGE;
         }
     }
 
@@ -113,9 +117,19 @@ public class FileGenerator extends TimerTask {
     }
     
     private enum Range {
-        ZERO_FIFTY,
-        FIFTY_HUNDRED,
-        HUNDRED_FIFTY,
-        REST
+        FIRST_RANGE (0.25),
+        SECOND_RANGE(0.5),
+        THIRD_RANGE(0.75),
+        FORTH_RANGE (1);
+        
+        private final double coefficient;
+
+        Range(final double coefficientValue) {
+            coefficient = coefficientValue;
+        }
+
+        public double getCoefficient() {
+            return coefficient;
+        }
     }
 }

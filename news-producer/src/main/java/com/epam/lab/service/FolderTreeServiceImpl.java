@@ -9,7 +9,8 @@ import static java.nio.file.Files.exists;
 import static java.nio.file.Paths.get;
 
 public class FolderTreeServiceImpl implements FolderTreeService {
-    
+
+    private static final String USER_DIR = "user.dir";
     private final FolderTreeDao folderTreeDao;
 
     public FolderTreeServiceImpl(final FolderTreeDao folderTreeDaoValue) {
@@ -18,9 +19,9 @@ public class FolderTreeServiceImpl implements FolderTreeService {
 
     @Override
     public void createFolderTree(final String root, final int subfolderCount) {
-        Path projectDir = get(System.getProperty("user.dir"));
+        Path projectDir = get(System.getProperty(USER_DIR));
         Path parent = get(projectDir.toAbsolutePath().toString(), File.separator, root);
-        folderTreeDao.createFolderTree(parent, subfolderCount);        
+        folderTreeDao.createFolderTree(parent, subfolderCount);
     }
 
     @Override

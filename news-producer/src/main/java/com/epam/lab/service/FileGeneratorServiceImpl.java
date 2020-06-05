@@ -11,6 +11,7 @@ import static java.nio.file.Paths.get;
 
 public class FileGeneratorServiceImpl implements FileGeneratorService {
 
+    private static final int TIME_MS = 1000;
     private final FileGeneratorDao fileGeneratorDao;
 
     public FileGeneratorServiceImpl(final FileGeneratorDao fileGeneratorDaoValue) {
@@ -28,9 +29,8 @@ public class FileGeneratorServiceImpl implements FileGeneratorService {
 
     @Override
     public void runTasks(final List<TimerTask> tasks, final long testTime, final double periodTime) {
-        long testTimeMs = testTime * 1000;
-        long periodTimeMs = (long) (periodTime * 1000);
-        
+        long testTimeMs = testTime * TIME_MS;
+        long periodTimeMs = (long) (periodTime * TIME_MS);
         fileGeneratorDao.runTasks(tasks, testTimeMs, periodTimeMs);
     }
 }

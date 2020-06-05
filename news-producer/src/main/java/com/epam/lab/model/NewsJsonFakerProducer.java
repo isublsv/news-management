@@ -7,7 +7,9 @@ import com.google.gson.JsonObject;
 
 public final class NewsJsonFakerProducer implements JsonProducer {
 
-    private static final int FULL_TEXT_SENTENCE_COUNT = 5;
+    private static final int TITLE_NUMBER_OF_LETTERS = 30;
+    private static final int SHORT_TEXT_NUMBER_OF_LETTERS = 80;
+    private static final int FULL_TEXT_NUMBER_OF_LETTER = 500;
 
     private final Faker faker = new Faker();
     private final Gson gsonBuilder = new GsonBuilder().create();
@@ -22,14 +24,14 @@ public final class NewsJsonFakerProducer implements JsonProducer {
     }
 
     public String generateInvalidFormatJson() {
-        return "{" + faker.lorem().characters(30) + "}";
+        return "{" + getRandomText(TITLE_NUMBER_OF_LETTERS) + "}";
     }
 
     public String generateFakeNewsJson() {
         JsonObject json = new JsonObject();
-        json.addProperty("title_value", getRandomTitle());
-        json.addProperty("short_txt", getRandomShortText());
-        json.addProperty("full_txt", getRandomFullText());
+        json.addProperty("title_value", getRandomText(TITLE_NUMBER_OF_LETTERS));
+        json.addProperty("short_txt", getRandomText(SHORT_TEXT_NUMBER_OF_LETTERS));
+        json.addProperty("full_txt", getRandomText(FULL_TEXT_NUMBER_OF_LETTER));
 
         JsonObject author = new JsonObject();
         author.addProperty("name", getRandomName());
@@ -56,22 +58,14 @@ public final class NewsJsonFakerProducer implements JsonProducer {
 
     private News getRandomNews() {
         News news = new News();
-        news.setTitle(getRandomTitle());
-        news.setShortText(getRandomShortText());
-        news.setFullText(getRandomFullText());
+        news.setTitle(getRandomText(TITLE_NUMBER_OF_LETTERS));
+        news.setShortText(getRandomText(SHORT_TEXT_NUMBER_OF_LETTERS));
+        news.setFullText(getRandomText(FULL_TEXT_NUMBER_OF_LETTER));
         return news;
     }
 
-    private String getRandomTitle() {
-        return faker.lorem().fixedString(30);
-    }
-
-    private String getRandomShortText() {
-        return faker.lorem().word();
-    }
-
-    private String getRandomFullText() {
-        return faker.lorem().sentence(FULL_TEXT_SENTENCE_COUNT);
+    private String getRandomText(final int numberOfLetters) {
+        return faker.lorem().fixedString(numberOfLetters);
     }
 
     private Author getRandomAuthor() {

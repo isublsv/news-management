@@ -16,7 +16,7 @@ public class ProducerRunner {
         ApplicationContext context = new AnnotationConfigApplicationContext(ProducerConfiguration.class);
 
         final ConfigurationManager manager = context.getBean(ConfigurationManager.class);
-     
+
         final FolderTreeController folderTreeController = context.getBean(FolderTreeController.class);
         folderTreeController.deleteFolderTree(manager.getRootFolder());
         folderTreeController.createFolderTree(manager.getRootFolder(), manager.getSubFolderCount());
