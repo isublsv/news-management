@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -38,9 +37,8 @@ public class ScannerRunner implements CommandLineRunner {
     public void run(final String... args) {
         LOGGER.info("Scanner started!");
         final long scanDelayMs = (long) (Double.parseDouble(scanDelay) * 1000);
-        List<Path> paths = new CopyOnWriteArrayList<>();
         while (true) {
-            paths = controller.findFiles(rootFolder, paths);
+            List<Path> paths = controller.findFiles(rootFolder);
             controller.scanFiles(paths, Integer.parseInt(threadCount));
             try {
                 TimeUnit.MILLISECONDS.sleep(scanDelayMs);

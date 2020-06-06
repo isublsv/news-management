@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ScannerService extends Service {
 
-    List<Path> findFiles(String root, final List<Path> paths);
+    List<Path> findFiles(String root);
 
     void scanFiles(List<Path> paths, int threadCount);
 }

@@ -1,11 +1,8 @@
 package com.epam.lab.service;
 
-import com.epam.lab.dao.FileReaderDao;
-import com.epam.lab.dao.NewsDao;
 import com.epam.lab.model.FileConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
@@ -37,10 +35,10 @@ public class ScannerServiceImpl implements ScannerService {
     }
 
     @Override
-    public List<Path> findFiles(final String root, final List<Path> paths) {
+    public List<Path> findFiles(final String root) {
         Path projectDir = get(System.getProperty(USER_DIR));
         Path parent = get(projectDir.toAbsolutePath().toString(), root);
-
+        List<Path> paths = new CopyOnWriteArrayList<>();
         if (Files.exists(parent)) {
             try (final Stream<Path> pathStream = Files.find(parent, Integer.MAX_VALUE, 
                                                             (path, basicFileAttributesValue) ->
@@ -61,9 +59,6 @@ public class ScannerServiceImpl implements ScannerService {
     @Override
     public void scanFiles(final List<Path> paths, final int threadCount) {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(threadCount);
-        paths.forEach(path -> {
-            service.schedule(getFileConsumer(path), 0, MILLISECONDS);
-            paths.remove(path);
-        });
+        paths.forEach(path -> service.schedule(getFileConsumer(path), 0, MILLISECONDS));
     }
 }
