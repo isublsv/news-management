@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static java.nio.file.Files.createDirectory;
+import static java.nio.file.Files.delete;
 import static java.nio.file.Files.exists;
 import static java.nio.file.Files.move;
 import static java.nio.file.Paths.get;
@@ -22,7 +23,7 @@ public class FileConsumer implements Runnable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileConsumer.class);
     
-    @Value("{error.folder}")
+    @Value("${error.folder}")
     private String errorFolderName;
     
     private final Path path;
@@ -48,6 +49,7 @@ public class FileConsumer implements Runnable {
                 final List<News> news = fileReaderDao.readFile(path);
                 if (!news.isEmpty()) {
                     newsDao.addNews(news);
+                    delete(path);
                 } else {
                     moveFileToErrorFolder(path);
                 }

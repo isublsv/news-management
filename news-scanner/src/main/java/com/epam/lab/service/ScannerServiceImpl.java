@@ -6,6 +6,7 @@ import com.epam.lab.model.FileConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +28,12 @@ public class ScannerServiceImpl implements ScannerService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ScannerServiceImpl.class);
     private static final String USER_DIR = "user.dir";
 
-    @Value("{error.folder}")
+    @Value("${error.folder}")
     private String errorFolderName;
-
-    private final FileReaderDao fileReaderDao;
-    private final NewsDao newsDao;
-
-    @Autowired
-    public ScannerServiceImpl(final FileReaderDao fileReaderDaoValue, final NewsDao newsDaoValue) {
-        fileReaderDao = fileReaderDaoValue;
-        newsDao = newsDaoValue;
+    
+    @Lookup
+    protected FileConsumer getFileConsumer(final Path path) {
+        return null;
     }
 
     @Override
@@ -65,7 +62,7 @@ public class ScannerServiceImpl implements ScannerService {
     public void scanFiles(final List<Path> paths, final int threadCount) {
         ScheduledExecutorService service = Executors.newScheduledThreadPool(threadCount);
         paths.forEach(path -> {
-            service.schedule(new FileConsumer(path, fileReaderDao, newsDao), 0, MILLISECONDS);
+            service.schedule(getFileConsumer(path), 0, MILLISECONDS);
             paths.remove(path);
         });
     }
