@@ -25,9 +25,6 @@ public class ScannerRunner implements CommandLineRunner {
     @Value("${scan.delay}")
     private String scanDelay;
 
-    @Value("${thread.count}")
-    private String threadCount;
-
     @Autowired
     public ScannerRunner(final ScannerController controllerValue) {
         controller = controllerValue;
@@ -39,7 +36,7 @@ public class ScannerRunner implements CommandLineRunner {
         final long scanDelayMs = (long) (Double.parseDouble(scanDelay) * 1000);
         while (true) {
             List<Path> paths = controller.findFiles(rootFolder);
-            controller.scanFiles(paths, Integer.parseInt(threadCount));
+            controller.scanFiles(paths);
             try {
                 TimeUnit.MILLISECONDS.sleep(scanDelayMs);
             } catch (InterruptedException e) {

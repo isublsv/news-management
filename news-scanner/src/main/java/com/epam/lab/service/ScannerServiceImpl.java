@@ -3,6 +3,7 @@ package com.epam.lab.service;
 import com.epam.lab.model.FileConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.nio.file.Paths.get;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Service
 public class ScannerServiceImpl implements ScannerService {
@@ -29,6 +28,13 @@ public class ScannerServiceImpl implements ScannerService {
     @Value("${error.folder}")
     private String errorFolderName;
     
+    private final ExecutorService service;
+
+    @Autowired
+    public ScannerServiceImpl(final ExecutorService serviceValue) {
+        service = serviceValue;
+    }
+
     @Lookup
     protected FileConsumer getFileConsumer(final Path path) {
         return null;
@@ -57,8 +63,7 @@ public class ScannerServiceImpl implements ScannerService {
     }
 
     @Override
-    public void scanFiles(final List<Path> paths, final int threadCount) {
-        ScheduledExecutorService service = Executors.newScheduledThreadPool(threadCount);
-        paths.forEach(path -> service.schedule(getFileConsumer(path), 0, MILLISECONDS));
+    public void scanFiles(final List<Path> paths) {
+        paths.forEach(path -> service.execute(getFileConsumer(path)));
     }
 }

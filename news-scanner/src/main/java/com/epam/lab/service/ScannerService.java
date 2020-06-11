@@ -7,5 +7,5 @@ public interface ScannerService extends Service {
 
     List<Path> findFiles(String root);
 
-    void scanFiles(List<Path> paths, int threadCount);
+    void scanFiles(List<Path> paths);
 }

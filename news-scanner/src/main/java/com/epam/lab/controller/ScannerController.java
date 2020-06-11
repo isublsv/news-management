@@ -25,9 +25,9 @@ public class ScannerController {
         return Collections.emptyList();
     }
 
-    public void scanFiles(final List<Path> paths, final int threadCount) {
-        if (!paths.isEmpty() && threadCount > 0) {
-            scannerService.scanFiles(paths, threadCount);
+    public void scanFiles(final List<Path> paths) {
+        if (!paths.isEmpty()) {
+            scannerService.scanFiles(paths);
         }
     }
 }
