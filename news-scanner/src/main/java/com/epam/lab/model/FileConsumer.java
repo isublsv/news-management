@@ -82,7 +82,7 @@ public class FileConsumer implements Runnable {
             if (!exists(errorFolder)) {
                 createDirectory(errorFolder);
             }
-            move(path, newFilePath, ATOMIC_MOVE);
+            move(path, newFilePath, ATOMIC_MOVE, REPLACE_EXISTING);
         } catch (IOException e) {
             final String message = String.format("Error during moving a file : %s", e);
             LOGGER.error(message);
