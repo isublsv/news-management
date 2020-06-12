@@ -9,4 +9,6 @@ import java.util.List;
 public interface FileReaderDao extends Dao {
 
     List<News> readFile(Path path) throws IOException;
+    
+    void moveFile(Path path);
 }
