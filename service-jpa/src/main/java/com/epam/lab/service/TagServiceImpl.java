@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TagServiceImpl implements TagService {
 
@@ -43,5 +46,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public void delete(final Long id) {
         tagRepository.delete(id);
+    }
+
+    @Override
+    public List<TagDto> findAll() {
+        return tagRepository.findAll().stream().map(tagMapper::toDto).collect(Collectors.toList());
     }
 }

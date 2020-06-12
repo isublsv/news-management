@@ -1,7 +1,7 @@
 package com.epam.lab.controller;
 
-import com.epam.lab.dto.TagDto;
-import com.epam.lab.service.TagService;
+import com.epam.lab.dto.UserDto;
+import com.epam.lab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -24,40 +24,40 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
-@RequestMapping("/tag")
+@RequestMapping("/user")
 @Validated
-public class TagController {
+public class UserController {
 
-    private TagService tagService;
+    private UserService userService;
 
     @Autowired
-    public TagController(final TagService tagServiceValue) {
-        tagService = tagServiceValue;
+    public UserController(final UserService userServiceValue) {
+        userService = userServiceValue;
     }
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public TagDto addTag(@RequestBody @Valid final TagDto tagDto) {
-        return tagService.create(tagDto);
+    public UserDto createUser(@RequestBody @Valid final UserDto userDto) {
+        return userService.create(userDto);
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
-    public TagDto findTagById(@PathVariable @Positive(message = "Id must positive") final Long id) {
-        return tagService.find(id);
+    public UserDto findUserById(@PathVariable @Positive(message = "Id  must positive") final Long id) {
+        return userService.find(id);
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-    public TagDto editTag(@RequestBody @Valid final TagDto tagDto) {
-        return tagService.update(tagDto);
+    public UserDto editUser(@RequestBody @Valid final UserDto userDto) {
+        return userService.update(userDto);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTag(@PathVariable @Positive(message = "Id must positive") final Long id) {
-        tagService.delete(id);
+    public void deleteUser(@PathVariable @Positive(message = "Id must positive") final Long id) {
+        userService.delete(id);
     }
 
     @GetMapping("/findAll")
-    public List<TagDto> findAllNews() {
-        return tagService.findAll();
+    public List<UserDto> findAllNews() {
+        return userService.findAll();
     }
 }

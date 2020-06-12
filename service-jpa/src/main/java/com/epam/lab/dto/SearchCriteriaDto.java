@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -34,6 +35,14 @@ public class SearchCriteriaDto extends AbstractDto {
             @Pattern(regexp = "^[A-ZА-Я_]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided column name is not valid.") String> orderBy;
+
+    @Valid
+    @Positive(message = "The page number must be positive")
+    private int activePage;
+
+    @Valid
+    @Positive(message = "The page size must be positive")
+    private int pageSize;
 
     public SearchCriteriaDto() {
         tags = new HashSet<>();
@@ -82,9 +91,26 @@ public class SearchCriteriaDto extends AbstractDto {
         orderBy = orderByValue;
     }
 
+    public int getActivePage() {
+        return activePage;
+    }
+
+    public void setActivePage(int activePage) {
+        this.activePage = activePage;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
     @Override
     public String toString() {
-        return String.format("SearchCriteria{name='%s', surname='%s', tags=%s, orderBy=%s}",
-                name, surname, tags, orderBy);
+        return String.format("SearchCriteria{name='%s', surname='%s'," +
+                             " tags=%s, orderBy=%s, activePage=%d, pageSize=%d}",
+                name, surname, tags, orderBy, activePage, pageSize);
     }
 }

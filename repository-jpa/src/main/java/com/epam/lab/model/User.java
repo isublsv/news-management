@@ -3,11 +3,12 @@ package com.epam.lab.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user", schema = "news")
-public class User extends AbstractEntity {
+@Table(name = "user", schema = "news", uniqueConstraints = @UniqueConstraint(columnNames = "login"))
+public class User extends AbstractEntity implements Pageable {
 
     @Column(name = "name", length = 20, nullable = false)
     private String name;
@@ -15,7 +16,7 @@ public class User extends AbstractEntity {
     @Column(name = "surname", length = 20, nullable = false)
     private String surname;
 
-    @Column(name = "login", length = 30, nullable = false)
+    @Column(name = "login", length = 30, unique = true, nullable = false)
     private String login;
 
     @Column(name = "password", length = 30, nullable = false)
@@ -62,10 +63,10 @@ public class User extends AbstractEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return name.equals(user.name) &&
-                surname.equals(user.surname) &&
-                login.equals(user.login) &&
-                password.equals(user.password);
+        return name.equals(user.name)
+               && surname.equals(user.surname)
+               && login.equals(user.login)
+               && password.equals(user.password);
     }
 
     @Override

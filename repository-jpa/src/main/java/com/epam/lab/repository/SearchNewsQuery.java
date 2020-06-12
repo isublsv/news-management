@@ -6,20 +6,19 @@ import com.epam.lab.model.News;
 import com.epam.lab.model.News_;
 import com.epam.lab.model.OrderBy;
 import com.epam.lab.model.SearchCriteria;
-import com.epam.lab.model.Tag;
 import com.epam.lab.model.Tag_;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.epam.lab.model.AbstractEntity_.ID;
 
@@ -57,30 +56,26 @@ final class SearchNewsQuery {
             predicates.add(builder.equal(builder.upper(authorJoin.get(Author_.SURNAME)), surname.toUpperCase()));
         }
 
-        Subquery<Long> tagSubquery = query.subquery(Long.class);
-        Root<News> subRoot = tagSubquery.from(News.class);
-        Join<News, Tag> subJoinTag = subRoot.join(News_.TAGS, JoinType.LEFT);
-
-        for (String tagName : searchCriteria.getTags()) {
-            tagSubquery.select(subRoot.get(ID)).where(builder.equal(
-                    builder.upper(subJoinTag.get(Tag_.NAME)), tagName.toUpperCase()));
-            predicates.add(builder.equal(newsRoot.get(ID), builder.any(tagSubquery)));
+        Set<String> tagNames = searchCriteria.getTags();
+        if (isNotEmpty(tagNames)) {
+            Expression<String> expression = newsRoot.join(News_.TAGS).get(Tag_.NAME);
+            List<String> tags = tagNames.stream().map(String::toLowerCase).collect(Collectors.toList());
+            Predicate predicate = expression.in(tags);
+            predicates.add(predicate);
         }
 
-        if (isNotEmpty(predicates)) {
-            query.where(builder.and(predicates.toArray(new Predicate[0])));
-        }
+        query.where(predicates.toArray(new Predicate[]{}))
+             .groupBy(newsRoot.get(News_.AUTHOR).get(Author_.NAME), newsRoot.get(News_.AUTHOR).get(Author_.SURNAME),
+                      newsRoot.get(News_.AUTHOR).get(ID), newsRoot)
+             .having(builder.ge(builder.count(newsRoot), tagNames.size()));
     }
 
-    private boolean isNotEmpty(final List<Predicate> value) {
+    private boolean isNotEmpty(final Set<String> value) {
         return !value.isEmpty();
     }
 
     private void getGroupsAndOrdersColumns(final Root<News> newsRootValue, final Join<News, Author> authorJoinValue) {
         List<Order> orders = new ArrayList<>();
-        List<Expression<?>> expressions = new ArrayList<>();
-        expressions.add(newsRootValue.get(ID));
-        expressions.add(newsRootValue.get(News_.AUTHOR).get(ID));
 
         for (String columnValue : searchCriteria.getOrderBy()) {
             try {
@@ -91,12 +86,8 @@ final class SearchNewsQuery {
                         orders.add(builder.asc(newsRootValue.get(columnName)));
                         break;
                     case AUTHOR_NAME:
-                        orders.add(builder.asc(authorJoinValue.get(columnName)));
-                        expressions.add(authorJoinValue.get(Author_.NAME));
-                        break;
                     case AUTHOR_SURNAME:
                         orders.add(builder.asc(authorJoinValue.get(columnName)));
-                        expressions.add(authorJoinValue.get(Author_.SURNAME));
                         break;
                 }
             } catch (IllegalArgumentException ignored) {
@@ -104,6 +95,6 @@ final class SearchNewsQuery {
             }
         }
 
-        query.groupBy(expressions).orderBy(orders);
+        query.orderBy(orders);
     }
 }

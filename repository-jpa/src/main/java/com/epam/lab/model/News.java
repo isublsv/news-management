@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "news", schema = "news")
-public class News extends AbstractEntity {
+public class News extends AbstractEntity implements Pageable {
 
     @Column(name = "title", length = 30, nullable = false)
     private String title;

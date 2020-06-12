@@ -1,5 +1,6 @@
 package com.epam.lab.controller;
 
+import com.epam.lab.exception.RepositoryException;
 import com.epam.lab.exception.ServiceException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -29,6 +30,11 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("YYYY-MM-DD HH:mm:ss");
 
+    private static final String ERROR = "error";
+    private static final String TIMESTAMP = "timestamp";
+    private static final String STATUS = "status";
+    private static final String DEFAULT_MESSAGE = "ConstraintViolationException occurred.";
+
     @ExceptionHandler(ServiceException.class)
     public void handleServiceError(final HttpServletResponse response, final Exception e) throws IOException {
         response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
@@ -39,14 +45,22 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
         response.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
     }
 
+    @ExceptionHandler(RepositoryException.class)
+    public ResponseEntity<Object> handleRepositoryException(final RepositoryException ex) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
+        body.put(ERROR, ex.getMessage());
+        return new ResponseEntity<>(body, ex.getStatusCode());
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Object> handleEntityConstraintNotValid(ConstraintViolationException exception) {
+    public ResponseEntity<Object> handleEntityConstraintNotValid(final ConstraintViolationException exception) {
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
         String errorMessage;
         Map<String, Object> body = new LinkedHashMap<>();
         errorMessage = createErrorMessage(violations);
-        body.put("timestamp", LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        body.put("violation", errorMessage);
+        body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
+        body.put(ERROR, errorMessage);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -57,20 +71,21 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
             violationsValue.forEach(violation -> builder.append(" ").append(violation.getMessage()));
             errorMessage = builder.toString();
         } else {
-            errorMessage = "ConstraintViolationException occurred.";
+            errorMessage = DEFAULT_MESSAGE;
         }
         return errorMessage;
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-            HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
+                                                                  final HttpHeaders headers, HttpStatus status,
+                                                                  final WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
-        body.put("timestamp", LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        body.put("status", status.value());
+        body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
+        body.put(STATUS, status.value());
         List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(
                 DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
-        body.put("errors", errors);
+        body.put(ERROR, errors);
         return new ResponseEntity<>(body, headers, status);
     }
 }

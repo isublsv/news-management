@@ -12,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "author", schema = "news")
-public class Author extends AbstractEntity {
+public class Author extends AbstractEntity implements Pageable {
 
     @Column(name = "name", length = 30, nullable = false)
     private String name;
@@ -20,7 +20,7 @@ public class Author extends AbstractEntity {
     @Column(name = "surname", length = 30, nullable = false)
     private String surname;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<News> news = new ArrayList<>();
 
     public Author() {

@@ -1,5 +1,6 @@
 package com.epam.lab.dto;
 
+import com.epam.lab.model.Pageable;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,23 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class NewsDto extends AbstractDto {
+public class NewsDto extends AbstractDto implements Pageable {
 
-    @NotBlank
+    @NotBlank(message = "Provided news title must not be blank")
     @Length(min = 2, max = 30, message = "The news title length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d ]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news title is not valid")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "Provided news description must not be blank")
     @Length(min = 2, max = 100, message = "The news description length must be between 2 and 100 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided news description is not valid.")
     private String shortText;
 
-    @NotBlank
+    @NotBlank(message = "Provided news text must not be blank")
     @Length(min = 2, max = 2000, message = "The news text length must be between 2 and 2000 characters.")
     @Pattern(regexp = "^[A-ZА-Я_!?\\-\\d\\s]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
@@ -125,9 +126,11 @@ public class NewsDto extends AbstractDto {
             return false;
         }
         NewsDto newsDto = (NewsDto) oValue;
-        return title.equals(newsDto.title) && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
-                && creationDate.equals(newsDto.creationDate) && modificationDate.equals(newsDto.modificationDate)
-                && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
+        return title.equals(newsDto.title)
+               && shortText.equals(newsDto.shortText) && fullText.equals(newsDto.fullText)
+               && creationDate.equals(newsDto.creationDate)
+               && modificationDate.equals(newsDto.modificationDate)
+               && author.equals(newsDto.author) && Objects.equals(tags, newsDto.tags);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.epam.lab.exception.EntityDuplicatedException;
 import com.epam.lab.exception.EntityNotFoundException;
 import com.epam.lab.model.Author;
 import com.epam.lab.model.News;
+import com.epam.lab.model.Page;
 import com.epam.lab.model.SearchCriteria;
 import com.epam.lab.model.Tag;
 import org.hibernate.ReplicationMode;
@@ -18,6 +19,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.epam.lab.model.AbstractEntity_.ID;
 
 @Repository
 public class NewsRepositoryImpl implements NewsRepository {
@@ -64,13 +67,15 @@ public class NewsRepositoryImpl implements NewsRepository {
         List<Tag> tags = news.getTags();
         tags.clear();
         try {
-            entity.getTags().forEach(tag -> entityManager.unwrap(Session.class).replicate(tag, ReplicationMode.IGNORE));
+            entity.getTags().forEach(tag -> entityManager
+                    .unwrap(Session.class)
+                    .replicate(tag, ReplicationMode.IGNORE));
         } catch (ConstraintViolationException e) {
             throw new EntityDuplicatedException();
         }
         tags.addAll(entity.getTags());
 
-        return entityManager.merge(news);
+        return news;
     }
 
     @Override
@@ -84,6 +89,15 @@ public class NewsRepositoryImpl implements NewsRepository {
         entityManager.clear();
         //remove entity
         entityManager.remove(find(id));
+    }
+
+    @Override
+    public List<News> findAll() {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<News> query = criteriaBuilder.createQuery(News.class);
+        Root<News> from = query.from(News.class);
+        query.select(from).orderBy(criteriaBuilder.asc(from.get(ID)));
+        return entityManager.createQuery(query).getResultList();
     }
 
     @Override
@@ -113,9 +127,18 @@ public class NewsRepositoryImpl implements NewsRepository {
     }
 
     @Override
-    public List<News> searchBy(final SearchCriteria searchCriteria) {
+    public Page<News> searchBy(final SearchCriteria sc) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, searchCriteria);
-        return entityManager.createQuery(searchNewsQuery.buildQuery()).getResultList();
+        SearchNewsQuery searchNewsQuery = new SearchNewsQuery(builder, sc);
+
+        Page<News> page = new Page<>();
+        CriteriaQuery<News> query = searchNewsQuery.buildQuery();
+
+        page.setTotalCount(entityManager.createQuery(query).getResultList().size());
+        page.setEntities(entityManager.createQuery(query)
+                                      .setFirstResult((sc.getActivePage() - 1) * sc.getPageSize())
+                                      .setMaxResults(sc.getPageSize())
+                                      .getResultList());
+        return page;
     }
 }

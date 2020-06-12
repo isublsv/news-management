@@ -1,21 +1,22 @@
 package com.epam.lab.dto;
 
+import com.epam.lab.model.Pageable;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
-public class AuthorDto extends AbstractDto {
+public class AuthorDto extends AbstractDto implements Pageable {
 
-    @NotBlank
+    @NotBlank(message = "Provided author name must not be blank")
     @Length(min = 2, max = 30, message = "The author name length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Provided author name is not valid.")
     private String name;
     
-    @NotBlank
+    @NotBlank(message = "Provided author surname must not be blank")
     @Length(min = 2, max = 30, message = "The author surname length must be between 2 and 30 characters.")
     @Pattern(regexp = "^[A-ZА-Я\\-]+",
             flags = Pattern.Flag.CASE_INSENSITIVE,
