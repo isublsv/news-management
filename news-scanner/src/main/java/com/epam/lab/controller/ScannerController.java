@@ -5,8 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ScannerController {
@@ -18,14 +17,13 @@ public class ScannerController {
         scannerService = scannerServiceValue;
     }
 
-    public List<Path> findFiles(final String root) {
+    public void findFiles(final String root, final Set<Path> paths) {
         if (!root.isEmpty()) {
-            return scannerService.findFiles(root);
+            scannerService.findFiles(root, paths);
         }
-        return Collections.emptyList();
     }
 
-    public void scanFiles(final List<Path> paths) {
+    public void scanFiles(final Set<Path> paths) {
         if (!paths.isEmpty()) {
             scannerService.scanFiles(paths);
         }

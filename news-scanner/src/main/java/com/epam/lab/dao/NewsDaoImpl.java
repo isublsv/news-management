@@ -28,7 +28,7 @@ public class NewsDaoImpl implements NewsDao {
     @Transactional
     @Override
     public void addNews(final List<News> news) {
-        for (News newsValue : news) {
+        news.forEach(newsValue -> {
             LocalDate date = LocalDate.now();
             newsValue.setCreationDate(date);
             newsValue.setModificationDate(date);
@@ -37,6 +37,6 @@ public class NewsDaoImpl implements NewsDao {
             } catch (ConstraintViolationException e) {
                 throw new EntityDuplicatedException();
             }
-        }
+        });
     }
 }

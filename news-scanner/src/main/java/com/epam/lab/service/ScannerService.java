@@ -1,11 +1,11 @@
 package com.epam.lab.service;
 
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Set;
 
 public interface ScannerService extends Service {
 
-    List<Path> findFiles(String root);
+    Set<Path> findFiles(String root, final Set<Path> paths);
 
-    void scanFiles(List<Path> paths);
+    void scanFiles(Set<Path> paths);
 }

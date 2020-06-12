@@ -11,8 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,10 +40,9 @@ public class ScannerServiceImpl implements ScannerService {
     }
 
     @Override
-    public List<Path> findFiles(final String root) {
+    public Set<Path> findFiles(final String root, final Set<Path> paths) {
         Path projectDir = get(System.getProperty(USER_DIR));
         Path parent = get(projectDir.toAbsolutePath().toString(), root);
-        List<Path> paths = new CopyOnWriteArrayList<>();
         if (Files.exists(parent)) {
             try (final Stream<Path> pathStream = Files.find(parent, Integer.MAX_VALUE, 
                                                             (path, basicFileAttributesValue) ->
@@ -57,13 +55,16 @@ public class ScannerServiceImpl implements ScannerService {
         }
 
         final String message = String.format("Files found: %d", paths.size());
-        LOGGER.debug(message);
+        LOGGER.info(message);
         return paths;
-
     }
 
     @Override
-    public void scanFiles(final List<Path> paths) {
-        paths.forEach(path -> service.execute(getFileConsumer(path)));
+    public void scanFiles(final Set<Path> paths) {
+        paths.forEach(path -> {
+            if (service.submit(getFileConsumer(path)).isDone()) {
+                paths.remove(path);
+            }
+        });
     }
 }

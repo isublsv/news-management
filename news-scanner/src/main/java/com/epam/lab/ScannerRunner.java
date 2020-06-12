@@ -9,7 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -34,8 +35,9 @@ public class ScannerRunner implements CommandLineRunner {
     public void run(final String... args) {
         LOGGER.info("Scanner started!");
         final long scanDelayMs = (long) (Double.parseDouble(scanDelay) * 1000);
+        Set<Path> paths = ConcurrentHashMap.newKeySet();
         while (true) {
-            List<Path> paths = controller.findFiles(rootFolder);
+            controller.findFiles(rootFolder, paths);
             controller.scanFiles(paths);
             try {
                 TimeUnit.MILLISECONDS.sleep(scanDelayMs);
