@@ -189,3 +189,83 @@ curl --location --request PUT 'http://epbyminw7596.minsk.epam.com:8080/news/tag/
 }'
 ```
 * DELETE: /tag/delete/id - deletes tag by ID.
+
+#### Task #8. Security  
+  
+Application should support user-based authentication. This means a user is stored in a database with some basic information and a password.  
+  
+##### User Permissions:  
+ - Guest
+  
+1. Read operations for News.  
+2. Sign up.  
+3. Log in.  
+  
+* User:  
+  
+1. All read operations.  
+2. All create operations.  
+3. All update operations.  
+  
+* Administrator (can be added only via database call):  
+  
+ 1. All operations.  
+  
+##### Tools and Implementation Requirements:  
+Please note that only GA versions of tools, frameworks, and libraries are allowed.  
+  
+- Spring Boot.  
+- Server should support only stateless user authentication and verify integrity of JWT token.  
+- Use OAuth2 as an authorization protocol.  
+- OAuth2 scopes should be used to restrict data.  
+- Implicit grant and Resource owner credentials grant should be implemented.  
+- Implement CSRF protection.  
+- APIs should be demonstrated using Postman tool.  
+- For demo, prepare Postman collections with APIs.  
+  
+##### Restrictions:  
+It is forbidden to use:  
+  
+- Spring Data Repositories,,  
+- Lombok,  
+- Powermock.
+
+#### How to use.
+
+- To work with News API you should create new user use the next link http://epbyminw7596.minsk.epam.com:8080/news/auth/register
+
+Json for new user:
+> {
+	"name": "Petr",
+	"surname": "Petrov",
+	"login": "petrovich",
+	"password": "Asdsf123!"
+}
+
+Or login: http://epbyminw7596.minsk.epam.com:8080/news/auth/login
+
+JSON for existing ADMIN user:
+> {
+	"login": "crach",
+	"password": "Asdsf123!"
+}
+
+for regular USER:
+> {
+	"login": "bub",
+	"password": "Asdsf123!"
+}
+
+- After login or creation new USER you will get access token from response and csrf token from cookie.
+
+Access token example:
+> eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw
+
+SCRF token example:
+> 7080cdc8-6eff-43a1-a5aa-fdec3beeba96
+
+- The list of examples of request you can see above at **task #7** or you can import **Postman request collection** and just change headers in existing requests.
+
+Header Example:
+> Authorization:Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw
+X-XSRF-TOKEN:7080cdc8-6eff-43a1-a5aa-fdec3beeba96

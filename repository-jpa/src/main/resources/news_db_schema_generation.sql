@@ -38,7 +38,8 @@ CREATE TABLE news."user" (
     name character varying(20) NOT NULL,
     surname character varying(20) NOT NULL,
     login character varying(30) NOT NULL,
-    password character varying(30) NOT NULL,
+    password character varying(120) NOT NULL,
+    CONSTRAINT uniq_login_name UNIQUE (login),
 	PRIMARY KEY (id)
 );
 
@@ -61,11 +62,11 @@ CREATE TABLE news.news_tag (
     tag_id bigint NOT NULL,
     CONSTRAINT uniq_news_id_tag_id UNIQUE (news_id, tag_id),
 	CONSTRAINT fk_news_id FOREIGN KEY (news_id)
-		REFERENCES news.news(id) MATCH SIMPLE
+		REFERENCES news.news (id) MATCH SIMPLE
         ON UPDATE CASCADE 
         ON DELETE CASCADE ,
 	CONSTRAINT fk_tag_id FOREIGN KEY (tag_id)
-		REFERENCES news.tag(id) MATCH SIMPLE
+		REFERENCES news.tag (id) MATCH SIMPLE
         ON UPDATE CASCADE 
         ON DELETE CASCADE
 );
@@ -74,7 +75,7 @@ CREATE TABLE news.roles (
     user_id bigint NOT NULL,
     role_name character varying(30) NOT NULL,
 	CONSTRAINT fk_user_id FOREIGN KEY (user_id)
-		REFERENCES news."user"(id) MATCH SIMPLE
+		REFERENCES news."user" (id) MATCH SIMPLE
 		ON UPDATE NO ACTION 
 		ON DELETE NO ACTION
 );

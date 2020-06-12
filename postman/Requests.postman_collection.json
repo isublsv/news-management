@@ -1,0 +1,994 @@
+{
+	"info": {
+		"_postman_id": "96ade689-f373-40ec-a75d-f0f76ec34763",
+		"name": "Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Author",
+			"item": [
+				{
+					"name": "FIND AUTHOR",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/author/find/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"author",
+								"find",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD AUTHOR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Mike\",\r\n    \"surname\": \"Davidson\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/author/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"author",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDIT AUTHOR",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 20,\r\n    \"name\": \"David\",\r\n    \"surname\": \"Davidson\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/author/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"author",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE AUTHOR",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQ2OTM2OSwiZXhwIjoxNTg1NTU1NzY5fQ.1MRQhoJu2xjPO4CsW7VEXw7MJz7cTg_ke8rFzP3fM3bjsVFBjzFAQ7obdFFRCboXOjok0DOix28SO_mg67iqxQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/author/delete/20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"author",
+								"delete",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND ALL AUTHORS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/news/author/findAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"author",
+								"findAll"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Tag",
+			"item": [
+				{
+					"name": "ADD TAG",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"sport\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/tag/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"tag",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND TAG",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/tag/find/11",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"tag",
+								"find",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDIT TAG",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 5,\r\n    \"name\": \"Good news!\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/tag/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"tag",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE TAG",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQ2OTM2OSwiZXhwIjoxNTg1NTU1NzY5fQ.1MRQhoJu2xjPO4CsW7VEXw7MJz7cTg_ke8rFzP3fM3bjsVFBjzFAQ7obdFFRCboXOjok0DOix28SO_mg67iqxQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/tag/delete/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"tag",
+								"delete",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND ALL TAGS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/news/tag/findAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"tag",
+								"findAll"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "FIND USER",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQxNzE0NywiZXhwIjoxNTg1NTAzNTQ3fQ.RLyZ5JN7BL8M3VkiF_uEVu89Kj8AxtngRjUCRIQ78bP23L29dyzFmqLZGnCCJTF8n22PUoQ5XW9GRlyDQei3XQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/user/find/15",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"user",
+								"find",
+								"15"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDIT USER",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQxNzE0NywiZXhwIjoxNTg1NTAzNTQ3fQ.RLyZ5JN7BL8M3VkiF_uEVu89Kj8AxtngRjUCRIQ78bP23L29dyzFmqLZGnCCJTF8n22PUoQ5XW9GRlyDQei3XQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 15,\r\n    \"name\": \"Svetlana\",\r\n    \"surname\": \"Melegka\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/user/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"user",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE USER",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQ2OTM2OSwiZXhwIjoxNTg1NTU1NzY5fQ.1MRQhoJu2xjPO4CsW7VEXw7MJz7cTg_ke8rFzP3fM3bjsVFBjzFAQ7obdFFRCboXOjok0DOix28SO_mg67iqxQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/user/delete/20",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"user",
+								"delete",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND ALL USERS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQxNzE0NywiZXhwIjoxNTg1NTAzNTQ3fQ.RLyZ5JN7BL8M3VkiF_uEVu89Kj8AxtngRjUCRIQ78bP23L29dyzFmqLZGnCCJTF8n22PUoQ5XW9GRlyDQei3XQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/news/user/findAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"user",
+								"findAll"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "News",
+			"item": [
+				{
+					"name": "ADD NEWS",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Big news1221\",\n    \"shortText\": \"BLABLA!\",\n    \"fullText\": \"Full text!\",\n    \"author\": {\n        \"name\": \"Name\",\n        \"surname\": \"Surname\"\n    },\n    \"tags\": [\n        {\n            \"name\": \"car\"\n        }\n\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "COUNT NEWS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/countAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"countAll"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND NEWS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/find/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"find",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE NEWS",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjcmFjaCIsImlhdCI6MTU4NTQ2OTM2OSwiZXhwIjoxNTg1NTU1NzY5fQ.1MRQhoJu2xjPO4CsW7VEXw7MJz7cTg_ke8rFzP3fM3bjsVFBjzFAQ7obdFFRCboXOjok0DOix28SO_mg67iqxQ",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/news/delete/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SEARCH BY",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/search_by?tags=CAR&orderBy=date&activePage=1&pageSize=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"search_by"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "igor",
+									"disabled": true
+								},
+								{
+									"key": "surname",
+									"value": "bikov",
+									"disabled": true
+								},
+								{
+									"key": "tags",
+									"value": "CAR"
+								},
+								{
+									"key": "tags",
+									"value": "Football",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "date"
+								},
+								{
+									"key": "orderBy",
+									"value": "author_name",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "author_surname",
+									"disabled": true
+								},
+								{
+									"key": "activePage",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "EDIT NEWS",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 5,\n    \"title\": \"New title\",\n    \"shortText\": \"New description\",\n    \"fullText\": \"New text\",\n    \"author\": {\n        \"name\": \"Danila\",\n        \"surname\": \"Bobrov\"\n    },\n    \"tags\": [\n        {\n            \"id\": 5,\n            \"name\": \"football\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/edit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD TAGS",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXciLCJpYXQiOjE1ODU0MTE5NjksImV4cCI6MTU4NTQ5ODM2OX0.5EDo_NSl-O9Mr02KAD1cr11NUoeFrqAG3l2H-6M_7oqQHlc-GInvsfKkr82D3I5zqcbOo9t2qo-_dYXLjCdLZw",
+								"type": "text"
+							},
+							{
+								"key": "X-XSRF-TOKEN",
+								"value": "7080cdc8-6eff-43a1-a5aa-fdec3beeba96",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"id\": 4,\n        \"name\": \"car\"\n    },\n    {\n        \"id\": 7,\n        \"name\": \"hockey\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/news/add_tags/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"add_tags",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FIND ALL NEWS",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/news/findAll",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"news",
+								"findAll"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "SIGNUP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "9ad2f4d6-2837-463e-9108-90a52be9abf4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Petr\",\n\t\"surname\": \"Petrov\",\n\t\"login\": \"isu\",\n\t\"password\": \"Asdsf123!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/news/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"news",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SIGNIN",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-XSRF-TOKEN",
+						"value": "9ad2f4d6-2837-463e-9108-90a52be9abf4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"login\": \"crach\",\n\t\"password\": \"Asdsf123!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/news/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"news",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

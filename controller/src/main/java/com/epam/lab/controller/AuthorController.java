@@ -4,6 +4,7 @@ import com.epam.lab.dto.AuthorDto;
 import com.epam.lab.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,27 +38,31 @@ public class AuthorController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public AuthorDto createAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.create(authorDto);
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public AuthorDto findAuthorById(@PathVariable @Positive(message = "Id  must positive") final Long id) {
         return authorService.find(id);
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public AuthorDto editAuthor(@RequestBody @Valid final AuthorDto authorDto) {
         return authorService.update(authorDto);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteAuthor(@PathVariable @Positive(message = "Id must positive") final Long id) {
         authorService.delete(id);
     }
 
     @GetMapping("/findAll")
-    public List<AuthorDto> findAllNews() {
+    public List<AuthorDto> findAllAuthors() {
         return authorService.findAll();
     }
 }

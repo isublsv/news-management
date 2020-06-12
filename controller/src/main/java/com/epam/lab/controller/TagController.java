@@ -4,6 +4,7 @@ import com.epam.lab.dto.TagDto;
 import com.epam.lab.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,27 +38,31 @@ public class TagController {
 
     @PostMapping(value = "/add", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public TagDto addTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.create(tagDto);
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public TagDto findTagById(@PathVariable @Positive(message = "Id must positive") final Long id) {
         return tagService.find(id);
     }
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public TagDto editTag(@RequestBody @Valid final TagDto tagDto) {
         return tagService.update(tagDto);
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteTag(@PathVariable @Positive(message = "Id must positive") final Long id) {
         tagService.delete(id);
     }
 
     @GetMapping("/findAll")
-    public List<TagDto> findAllNews() {
+    public List<TagDto> findAllTags() {
         return tagService.findAll();
     }
 }
