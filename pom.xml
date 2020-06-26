@@ -29,8 +29,6 @@
     <name>news</name>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
         <mapper.module.ver>1.1.0</mapper.module.ver>
     </properties>
 
@@ -95,7 +93,6 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.1.2.Final</version>
         </dependency>
     </dependencies>
 
