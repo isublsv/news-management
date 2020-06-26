@@ -15,21 +15,14 @@
     <name>repository-jdbc</name>
     <url>http://www.epam.com</url>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <postgres.version>42.2.9</postgres.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgres.version}</version>
         </dependency>
     </dependencies>
 </project>
