@@ -2,9 +2,9 @@
 /.idea
 target/
 json/
+/.terraform
 
 #Files
 *.iml
 *.log
-
-
+*.tfstate
