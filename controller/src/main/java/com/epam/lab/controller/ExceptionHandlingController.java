@@ -46,29 +46,28 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
     }
 
     @ExceptionHandler(RepositoryException.class)
-    public ResponseEntity<Object> handleRepositoryException(final RepositoryException ex) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        body.put(ERROR, ex.getMessage());
-        return new ResponseEntity<>(body, ex.getStatusCode());
+    public ResponseEntity<Object> handleRepositoryException(final RepositoryException e) {
+        return createResponseEntity(e.getMessage(), e.getStatusCode());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleEntityConstraintNotValid(final ConstraintViolationException exception) {
         Set<ConstraintViolation<?>> violations = exception.getConstraintViolations();
-        String errorMessage;
-        Map<String, Object> body = new LinkedHashMap<>();
-        errorMessage = createErrorMessage(violations);
-        body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        body.put(ERROR, errorMessage);
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        return createResponseEntity(createErrorMessage(violations), HttpStatus.BAD_REQUEST);
     }
 
-    private String createErrorMessage(final Set<ConstraintViolation<?>> violationsValue) {
+    private ResponseEntity<Object> createResponseEntity(final String errorMessage, final HttpStatus statusCode) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
+        body.put(ERROR, errorMessage);
+        return new ResponseEntity<>(body, statusCode);
+    }
+
+    private String createErrorMessage(final Set<ConstraintViolation<?>> violations) {
         String errorMessage;
-        if (!violationsValue.isEmpty()) {
+        if (!violations.isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            violationsValue.forEach(violation -> builder.append(" ").append(violation.getMessage()));
+            violations.forEach(violation -> builder.append(" ").append(violation.getMessage()));
             errorMessage = builder.toString();
         } else {
             errorMessage = DEFAULT_MESSAGE;
@@ -77,15 +76,18 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex,
-                                                                  final HttpHeaders headers, HttpStatus status,
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException e,
+                                                                  final HttpHeaders headers, HttpStatus statusCode,
                                                                   final WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now().format(DATE_TIME_FORMATTER));
-        body.put(STATUS, status.value());
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(
-                DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
+        body.put(STATUS, statusCode.value());
+        List<String> errors = e.getBindingResult()
+                               .getFieldErrors()
+                               .stream()
+                               .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                               .collect(Collectors.toList());
         body.put(ERROR, errors);
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, headers, statusCode);
     }
 }

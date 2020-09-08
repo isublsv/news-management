@@ -33,7 +33,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public class NewsController {
 
-    private NewsService newsService;
+    private final NewsService newsService;
 
     @Autowired
     public NewsController(final NewsService newsServiceValue) {
@@ -48,7 +48,7 @@ public class NewsController {
     }
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
-    public NewsDto findNewsById(@PathVariable @Positive(message = "Id must positive") final Long id) {
+    public NewsDto findNewsById(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         return newsService.find(id);
     }
 
@@ -60,7 +60,7 @@ public class NewsController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteAuthor(@PathVariable  @Positive(message = "Id must positive") final Long id) {
+    public void deleteAuthor(@PathVariable  @Positive(message = "Id must be positive") final Long id) {
         newsService.delete(id);
     }
     
@@ -72,7 +72,7 @@ public class NewsController {
     @PutMapping(value = "/add_tags/{newsId}", produces = APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public List<TagDto> addTagForNews(@PathVariable
-                                      @Positive(message = "News Id must positive") final Long newsId,
+                                      @Positive(message = "News Id must be positive") final Long newsId,
                                       @RequestBody @NotNull final List<@Valid TagDto> tagDtos) {
         return newsService.addTagsForNews(newsId, tagDtos);
     }

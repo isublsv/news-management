@@ -26,7 +26,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public UserController(final UserService userServiceValue) {
@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
-    public UserDto findUserById(@PathVariable @Positive(message = "Id must positive") final Long id) {
+    public UserDto findUserById(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         return userService.find(id);
     }
 
@@ -47,7 +47,7 @@ public class UserController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUser(@PathVariable @Positive(message = "Id must positive") final Long id) {
+    public void deleteUser(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         userService.delete(id);
     }
 

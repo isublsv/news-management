@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public class TagController {
 
-    private TagService tagService;
+    private final TagService tagService;
 
     @Autowired
     public TagController(final TagService tagServiceValue) {
@@ -45,7 +45,7 @@ public class TagController {
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public TagDto findTagById(@PathVariable @Positive(message = "Id must positive") final Long id) {
+    public TagDto findTagById(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         return tagService.find(id);
     }
 
@@ -57,7 +57,7 @@ public class TagController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteTag(@PathVariable @Positive(message = "Id must positive") final Long id) {
+    public void deleteTag(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         tagService.delete(id);
     }
 

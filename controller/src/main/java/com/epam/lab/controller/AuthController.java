@@ -36,10 +36,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public class AuthController {
 
-    private UserService userService;
-    private AuthenticationManager authenticationManager;
-    private JwtUtils jwtUtils;
-    private PasswordEncoder encoder;
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
+    private final PasswordEncoder encoder;
 
     @Autowired
     public AuthController(

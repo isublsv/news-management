@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Validated
 public class AuthorController {
 
-    private AuthorService authorService;
+    private final AuthorService authorService;
 
     @Autowired
     public AuthorController(final AuthorService authorServiceValue) {
@@ -45,7 +45,7 @@ public class AuthorController {
 
     @GetMapping(value = "/find/{id}", produces = APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public AuthorDto findAuthorById(@PathVariable @Positive(message = "Id  must positive") final Long id) {
+    public AuthorDto findAuthorById(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         return authorService.find(id);
     }
 
@@ -57,7 +57,7 @@ public class AuthorController {
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteAuthor(@PathVariable @Positive(message = "Id must positive") final Long id) {
+    public void deleteAuthor(@PathVariable @Positive(message = "Id must be positive") final Long id) {
         authorService.delete(id);
     }
 

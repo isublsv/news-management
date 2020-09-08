@@ -26,7 +26,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
