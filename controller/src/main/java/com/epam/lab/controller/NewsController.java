@@ -54,13 +54,13 @@ public class NewsController {
 
     @PutMapping(value = "/edit", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public NewsDto editAuthor(@RequestBody @Valid final NewsDto newsDto) {
+    public NewsDto editNews(@RequestBody @Valid final NewsDto newsDto) {
         return newsService.update(newsDto);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteAuthor(@PathVariable  @Positive(message = "Id must be positive") final Long id) {
+    public void deleteNews(@PathVariable  @Positive(message = "Id must be positive") final Long id) {
         newsService.delete(id);
     }
     
