@@ -29,7 +29,7 @@
     <name>news</name>
 
     <properties>
-        <mapper.module.ver>1.1.0</mapper.module.ver>
+        <mapper.module.ver>1.2.1</mapper.module.ver>
     </properties>
 
     <dependencyManagement>
